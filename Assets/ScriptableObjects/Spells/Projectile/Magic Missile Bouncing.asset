@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c85124c9fdc0c438e1b007affa9537, type: 3}
+  m_Name: Magic Missile Bouncing
+  m_EditorClassIdentifier: 
+  spellType: 1
+  cooldownTime: 0.3
+  onCooldown: 0
+  shape: ball
+  power: 1
+  lifetime: 1
+  size: 1
+  instances: 1
+  speed: 10
+  unique: 2
+  aoe: {fileID: 0}
+  projectile: {fileID: 4820860642451385088, guid: 7eb5bb91981c14b43ae5ae07555c6549,
+    type: 3}
+  utilityType: 0
+  utility: {fileID: 0}
+  melee: {fileID: 0}
+  summon: {fileID: 0}
