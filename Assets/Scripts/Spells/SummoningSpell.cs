@@ -25,11 +25,23 @@ public class SummoningSpell : MonoBehaviour
     private bool setup = false;
     private Transform FirePos = default;
     private NavMeshAgent agent = default;
+    private Animator animator = default;
+    private Weapon weapon = default;
+    private float attackRate = default;
+    private bool attackCooldown = default;
     private float hp = default;
 
     private void Awake()
     {
         gameObject.SetActive(false);
+        if (TryGetComponent(out Animator animator))
+        {
+            this.animator = animator;
+        }
+        if (TryGetComponent(out Weapon weapon))
+        {
+            this.weapon = weapon;
+        }
     }
 
     private void Update()
@@ -74,9 +86,10 @@ public class SummoningSpell : MonoBehaviour
                     Vector3 direction = target.position - transform.position;
                     float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.Euler(0, rotation, 0);
-                    if ((!summonSpellInventory.GetCooldownStatus(1) || !summonSpellInventory.GetCooldownStatus(2) || !summonSpellInventory.GetCooldownStatus(3)) && !summonSpellInventory.GetGeneralCooldownStatus())
+                    if ((!summonSpellInventory.GetCooldownStatus(1) || !summonSpellInventory.GetCooldownStatus(2) || !summonSpellInventory.GetCooldownStatus(3)) && attackCooldown)
                     {
                         summonSpellInventory.Attack();
+                        StartCoroutine("AttackCooldown");
                     }
                 }
                 else
@@ -95,6 +108,31 @@ public class SummoningSpell : MonoBehaviour
                 else
                 {
                     agent.destination = transform.position;
+                }
+                if (targetFound)
+                {
+                    if (Vector3.Distance(transform.position, target.position) > 0.5f)
+                    {
+                        agent.destination = target.position;
+                    }
+                    else
+                    {
+                        agent.destination = transform.position;
+                    }
+                    Vector3 direction = target.position - transform.position;
+                    float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.Euler(0, rotation, 0);
+                    if (!attackCooldown)
+                    {
+                        Attack();
+                        StartCoroutine("AttackCooldown");
+                    }
+                }
+                else
+                {
+                    Vector3 direction = caster.position - transform.position;
+                    float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.Euler(0, rotation, 0);
                 }
                 break;
         }
@@ -166,11 +204,17 @@ public class SummoningSpell : MonoBehaviour
                 break;
             case "ranged":
                 agent = GetComponent<NavMeshAgent>();
-                spellInventory.SetAttackRate(1f / (speed / 5f));
-                hp = damage * 5f;
+                attackRate = (1f / (speed / 5f));
+                hp = damage * 2f;
                 transform.SetParent(null, true);
                 summonSpellInventory = GetComponent<SpellInventory>();
                 Destroy(gameObject, lifetime*5f);
+                break;
+            case "melee":
+                attackRate = (1f / (speed / 3f));
+                hp = damage * 5f;
+                transform.SetParent(null, true);
+                Destroy(gameObject, lifetime * 5f);
                 break;
         }
         if (!spellInventory.GetCooldownStatus(spellSlot))
@@ -250,6 +294,21 @@ public class SummoningSpell : MonoBehaviour
     {
         yield return new WaitForSeconds(lifetime * 5f);
         Destroy(gameObject);
+    }
+
+    private void Attack()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+    }
+
+    private IEnumerator AttackCooldown()
+    {
+        attackCooldown = true;
+        yield return new WaitForSeconds(attackRate);
+        attackCooldown = false;
     }
 
     private void OnCollisionEnter(Collision col)
