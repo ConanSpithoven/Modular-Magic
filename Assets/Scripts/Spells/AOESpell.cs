@@ -137,19 +137,33 @@ public class AOESpell : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
+        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
         {
             if (hit)
             {
-                col.gameObject.GetComponent<EnemyManager>().Hit(damage);
+                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                {
+                    enemy.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
                 StartCoroutine("BeamDamageCooldown");
             }
         }
-        else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
+        else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (hit)
             {
-                col.gameObject.GetComponent<PlayerManager>().Hit(damage);
+                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                {
+                    player.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -173,20 +187,34 @@ public class AOESpell : MonoBehaviour
 
     private void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
+        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
         {
             if (hit)
             {
-                col.gameObject.GetComponent<EnemyManager>().Hit(damage);
+                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                {
+                    enemy.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
                 StartCoroutine("BeamDamageCooldown");
             }
 
         }
-        else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
+        else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (hit)
             {
-                col.gameObject.GetComponent<PlayerManager>().Hit(damage);
+                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                {
+                    player.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
                 StartCoroutine("BeamDamageCooldown");
             }
         }

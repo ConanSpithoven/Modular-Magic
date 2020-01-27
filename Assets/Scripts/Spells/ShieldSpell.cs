@@ -177,13 +177,27 @@ public class ShieldSpell : MonoBehaviour
     private void OnCollisionEnter(Collision col)
     {
         if (shape != "orbit") { return; }
-        if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Shield_Spell"))
+        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Shield_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(damage / 2f);
+            if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+            {
+                enemy.Hit(damage / 2f);
+            }
+            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            {
+                summon.ReducePower(damage / 2f);
+            }
         }
-        else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Shield_Spell"))
+        else if ((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Shield_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(damage / 2f);
+            if (col.gameObject.TryGetComponent(out PlayerManager player))
+            {
+                player.Hit(damage / 2f);
+            }
+            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            {
+                summon.ReducePower(damage / 2f);
+            }
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Shield_Spell")) || (col.gameObject.CompareTag("enemy_Shield_Spell") && gameObject.CompareTag("Shield_Spell")))
         {
