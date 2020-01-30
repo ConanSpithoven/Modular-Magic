@@ -25,11 +25,18 @@ public class SummoningSpell : MonoBehaviour
     private bool setup = false;
     private Transform FirePos = default;
     private NavMeshAgent agent = default;
+    private Animator animator = default;
+    private float attackRate = default;
+    private bool attackCooldown = default;
     private float hp = default;
 
     private void Awake()
     {
         gameObject.SetActive(false);
+        if (TryGetComponent(out Animator animator))
+        {
+            this.animator = animator;
+        }
     }
 
     private void Update()
@@ -74,9 +81,10 @@ public class SummoningSpell : MonoBehaviour
                     Vector3 direction = target.position - transform.position;
                     float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.Euler(0, rotation, 0);
-                    if ((!summonSpellInventory.GetCooldownStatus(1) || !summonSpellInventory.GetCooldownStatus(2) || !summonSpellInventory.GetCooldownStatus(3)) && !summonSpellInventory.GetGeneralCooldownStatus())
+                    if ((!summonSpellInventory.GetCooldownStatus(1) || !summonSpellInventory.GetCooldownStatus(2) || !summonSpellInventory.GetCooldownStatus(3)) && attackCooldown)
                     {
                         summonSpellInventory.Attack();
+                        StartCoroutine("AttackCooldown");
                     }
                 }
                 else
@@ -95,6 +103,30 @@ public class SummoningSpell : MonoBehaviour
                 else
                 {
                     agent.destination = transform.position;
+                }
+                if (targetFound)
+                {
+                    if (Vector3.Distance(transform.position, target.position) > 1.2f)
+                    {
+                        agent.destination = target.position;
+                    }
+                    else
+                    {
+                        agent.destination = transform.position;
+                        if (!attackCooldown)
+                        {
+                            Attack();
+                        }
+                    }
+                    Vector3 direction = target.position - transform.position;
+                    float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.Euler(0, rotation, 0);
+                }
+                else
+                {
+                    Vector3 direction = caster.position - transform.position;
+                    float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.Euler(0, rotation, 0);
                 }
                 break;
         }
@@ -166,11 +198,18 @@ public class SummoningSpell : MonoBehaviour
                 break;
             case "ranged":
                 agent = GetComponent<NavMeshAgent>();
-                spellInventory.SetAttackRate(1f / (speed / 5f));
-                hp = damage * 5f;
+                attackRate = (1f / (speed / 5f));
+                hp = damage * 2f;
                 transform.SetParent(null, true);
                 summonSpellInventory = GetComponent<SpellInventory>();
                 Destroy(gameObject, lifetime*5f);
+                break;
+            case "melee":
+                agent = GetComponent<NavMeshAgent>();
+                attackRate = (1f / (speed / 3f));
+                hp = damage * 5f;
+                transform.SetParent(null, true);
+                Destroy(gameObject, lifetime * 5f);
                 break;
         }
         if (!spellInventory.GetCooldownStatus(spellSlot))
@@ -213,14 +252,14 @@ public class SummoningSpell : MonoBehaviour
         {
             if (hitColliders[i].gameObject != target)
             {
-                if ((hitColliders[i].CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) || (hitColliders[i].CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")))
+                if ((hitColliders[i].CompareTag("Enemy") && (gameObject.CompareTag("Attack_Spell") || gameObject.CompareTag("Summon_Spell"))) || (hitColliders[i].CompareTag("Player") && (gameObject.CompareTag("Enemy_Attack_Spell") || gameObject.CompareTag("Summon_Spell"))))
                 {
                     if (closestTarget == transform || Vector3.Distance(transform.position, hitColliders[i].transform.position) < Vector3.Distance(transform.position, closestTarget.position))
                     {
                         RaycastHit hit;
                         if (Physics.Raycast(transform.position, hitColliders[i].transform.position - transform.position, out hit, size * 6f, obstacles, QueryTriggerInteraction.Ignore))
                         {
-                            if ((hit.transform.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) || (hitColliders[i].CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")))
+                            if ((hit.transform.gameObject.CompareTag("Enemy") && (gameObject.CompareTag("Attack_Spell") || gameObject.CompareTag("Summon_Spell"))) || (hitColliders[i].CompareTag("Player") && (gameObject.CompareTag("Enemy_Attack_Spell") || gameObject.CompareTag("Enemy_Summon_Spell"))))
                             {
                                 closestTarget = hitColliders[i].transform;
                             }
@@ -234,15 +273,21 @@ public class SummoningSpell : MonoBehaviour
         {
             target = closestTarget;
             targetFound = true;
-            summonSpellInventory.SetTargetFound(true);
-            summonSpellInventory.SetTarget(target);
+            if(shape == "ranged")
+            {
+                summonSpellInventory.SetTargetFound(true);
+                summonSpellInventory.SetTarget(target);
+            }
         }
         else
         {
             target = null;
             targetFound = false;
-            summonSpellInventory.SetTargetFound(false);
-            summonSpellInventory.SetTarget(null);
+            if(shape == "ranged")
+            {
+                summonSpellInventory.SetTargetFound(false);
+                summonSpellInventory.SetTarget(null);
+            }
         }
     }
 
@@ -252,30 +297,64 @@ public class SummoningSpell : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void Attack()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+            StartCoroutine("AttackCooldown");
+        }
+    }
+
+    private IEnumerator AttackCooldown()
+    {
+        attackCooldown = true;
+        yield return new WaitForSeconds(attackRate);
+        attackCooldown = false;
+    }
+
     private void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
+        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(damage);
-            Destroy(gameObject);
+            if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+            {
+                enemy.Hit(damage);
+            }
+            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            {
+                summon.ReducePower(damage);
+            }
+            if(shape == "chaser")
+                Destroy(gameObject);
         }
-        else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
+        else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(damage);
-            Destroy(gameObject);
+            if (col.gameObject.TryGetComponent(out PlayerManager player))
+            {
+                player.Hit(damage);
+            }
+            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            {
+                summon.ReducePower(damage);
+            }
+            if(shape == "chaser")
+                Destroy(gameObject);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
             col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
-            Destroy(gameObject);
+            if(shape == "chaser")
+                Destroy(gameObject);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
-            if (TryGetComponent(out ProjectileSpell projectile))
+            if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
             {
                 projectile.ReducePower(damage);
             }
-            Destroy(gameObject);
+            if(shape == "chaser")
+                Destroy(gameObject);
         }
     }
 
@@ -301,6 +380,50 @@ public class SummoningSpell : MonoBehaviour
                 Destroy(gameObject, lifetime);
             }
                 return;
+        }
+        else if (shape == "melee")
+        {
+            if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Summon_Spell"))
+            {
+                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                {
+                    enemy.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
+                if(shape == "chaser")
+                    Destroy(gameObject);
+            }
+            else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Summon_Spell")))
+            {
+                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                {
+                    player.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
+                if(shape == "chaser")
+                    Destroy(gameObject);
+            }
+            else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Summon_Spell")))
+            {
+                col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
+                if(shape == "chaser")
+                    Destroy(gameObject);
+            }
+            else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Summon_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")))
+            {
+                if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
+                {
+                    projectile.ReducePower(damage);
+                }
+                if(shape == "chaser")
+                    Destroy(gameObject);
+            }
         }
     }
 

@@ -230,6 +230,23 @@ public class SpellManager : MonoBehaviour
                 SummonInstanceHandler(spell);
             }
         }
+        if (spell.shape == "melee")
+        {
+            if (spell.instances <= 1)
+            {
+                GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
+                SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
+                summonObject.transform.SetParent(transform, true);
+                summonObject.transform.localPosition = Vector3.up;
+                summonObject.transform.Translate(Vector3.forward * 1f);
+                SummoningSpellHandler(spell, summon);
+                summon.Activate();
+            }
+            else if (spell.instances > 1)
+            {
+                SummonInstanceHandler(spell);
+            }
+        }
     }
 
     private void ProjectileSpellHandler(Spell spell, ProjectileSpell projectile) 
@@ -410,6 +427,16 @@ public class SpellManager : MonoBehaviour
                 summonObject.transform.SetParent(transform, true);
                 summonObject.transform.localPosition = Vector3.up;
                 summonObject.transform.Translate(Vector3.back * 3f);
+                SummoningSpellHandler(spell, summon);
+                summon.Activate();
+            }
+            if (spell.shape == "melee")
+            {
+                summonObject = Instantiate(spell.summon, transform.position, CalcRotation(spell.instances, i, 140f));
+                SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
+                summonObject.transform.SetParent(transform, true);
+                summonObject.transform.localPosition = Vector3.up;
+                summonObject.transform.Translate(Vector3.forward * 3f);
                 SummoningSpellHandler(spell, summon);
                 summon.Activate();
             }

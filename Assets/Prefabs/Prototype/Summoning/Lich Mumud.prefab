@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5376322007838446693}
   - component: {fileID: 5376322007838446692}
   - component: {fileID: 5376322007838446699}
-  m_Layer: 10
+  m_Layer: 17
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,9 +108,9 @@ GameObject:
   - component: {fileID: 5376322008537632173}
   - component: {fileID: 5376322008537632172}
   - component: {fileID: 8576502613794189409}
-  m_Layer: 10
+  m_Layer: 17
   m_Name: Lich Mumud
-  m_TagString: Attack_Spell
+  m_TagString: Summon_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 5376322008693001663}
   - component: {fileID: 5376322008693001662}
   - component: {fileID: 5376322008693001661}
-  m_Layer: 10
+  m_Layer: 17
   m_Name: Wand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -299,7 +299,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5376322009086442178}
-  m_Layer: 10
+  m_Layer: 17
   m_Name: Firepos
   m_TagString: Untagged
   m_Icon: {fileID: 0}

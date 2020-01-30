@@ -149,13 +149,27 @@ public class MeleeSpell : MonoBehaviour
 
     private void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
+        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(damage);
+            if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+            {
+                enemy.Hit(damage);
+            }
+            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            {
+                summon.ReducePower(damage);
+            }
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(damage);
+            if (col.gameObject.TryGetComponent(out PlayerManager player))
+            {
+                player.Hit(damage);
+            }
+            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            {
+                summon.ReducePower(damage);
+            }
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
@@ -163,12 +177,12 @@ public class MeleeSpell : MonoBehaviour
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
-            if (TryGetComponent(out ProjectileSpell projectile))
+            if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
             {
                 projectile.ReducePower(damage);
             }
         }
-        if (shape == "axe" && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))))
+        if (shape == "axe" && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
             Destroy(gameObject);
     }
 }

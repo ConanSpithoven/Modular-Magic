@@ -11,8 +11,6 @@ public class SpellInventory : MonoBehaviour
     [SerializeField] private Spell slotOne = null;
     [SerializeField] private Spell slotTwo = null;
     [SerializeField] private Spell slotThree = null;
-    private bool generalCooldown = false;
-    private float attackRate = 1f;
     private bool targetFound = false;
     private int attacks = 1;
     private int attack = 0;
@@ -59,19 +57,19 @@ public class SpellInventory : MonoBehaviour
                 }
                 break;
             case Caster.Summon:
-                if (targetFound && slotOne != null && !slotOne.onCooldown && !generalCooldown && attack == 1)
+                if (targetFound && slotOne != null && !slotOne.onCooldown && attack == 1)
                 {
                     spellManager.ActivateSpell(slotOne, 1);
                     StartCoroutine("GeneralCooldown");
                     attack = 0;
                 }
-                if (targetFound && slotTwo != null && !slotTwo.onCooldown && !generalCooldown && attack == 2)
+                if (targetFound && slotTwo != null && !slotTwo.onCooldown && attack == 2)
                 {
                     spellManager.ActivateSpell(slotTwo, 2);
                     StartCoroutine("GeneralCooldown");
                     attack = 0;
                 }
-                if (targetFound && slotThree != null && !slotThree.onCooldown && !generalCooldown && attack == 3)
+                if (targetFound && slotThree != null && !slotThree.onCooldown && attack == 3)
                 {
                     spellManager.ActivateSpell(slotThree, 3);
                     StartCoroutine("GeneralCooldown");
@@ -123,13 +121,6 @@ public class SpellInventory : MonoBehaviour
         spell.onCooldown = true;
         yield return new WaitForSeconds(spell.cooldownTime);
         spell.onCooldown = false;
-    }
-
-    private IEnumerator GeneralCooldown()
-    {
-        generalCooldown = true;
-        yield return new WaitForSecondsRealtime(attackRate);
-        generalCooldown = false;
     }
 
     public bool GetCooldownStatus(int spellSlot)
@@ -186,11 +177,6 @@ public class SpellInventory : MonoBehaviour
         }
     }
 
-    public void SetAttackRate(float attackRate)
-    {
-        this.attackRate = attackRate;
-    }
-
     public void Attack() 
     {
         attack = Random.Range(1, attacks);
@@ -198,10 +184,5 @@ public class SpellInventory : MonoBehaviour
         {
             Attack();
         }
-    }
-
-    public bool GetGeneralCooldownStatus()
-    {
-        return generalCooldown;
     }
 }

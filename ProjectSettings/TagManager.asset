@@ -12,6 +12,8 @@ TagManager:
   - Ground
   - Wall
   - Heal_Spell
+  - Summon_Spell
+  - Enemy_Summon_Spell
   layers:
   - Default
   - TransparentFX
@@ -30,8 +32,8 @@ TagManager:
   - Ground
   - Wall
   - Heal_Spell
-  - 
-  - 
+  - Summon_Spell
+  - Enemy_Summon_Spell
   - 
   - 
   - 

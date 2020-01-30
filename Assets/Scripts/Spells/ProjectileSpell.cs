@@ -161,35 +161,21 @@ public class ProjectileSpell : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        /*if (shape == "homing")
-        {
-            if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
-            {
-                target = col.gameObject;
-                targetFound = true;
-                StopCoroutine("HomingTimer");
-                transform.SetParent(null, true);
-                GetComponent<CapsuleCollider>().enabled = false;
-                Destroy(gameObject, lifetime);
-            }
-            else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
-            {
-                target = col.gameObject;
-                targetFound = true;
-                StopCoroutine("HomingTimer");
-                GetComponentInChildren<CapsuleCollider>().enabled = false;
-                Destroy(gameObject, lifetime);
-            }
-                return;
-        }*/
         if(shape == "chain" && col.gameObject.CompareTag("Wall"))
         {
             Destroy(gameObject, 0.1f);
         }
-        if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) {
+        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell")) {
             if (hit)
             {
-                col.gameObject.GetComponent<EnemyManager>().Hit(damage);
+                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                {
+                    enemy.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
                 StartCoroutine("BeamDamageCooldown");
                 if (shape == "chain" && instances > 0)
                 {
@@ -201,10 +187,18 @@ public class ProjectileSpell : MonoBehaviour
                 }
             }
         } 
-        else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) {
+        else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
+        {
             if (hit)
             {
-                col.gameObject.GetComponent<PlayerManager>().Hit(damage);
+                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                {
+                    player.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
                 StartCoroutine("BeamDamageCooldown");
                 if (shape == "chain" && instances > 0)
                 {
@@ -239,11 +233,18 @@ public class ProjectileSpell : MonoBehaviour
 
     private void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
+        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
         {
             if (hit)
             {
-                col.gameObject.GetComponent<EnemyManager>().Hit(damage);
+                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                {
+                    enemy.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
                 StartCoroutine("BeamDamageCooldown");
                 if (shape == "chain" && instances > 0)
                 {
@@ -256,11 +257,18 @@ public class ProjectileSpell : MonoBehaviour
             }
             
         }
-        else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
+        else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (hit)
             {
-                col.gameObject.GetComponent<PlayerManager>().Hit(damage);
+                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                {
+                    player.Hit(damage);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(damage);
+                }
                 StartCoroutine("BeamDamageCooldown");
                 if (shape == "chain" && instances > 0)
                 {
@@ -284,7 +292,7 @@ public class ProjectileSpell : MonoBehaviour
         {
             if (hit)
             {
-                if (TryGetComponent(out ProjectileSpell projectile))
+                if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
                 {
                     projectile.ReducePower(damage);
                 }
