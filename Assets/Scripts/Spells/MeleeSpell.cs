@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MeleeSpell : MonoBehaviour
 {
+    private Element element;
     private float damage = 1f;
     private float lifetime = 1f;
     private float size = 1f;
@@ -12,10 +13,11 @@ public class MeleeSpell : MonoBehaviour
     private SpellInventory spellInventory = default;
     private int spellSlot = 1;
     private bool invert = false;
-    private Vector3 goal = default;
+    private Vector3 targetPos = default;
     private Vector3 oldPos = default;
     private float currentDistance = default;
     private float travelDistance = default;
+    private Transform FirePos = default;
 
     private void Awake()
     {
@@ -44,14 +46,14 @@ public class MeleeSpell : MonoBehaviour
                 }
                 break;
             case "spear":
-                if (transform.position == goal)
+                if (transform.position == targetPos)
                 {
                     Destroy(gameObject);
                 }
                 if (currentDistance < travelDistance)
                 {
                     float step = speed * Time.deltaTime;
-                    transform.position = Vector3.MoveTowards(transform.position, goal, step);
+                    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
                     currentDistance = Vector3.Distance(oldPos, transform.position);
                 }
                 else
@@ -86,6 +88,11 @@ public class MeleeSpell : MonoBehaviour
         this.spellInventory = spellInventory;
     }
 
+    public void SetElement(Element element)
+    {
+        this.element = element;
+    }
+
     public void SetLifetime(float lifetime)
     {
         this.lifetime = lifetime;
@@ -116,6 +123,11 @@ public class MeleeSpell : MonoBehaviour
         this.invert = invert;
     }
 
+    public void SetFirePos(Transform FirePos)
+    {
+        this.FirePos = FirePos;
+    }
+
     public void Activate()
     {
         gameObject.SetActive(true);
@@ -130,9 +142,18 @@ public class MeleeSpell : MonoBehaviour
                 size *= 4f;
                 oldPos = transform.position;
                 transform.SetParent(null, true);
-                goal = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                goal.y = 1f;
-                Vector3 targetDirection = goal - transform.position;
+                if (spellInventory.GetCasterType() == 1)
+                {
+                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    mousePos.y = FirePos.position.y;
+                    targetPos = mousePos;
+                }
+                else
+                {
+                    //Broken for Summon
+                    //targetPos = spellInventory.GetTarget().position;
+                }
+                Vector3 targetDirection = targetPos - transform.position;
                 Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, 360f, 360f);
                 transform.rotation = Quaternion.LookRotation(newDirection);
                 transform.Rotate(Vector3.forward, Random.Range(0f, 360f));
@@ -153,33 +174,33 @@ public class MeleeSpell : MonoBehaviour
         {
             if (col.gameObject.TryGetComponent(out EnemyManager enemy))
             {
-                enemy.Hit(damage);
+                enemy.Hit(damage, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage);
+                summon.ReducePower(damage, element);
             }
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
             if (col.gameObject.TryGetComponent(out PlayerManager player))
             {
-                player.Hit(damage);
+                player.Hit(damage, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage);
+                summon.ReducePower(damage, element);
             }
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
+            col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage);
+                projectile.ReducePower(damage, element);
             }
         }
         if (shape == "axe" && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))

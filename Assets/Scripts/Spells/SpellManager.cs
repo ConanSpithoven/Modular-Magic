@@ -251,6 +251,7 @@ public class SpellManager : MonoBehaviour
 
     private void ProjectileSpellHandler(Spell spell, ProjectileSpell projectile) 
     {
+        projectile.SetElement(spell.element);
         projectile.SetUnique(spell.unique);
         projectile.SetSpeed(spell.speed);
         projectile.SetShape(spell.shape);
@@ -263,6 +264,7 @@ public class SpellManager : MonoBehaviour
 
     private void AoESpellHandler(Spell spell, AOESpell aoe)
     {
+        aoe.SetElement(spell.element);
         aoe.SetCaster(transform);
         aoe.SetSpeed(spell.speed);
         aoe.SetDamage(spell.power);
@@ -309,6 +311,7 @@ public class SpellManager : MonoBehaviour
 
     private void MeleeSpellHandler(Spell spell, MeleeSpell weapon)
     {
+        weapon.SetElement(spell.element);
         weapon.SetLifetime(spell.lifetime);
         weapon.SetSpeed(spell.speed);
         weapon.SetDamage(spell.power);
@@ -320,6 +323,7 @@ public class SpellManager : MonoBehaviour
 
     private void ShieldSpellHandler(Spell spell, ShieldSpell shield)
     {
+        shield.SetElement(spell.element);
         shield.SetCaster(transform);
         shield.SetLifetime(spell.lifetime);
         shield.SetSpeed(spell.speed);
@@ -335,6 +339,7 @@ public class SpellManager : MonoBehaviour
         GameObject healObject = Instantiate(spell.utility, Vector3.zero, Quaternion.identity);
         HealSpell heal = healObject.GetComponent<HealSpell>();
         heal.transform.SetParent(transform, false);
+        heal.SetElement(spell.element);
         heal.SetShape(spell.shape);
         heal.SetLifetime(spell.lifetime);
         heal.SetDamage(spell.power);
@@ -349,6 +354,7 @@ public class SpellManager : MonoBehaviour
 
     private void MovementSpellHandler(Spell spell, MovementSpell movement)
     {
+        movement.SetElement(spell.element);
         movement.SetShape(spell.shape);
         movement.SetLifetime(spell.lifetime);
         movement.SetDamage(spell.power);
@@ -363,6 +369,7 @@ public class SpellManager : MonoBehaviour
 
     private void SummoningSpellHandler(Spell spell, SummoningSpell summon)
     {
+        summon.SetElement(spell.element);
         summon.SetSpeed(spell.speed);
         summon.SetShape(spell.shape);
         summon.SetDamage(spell.power);

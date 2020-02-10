@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private float HP = 100f;
     [SerializeField] private float hpMax = 100f;
     [SerializeField] private float speed = 5f;
+    [SerializeField] private Element element;
 
     private float horizontal = default;
     private float vertical = default;
@@ -42,9 +43,10 @@ public class PlayerManager : MonoBehaviour
         return HP;
     }
 
-    public void Hit(float damageTaken)
+    public void Hit(float damageTaken, Element element)
     {
-        TakeDamage(damageTaken);
+        float totalDamage = damageTaken * CheckElement(element);
+        TakeDamage(totalDamage);
     }
 
     public void TakeDamage(float damageTaken)
@@ -54,6 +56,33 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private float CheckElement(Element element)
+    {
+        float modifier = 1f;
+        if (element.ElementName == this.element.ElementName)
+        {
+            modifier = 0.5f;
+        }
+        else
+        {
+            foreach (string strength in element.ElementStrengths)
+            {
+                if (strength == this.element.ElementName || strength == "All")
+                {
+                    modifier = 1.25f;
+                }
+            }
+            foreach (string weakness in element.ElementWeaknesses)
+            {
+                if (weakness == this.element.ElementName || weakness == "All")
+                {
+                    modifier = 0.75f;
+                }
+            }
+        }
+        return modifier;
     }
 
     public void Heal(float healingReceived) {

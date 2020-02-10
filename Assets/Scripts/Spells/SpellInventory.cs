@@ -60,19 +60,16 @@ public class SpellInventory : MonoBehaviour
                 if (targetFound && slotOne != null && !slotOne.onCooldown && attack == 1)
                 {
                     spellManager.ActivateSpell(slotOne, 1);
-                    StartCoroutine("GeneralCooldown");
                     attack = 0;
                 }
                 if (targetFound && slotTwo != null && !slotTwo.onCooldown && attack == 2)
                 {
                     spellManager.ActivateSpell(slotTwo, 2);
-                    StartCoroutine("GeneralCooldown");
                     attack = 0;
                 }
                 if (targetFound && slotThree != null && !slotThree.onCooldown && attack == 3)
                 {
                     spellManager.ActivateSpell(slotThree, 3);
-                    StartCoroutine("GeneralCooldown");
                     attack = 0;
                 }
                 break;

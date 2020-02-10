@@ -22,6 +22,7 @@ MonoBehaviour:
   instances: 3
   speed: 1
   unique: 0
+  element: {fileID: 11400000, guid: 0ef608187a508794d85526c4a72564d4, type: 2}
   aoe: {fileID: 0}
   projectile: {fileID: 2675785919471812803, guid: 0d8d83f465dfd0641b785e1dd90d390a,
     type: 3}
