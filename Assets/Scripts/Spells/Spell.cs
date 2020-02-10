@@ -15,6 +15,7 @@ public class Spell : ScriptableObject
     public float speed;
     public int unique;
     private int spellSlot;
+    public Element element;
     [Header("AOESpell settings")]
     public GameObject aoe;
     [Header("ProjectileSpell settings")]

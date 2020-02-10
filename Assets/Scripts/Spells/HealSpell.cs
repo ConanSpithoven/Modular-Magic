@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealSpell : MonoBehaviour
 {
+    private Element element;
     private float lifetime = 0f;
     private string shape = "instant";
     private float damage = 0f;
@@ -36,6 +37,11 @@ public class HealSpell : MonoBehaviour
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
+    }
+
+    public void SetElement(Element element)
+    {
+        this.element = element;
     }
 
     public void SetLifetime(float lifetime)

@@ -21,9 +21,11 @@ MonoBehaviour:
   size: 1
   instances: 5
   speed: 1
+  unique: 0
+  element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
   aoe: {fileID: 0}
   projectile: {fileID: 0}
-  bounces: 0
   utilityType: 0
   utility: {fileID: 0}
   melee: {fileID: 1067428444710081871, guid: 4e399b5a6f013004398eb61ffdcb32c2, type: 3}
+  summon: {fileID: 0}

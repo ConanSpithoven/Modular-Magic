@@ -143,9 +143,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   casterType: 2
-  slotOne: {fileID: 11400000, guid: 6a77b56360b7e0847b45ac7f074e11ac, type: 2}
-  slotTwo: {fileID: 11400000, guid: b77b53c85dd65914c9debcb7f5a53b74, type: 2}
-  slotThree: {fileID: 11400000, guid: 7471a254dfec95144a1c825d151ff0fe, type: 2}
+  slotOne: {fileID: 0}
+  slotTwo: {fileID: 11400000, guid: 1fe40bdcc8f2cc24f98f2936e9cb52eb, type: 2}
+  slotThree: {fileID: 0}
 --- !u!114 &5376322008537632173
 MonoBehaviour:
   m_ObjectHideFlags: 0

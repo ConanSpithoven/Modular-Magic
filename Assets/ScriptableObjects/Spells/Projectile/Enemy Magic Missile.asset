@@ -16,13 +16,17 @@ MonoBehaviour:
   cooldownTime: 1.5
   onCooldown: 0
   shape: ball
-  aoe: {fileID: 0}
+  power: 0
+  lifetime: 1
   size: 0
-  projectile: {fileID: 4820860642451385088, guid: 462003cf8a00cb3428679facfaffa105,
-    type: 3}
   instances: 1
   speed: 10
+  unique: 0
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  aoe: {fileID: 0}
+  projectile: {fileID: 4820860642451385088, guid: 462003cf8a00cb3428679facfaffa105,
+    type: 3}
   utilityType: 0
   utility: {fileID: 0}
-  damage: 2
-  lifetime: 1
+  melee: {fileID: 0}
+  summon: {fileID: 0}

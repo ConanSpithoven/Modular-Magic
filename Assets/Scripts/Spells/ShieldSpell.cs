@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ShieldSpell : MonoBehaviour
 {
+    private Element element;
     private float damage = 1f;
     private float lifetime = 1f;
     private int instances= 1;
@@ -53,6 +54,10 @@ public class ShieldSpell : MonoBehaviour
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
+    }
+    public void SetElement(Element element)
+    {
+        this.element = element;
     }
 
     public void SetShape(string shape){
@@ -115,9 +120,10 @@ public class ShieldSpell : MonoBehaviour
         Destroy(gameObject, lifetime);
     }
 
-    public void Hit(float damageTaken)
+    public void Hit(float damageTaken, Element element)
     {
-        TakeDamage(damageTaken);
+        float totalDamage = damageTaken * CheckElement(element);
+        TakeDamage(totalDamage);
     }
 
     private void TakeDamage(float damageTaken)
@@ -127,6 +133,33 @@ public class ShieldSpell : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private float CheckElement(Element element)
+    {
+        float modifier = 1f;
+        if (element.ElementName == this.element.ElementName)
+        {
+            modifier = 0.5f;
+        }
+        else
+        {
+            foreach (string strength in element.ElementStrengths)
+            {
+                if (strength == this.element.ElementName || strength == "All")
+                {
+                    modifier = 1.25f;
+                }
+            }
+            foreach (string weakness in element.ElementWeaknesses)
+            {
+                if (weakness == this.element.ElementName || weakness == "All")
+                {
+                    modifier = 0.75f;
+                }
+            }
+        }
+        return modifier;
     }
 
     private void Setup()
@@ -181,31 +214,31 @@ public class ShieldSpell : MonoBehaviour
         {
             if (col.gameObject.TryGetComponent(out EnemyManager enemy))
             {
-                enemy.Hit(damage / 2f);
+                enemy.Hit(damage / 2f, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage / 2f);
+                summon.ReducePower(damage / 2f, element);
             }
         }
         else if ((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Shield_Spell"))
         {
             if (col.gameObject.TryGetComponent(out PlayerManager player))
             {
-                player.Hit(damage / 2f);
+                player.Hit(damage / 2f, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage / 2f);
+                summon.ReducePower(damage / 2f, element);
             }
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Shield_Spell")) || (col.gameObject.CompareTag("enemy_Shield_Spell") && gameObject.CompareTag("Shield_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage / 2f);
+            col.gameObject.GetComponent<ShieldSpell>().Hit(damage / 2f, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Shield_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Shield_Spell")))
         {
-            col.gameObject.GetComponent<ProjectileSpell>().ReducePower(damage / 2f);
+            col.gameObject.GetComponent<ProjectileSpell>().ReducePower(damage / 2f, element);
         }
     }
 }

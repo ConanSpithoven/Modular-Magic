@@ -5,6 +5,7 @@ using UnityEngine;
 public class MovementSpell : MonoBehaviour
 {
     [SerializeField] private LayerMask obstacles = default;
+    private Element element;
     private float speed = 1f;
     private float damage = 1f;
     private float lifetime = 1f;
@@ -78,6 +79,11 @@ public class MovementSpell : MonoBehaviour
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
+    }
+
+    public void SetElement(Element element)
+    {
+        this.element = element;
     }
 
     public void SetSpeed(float speed)
@@ -277,21 +283,21 @@ public class MovementSpell : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(damage);
+            col.gameObject.GetComponent<EnemyManager>().Hit(damage, element);
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(damage);
+            col.gameObject.GetComponent<PlayerManager>().Hit(damage, element);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
+            col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage);
+                projectile.ReducePower(damage, element);
             }
         }
     }

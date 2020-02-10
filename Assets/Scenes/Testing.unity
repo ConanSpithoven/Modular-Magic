@@ -978,7 +978,7 @@ GameObject:
   - component: {fileID: 1328639713}
   - component: {fileID: 1328639712}
   m_Layer: 9
-  m_Name: Dummy (1)
+  m_Name: Dummy (Metal)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1013,6 +1013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 1000
+  element: {fileID: 11400000, guid: 6519e511c6e7c7c4ea5b8f78926f60e7, type: 2}
 --- !u!136 &1328639714
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1044,7 +1045,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: acba6e7cd926ced41b15776624502795, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1384,7 +1385,7 @@ GameObject:
   - component: {fileID: 1914093176}
   - component: {fileID: 1914093177}
   m_Layer: 9
-  m_Name: Dummy
+  m_Name: Dummy (Null)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1421,7 +1422,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b3b4ad64c25fdf1469aecee098e1d5c9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1477,6 +1478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 1000
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
 --- !u!54 &1914093177
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1586,7 +1588,7 @@ GameObject:
   - component: {fileID: 2000098935}
   - component: {fileID: 2000098934}
   m_Layer: 9
-  m_Name: Dummy (2)
+  m_Name: Dummy (Fire)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1621,6 +1623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 1000
+  element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
 --- !u!136 &2000098936
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1652,7 +1655,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6e3ae8152ea243d4d9af49e5cdb896bd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1927,13 +1930,13 @@ PrefabInstance:
         type: 3}
       propertyPath: slotTwo
       value: 
-      objectReference: {fileID: 11400000, guid: a327111b8ce01f6478ad6852bd591f81,
+      objectReference: {fileID: 11400000, guid: 7471a254dfec95144a1c825d151ff0fe,
         type: 2}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}
       propertyPath: slotThree
       value: 
-      objectReference: {fileID: 11400000, guid: f2e4a8e109a326744a41af829e15fcdf,
+      objectReference: {fileID: 11400000, guid: 62a33fea4c7b73b448e3bd4c17c22ab5,
         type: 2}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}
@@ -1956,5 +1959,11 @@ PrefabInstance:
       propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5390303322027678983, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
+        type: 3}
+      propertyPath: element
+      value: 
+      objectReference: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa2b021256a721d4ea4cd8f0a54c20ae, type: 3}

@@ -4,6 +4,7 @@ using UnityEngine;
 public class ProjectileSpell : MonoBehaviour
 {
     [SerializeField] private LayerMask obstacles = default;
+    private Element element;
     private float speed = 1f;
     private float damage = 1f;
     private float lifetime = 1f;
@@ -40,6 +41,10 @@ public class ProjectileSpell : MonoBehaviour
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
+    }
+    public void SetElement(Element element)
+    {
+        this.element = element;
     }
 
     public void SetUnique(int unique) {
@@ -132,21 +137,21 @@ public class ProjectileSpell : MonoBehaviour
     private void OnCollisionEnter(Collision col){
         if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(damage);
+            col.gameObject.GetComponent<EnemyManager>().Hit(damage, element);
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(damage);
+            col.gameObject.GetComponent<PlayerManager>().Hit(damage, element);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
+            col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage);
+                projectile.ReducePower(damage, element);
             }
         }
         if (unique > 0 && shape != "line")
@@ -170,11 +175,11 @@ public class ProjectileSpell : MonoBehaviour
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
                 {
-                    enemy.Hit(damage);
+                    enemy.Hit(damage, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage);
+                    summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (shape == "chain" && instances > 0)
@@ -193,11 +198,11 @@ public class ProjectileSpell : MonoBehaviour
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))
                 {
-                    player.Hit(damage);
+                    player.Hit(damage, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage);
+                    summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (shape == "chain" && instances > 0)
@@ -214,7 +219,7 @@ public class ProjectileSpell : MonoBehaviour
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
+                col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -224,7 +229,7 @@ public class ProjectileSpell : MonoBehaviour
             {
                 if (TryGetComponent(out ProjectileSpell projectile))
                 {
-                    projectile.ReducePower(damage);
+                    projectile.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -239,11 +244,11 @@ public class ProjectileSpell : MonoBehaviour
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
                 {
-                    enemy.Hit(damage);
+                    enemy.Hit(damage, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage);
+                    summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (shape == "chain" && instances > 0)
@@ -263,11 +268,11 @@ public class ProjectileSpell : MonoBehaviour
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))
                 {
-                    player.Hit(damage);
+                    player.Hit(damage, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage);
+                    summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (shape == "chain" && instances > 0)
@@ -284,7 +289,7 @@ public class ProjectileSpell : MonoBehaviour
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
+                col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -294,7 +299,7 @@ public class ProjectileSpell : MonoBehaviour
             {
                 if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
                 {
-                    projectile.ReducePower(damage);
+                    projectile.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -362,12 +367,40 @@ public class ProjectileSpell : MonoBehaviour
         hit = true;
     }
 
-    public void ReducePower(float damage)
+    public void ReducePower(float damage, Element element)
     {
-        this.damage -= damage;
+        float totalDamage = damage * CheckElement(element);
+        this.damage -= totalDamage;
         if (this.damage <= 0f)
         {
             Destroy(gameObject);
         }
+    }
+
+    private float CheckElement(Element element)
+    {
+        float modifier = 1f;
+        if (element.ElementName == this.element.ElementName)
+        {
+            modifier = 0.5f;
+        }
+        else
+        {
+            foreach (string strength in element.ElementStrengths)
+            {
+                if (strength == this.element.ElementName || strength == "All")
+                {
+                    modifier = 1.25f;
+                }
+            }
+            foreach (string weakness in element.ElementWeaknesses)
+            {
+                if (weakness == this.element.ElementName || weakness == "All")
+                {
+                    modifier = 0.75f;
+                }
+            }
+        }
+        return modifier;
     }
 }

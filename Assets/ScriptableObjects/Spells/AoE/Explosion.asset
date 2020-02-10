@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellType: 2
   cooldownTime: 2
-  onCooldown: 1
+  onCooldown: 0
   shape: point
   power: 1
   lifetime: 1
@@ -22,6 +22,7 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
+  element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
   aoe: {fileID: 6980719320466699317, guid: d17260cf82fd8be48a5487c65ab4a49e, type: 3}
   projectile: {fileID: 0}
   utilityType: 0

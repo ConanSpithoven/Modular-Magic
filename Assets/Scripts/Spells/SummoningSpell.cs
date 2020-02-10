@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class SummoningSpell : MonoBehaviour
 {
     [SerializeField] private LayerMask obstacles = default;
-
+    private Element element;
     private float speed = 1f;
     private float damage = 1f;
     private float lifetime = 1f;
@@ -81,7 +81,7 @@ public class SummoningSpell : MonoBehaviour
                     Vector3 direction = target.position - transform.position;
                     float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.Euler(0, rotation, 0);
-                    if ((!summonSpellInventory.GetCooldownStatus(1) || !summonSpellInventory.GetCooldownStatus(2) || !summonSpellInventory.GetCooldownStatus(3)) && attackCooldown)
+                    if ((!summonSpellInventory.GetCooldownStatus(1) || !summonSpellInventory.GetCooldownStatus(2) || !summonSpellInventory.GetCooldownStatus(3)) && !attackCooldown)
                     {
                         summonSpellInventory.Attack();
                         StartCoroutine("AttackCooldown");
@@ -140,6 +140,10 @@ public class SummoningSpell : MonoBehaviour
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
+    }
+    public void SetElement(Element element)
+    {
+        this.element = element;
     }
 
     public void SetUnique(int unique)
@@ -245,7 +249,16 @@ public class SummoningSpell : MonoBehaviour
 
     private void TargetFinder()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, size * 6f);
+        float searchSize;
+        if (shape == "ranged")
+        {
+            searchSize = size * 6f;
+        }
+        else
+        {
+            searchSize = size * 3f;
+        }
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, searchSize);
         Transform closestTarget = transform;
         int i = 0;
         while (i < hitColliders.Length)
@@ -319,11 +332,11 @@ public class SummoningSpell : MonoBehaviour
         {
             if (col.gameObject.TryGetComponent(out EnemyManager enemy))
             {
-                enemy.Hit(damage);
+                enemy.Hit(damage, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage);
+                summon.ReducePower(damage, element);
             }
             if(shape == "chaser")
                 Destroy(gameObject);
@@ -332,18 +345,18 @@ public class SummoningSpell : MonoBehaviour
         {
             if (col.gameObject.TryGetComponent(out PlayerManager player))
             {
-                player.Hit(damage);
+                player.Hit(damage, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage);
+                summon.ReducePower(damage, element);
             }
             if(shape == "chaser")
                 Destroy(gameObject);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
+            col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
             if(shape == "chaser")
                 Destroy(gameObject);
         }
@@ -351,7 +364,7 @@ public class SummoningSpell : MonoBehaviour
         {
             if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage);
+                projectile.ReducePower(damage, element);
             }
             if(shape == "chaser")
                 Destroy(gameObject);
@@ -387,11 +400,11 @@ public class SummoningSpell : MonoBehaviour
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
                 {
-                    enemy.Hit(damage);
+                    enemy.Hit(damage, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage);
+                    summon.ReducePower(damage, element);
                 }
                 if(shape == "chaser")
                     Destroy(gameObject);
@@ -400,18 +413,18 @@ public class SummoningSpell : MonoBehaviour
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))
                 {
-                    player.Hit(damage);
+                    player.Hit(damage, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage);
+                    summon.ReducePower(damage, element);
                 }
                 if(shape == "chaser")
                     Destroy(gameObject);
             }
             else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Summon_Spell")))
             {
-                col.gameObject.GetComponent<ShieldSpell>().Hit(damage);
+                col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
                 if(shape == "chaser")
                     Destroy(gameObject);
             }
@@ -419,7 +432,7 @@ public class SummoningSpell : MonoBehaviour
             {
                 if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
                 {
-                    projectile.ReducePower(damage);
+                    projectile.ReducePower(damage, element);
                 }
                 if(shape == "chaser")
                     Destroy(gameObject);
@@ -427,12 +440,40 @@ public class SummoningSpell : MonoBehaviour
         }
     }
 
-    public void ReducePower(float damage)
+    public void ReducePower(float damage, Element element)
     {
-        hp -= damage;
-        if (hp <= 0f)
+        float totalDamage = damage * CheckElement(element);
+        this.damage -= totalDamage;
+        if (this.damage <= 0f)
         {
             Destroy(gameObject);
         }
+    }
+
+    private float CheckElement(Element element)
+    {
+        float modifier = 1f;
+        if (element.ElementName == this.element.ElementName)
+        {
+            modifier = 0.5f;
+        }
+        else
+        {
+            foreach (string strength in element.ElementStrengths)
+            {
+                if (strength == this.element.ElementName || strength == "All")
+                {
+                    modifier = 1.25f;
+                }
+            }
+            foreach (string weakness in element.ElementWeaknesses)
+            {
+                if (weakness == this.element.ElementName || weakness == "All")
+                {
+                    modifier = 0.75f;
+                }
+            }
+        }
+        return modifier;
     }
 }
