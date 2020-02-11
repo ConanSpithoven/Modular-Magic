@@ -45,6 +45,20 @@ public class EnemyManager : MonoBehaviour
                     modifier = 0.75f;
                 }
             }
+            foreach (string strength in this.element.ElementStrengths)
+            {
+                if (strength == element.ElementName || strength == "All")
+                {
+                    modifier = 0.75f;
+                }
+            }
+            foreach (string weakness in this.element.ElementWeaknesses)
+            {
+                if (weakness == element.ElementName || weakness == "All")
+                {
+                    modifier = 1.25f;
+                }
+            }
         }
         return modifier;
     }
