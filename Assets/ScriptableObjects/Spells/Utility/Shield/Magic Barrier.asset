@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Magic Barrier
   m_EditorClassIdentifier: 
   spellType: 0
-  cooldownTime: 15
+  cooldownTime: 10
   onCooldown: 0
   shape: barrier
   power: 5

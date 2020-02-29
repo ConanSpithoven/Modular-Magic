@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lich Mumud
   m_EditorClassIdentifier: 
   spellType: 4
-  cooldownTime: 0
+  cooldownTime: 15
   onCooldown: 0
   shape: ranged
   power: 2

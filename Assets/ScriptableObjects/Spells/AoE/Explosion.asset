@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Explosion
   m_EditorClassIdentifier: 
   spellType: 2
-  cooldownTime: 2
+  cooldownTime: 3
   onCooldown: 0
   shape: point
   power: 1

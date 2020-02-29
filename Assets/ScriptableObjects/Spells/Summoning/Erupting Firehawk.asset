@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Erupting Firehawk
   m_EditorClassIdentifier: 
   spellType: 4
-  cooldownTime: 0
+  cooldownTime: 5
   onCooldown: 0
   shape: chaser
   power: 1

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Force Push
   m_EditorClassIdentifier: 
   spellType: 0
-  cooldownTime: 0
+  cooldownTime: 6
   onCooldown: 0
   shape: push
   power: 1

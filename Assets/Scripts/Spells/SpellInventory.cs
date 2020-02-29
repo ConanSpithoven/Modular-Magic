@@ -116,7 +116,9 @@ public class SpellInventory : MonoBehaviour
     private IEnumerator Cooldown(Spell spell)
     {
         spell.onCooldown = true;
-        yield return new WaitForSeconds(spell.cooldownTime);
+        float totalCooldownTime = ((((spell.power * 0.2f - 0.2f) * spell.cooldownTime) + spell.lifetime + ((spell.size * 0.1f - 0.1f) * spell.cooldownTime) - ((spell.speed * 0.1f - 0.1f) * spell.cooldownTime)) * (spell.instances * 0.3f + 0.7f))/* * spell.cdr*/;
+        Debug.Log(totalCooldownTime);
+        yield return new WaitForSeconds(totalCooldownTime);
         spell.onCooldown = false;
     }
 

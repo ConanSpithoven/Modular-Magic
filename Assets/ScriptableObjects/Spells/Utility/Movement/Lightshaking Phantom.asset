@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lightshaking Phantom
   m_EditorClassIdentifier: 
   spellType: 0
-  cooldownTime: 10
+  cooldownTime: 5
   onCooldown: 0
   shape: teleport
   power: 1

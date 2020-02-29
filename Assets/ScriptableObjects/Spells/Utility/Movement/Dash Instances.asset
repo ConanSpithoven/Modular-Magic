@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dash Instances
   m_EditorClassIdentifier: 
   spellType: 0
-  cooldownTime: 0
+  cooldownTime: 3
   onCooldown: 0
   shape: dash
   power: 1
