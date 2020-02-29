@@ -2061,7 +2061,7 @@ PrefabInstance:
         type: 3}
       propertyPath: slotThree
       value: 
-      objectReference: {fileID: 11400000, guid: b77b53c85dd65914c9debcb7f5a53b74,
+      objectReference: {fileID: 11400000, guid: a2f09fd548258334ab41f160f240856a,
         type: 2}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}

@@ -17,7 +17,7 @@ MonoBehaviour:
   onCooldown: 0
   shape: line
   power: 1
-  lifetime: 1
+  lifetime: 5
   size: 1
   instances: 1
   speed: 1
