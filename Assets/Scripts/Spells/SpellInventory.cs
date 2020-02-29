@@ -43,15 +43,15 @@ public class SpellInventory : MonoBehaviour
         switch (casterType)
         {
             case Caster.Player:
-                if ((Input.GetKeyDown(KeyCode.Alpha1) || Input.GetMouseButtonDown(0)) && slotOne != null && !slotOne.onCooldown)
+                if ((Input.GetKey(KeyCode.Alpha1) || Input.GetMouseButton(0)) && slotOne != null && !slotOne.onCooldown)
                 {
                     spellManager.ActivateSpell(slotOne, 1);
                 }
-                if ((Input.GetKeyDown(KeyCode.Alpha2) || Input.GetMouseButtonDown(1)) && slotTwo != null && !slotTwo.onCooldown)
+                if ((Input.GetKey(KeyCode.Alpha2) || Input.GetMouseButton(1)) && slotTwo != null && !slotTwo.onCooldown)
                 {
                     spellManager.ActivateSpell(slotTwo, 2);
                 }
-                if ((Input.GetKeyDown(KeyCode.Alpha3) || Input.GetMouseButtonDown(2)) && slotThree != null && !slotThree.onCooldown)
+                if ((Input.GetKey(KeyCode.Alpha3) || Input.GetMouseButton(2)) && slotThree != null && !slotThree.onCooldown)
                 {
                     spellManager.ActivateSpell(slotThree, 3);
                 }
