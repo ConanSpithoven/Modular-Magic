@@ -4,11 +4,12 @@ using UnityEngine;
 public class ProjectileSpell : MonoBehaviour
 {
     [SerializeField] private LayerMask obstacles = default;
+    private enum SpellShape { ball, line, chain }
     private Element element;
     private float speed = 1f;
     private float damage = 1f;
     private float lifetime = 1f;
-    private string shape = "ball";
+    private SpellShape shape = default;
     private int instances = 1;
     private int unique = 0;
     private float size = 1f;
@@ -25,7 +26,7 @@ public class ProjectileSpell : MonoBehaviour
 
     private void Update()
     {
-        if (shape == "line")
+        if (shape == SpellShape.line)
         {
 
             RaycastHit hit;
@@ -70,8 +71,8 @@ public class ProjectileSpell : MonoBehaviour
         this.size = size;
     }
 
-    public void SetShape(string shape){
-        this.shape = shape;
+    public void SetShape(int shape){
+        this.shape = (SpellShape)shape;
     }
 
     public void SetDamage(float damage)
@@ -104,7 +105,7 @@ public class ProjectileSpell : MonoBehaviour
         gameObject.SetActive(true);
         switch (shape)
         {
-            case "ball":
+            case SpellShape.ball:
                 if (unique >= 1)
                 {
                     Collider col = GetComponent<Collider>();
@@ -115,14 +116,14 @@ public class ProjectileSpell : MonoBehaviour
                 rb.velocity = transform.forward * (speed + 9) * Time.deltaTime * 100f;
                 Destroy(gameObject, lifetime);
                 break;
-            case "line":
+            case SpellShape.line:
                 transform.localScale = new Vector3(transform.localScale.x * size / 2f, transform.localScale.y * size / 2f, transform.localScale.z);
                 speed *= 5;
                 size *= 3f;
                 damage *= 0.2f;
                 Destroy(gameObject, lifetime);
                 break;
-            case "chain":
+            case SpellShape.chain:
                 transform.localScale = new Vector3(0.5f, 0.5f, 0f);
                 size *= 3f;
                 Vector3 targetPos;
@@ -163,11 +164,11 @@ public class ProjectileSpell : MonoBehaviour
                 projectile.ReducePower(damage, element);
             }
         }
-        if (unique > 0 && shape != "line")
+        if (unique > 0 && shape != SpellShape.line)
         {
             unique -= 1;
         }
-        else if (unique <= 0 && shape != "line")
+        else if (unique <= 0 && shape != SpellShape.line)
         {
             Destroy(gameObject);
         }
@@ -175,7 +176,7 @@ public class ProjectileSpell : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if(shape == "chain" && col.gameObject.CompareTag("Wall"))
+        if(shape == SpellShape.chain && col.gameObject.CompareTag("Wall"))
         {
             Destroy(gameObject, 0.1f);
         }
@@ -191,11 +192,11 @@ public class ProjectileSpell : MonoBehaviour
                     summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
-                if (shape == "chain" && instances > 0)
+                if (shape == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
                 }
-                else if (shape == "chain" && instances <= 0)
+                else if (shape == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
@@ -214,11 +215,11 @@ public class ProjectileSpell : MonoBehaviour
                     summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
-                if (shape == "chain" && instances > 0)
+                if (shape == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
                 }
-                else if (shape == "chain" && instances <= 0)
+                else if (shape == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
@@ -260,11 +261,11 @@ public class ProjectileSpell : MonoBehaviour
                     summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
-                if (shape == "chain" && instances > 0)
+                if (shape == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
                 }
-                else if (shape == "chain" && instances <= 0)
+                else if (shape == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
@@ -284,11 +285,11 @@ public class ProjectileSpell : MonoBehaviour
                     summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
-                if (shape == "chain" && instances > 0)
+                if (shape == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
                 }
-                else if (shape == "chain" && instances <= 0)
+                else if (shape == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }

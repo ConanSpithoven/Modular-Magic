@@ -5,11 +5,12 @@ using UnityEngine;
 public class MeleeSpell : MonoBehaviour
 {
     private Element element;
+    private enum SpellShape { sword, spear, axe }
     private float damage = 1f;
     private float lifetime = 1f;
     private float size = 1f;
     private float speed = 1f;
-    private string shape = "sword";
+    private SpellShape shape = default;
     private SpellInventory spellInventory = default;
     private int spellSlot = 1;
     private bool invert = false;
@@ -28,7 +29,7 @@ public class MeleeSpell : MonoBehaviour
     {
         switch (shape)
         {
-            case "sword": 
+            case SpellShape.sword: 
                 if (transform.localRotation.y < Quaternion.Euler(0, 80, 0).y && transform.localRotation.y > Quaternion.Euler(0, -80, 0).y)
                 {
                     if (invert)
@@ -45,7 +46,7 @@ public class MeleeSpell : MonoBehaviour
                     Destroy(gameObject);
                 }
                 break;
-            case "spear":
+            case SpellShape.spear:
                 if (transform.position == targetPos)
                 {
                     Destroy(gameObject);
@@ -65,7 +66,7 @@ public class MeleeSpell : MonoBehaviour
                     Destroy(gameObject);
                 }
                 break;
-            case "axe":
+            case SpellShape.axe:
                 if (transform.localRotation.x < Quaternion.Euler(100, 0, 0).x)
                 {
                     transform.Rotate(Vector3.right, speed * Time.deltaTime);
@@ -113,9 +114,9 @@ public class MeleeSpell : MonoBehaviour
         this.speed = speed;
     }
 
-    public void SetShape(string shape)
+    public void SetShape(int shape)
     {
-        this.shape = shape;
+        this.shape = (SpellShape)shape;
     }
 
     public void SetDirection(bool invert)
@@ -134,10 +135,10 @@ public class MeleeSpell : MonoBehaviour
         transform.localScale *= size;
         switch (shape)
         {
-            case "sword":
+            case SpellShape.sword:
                 speed *= 250f;
                 break;
-            case "spear":
+            case SpellShape.spear:
                 speed *= 7.5f;
                 size *= 4f;
                 oldPos = transform.position;
@@ -150,8 +151,7 @@ public class MeleeSpell : MonoBehaviour
                 }
                 else
                 {
-                    //Broken for Summon
-                    //targetPos = spellInventory.GetTarget().position;
+                    targetPos = spellInventory.GetTarget().position;
                 }
                 Vector3 targetDirection = targetPos - transform.position;
                 Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, 360f, 360f);
@@ -159,7 +159,7 @@ public class MeleeSpell : MonoBehaviour
                 transform.Rotate(Vector3.forward, Random.Range(0f, 360f));
                 travelDistance = size;
                 break;
-            case "axe":
+            case SpellShape.axe:
                 speed *= 100f;
                 transform.SetParent(null, true);
                 break;
@@ -203,7 +203,7 @@ public class MeleeSpell : MonoBehaviour
                 projectile.ReducePower(damage, element);
             }
         }
-        if (shape == "axe" && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
+        if (shape == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
             Destroy(gameObject);
     }
 }

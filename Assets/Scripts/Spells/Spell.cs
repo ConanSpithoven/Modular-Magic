@@ -7,7 +7,7 @@ public class Spell : ScriptableObject
     public SpellType spellType;
     public float cooldownTime;
     public bool onCooldown;
-    public string shape;
+    public int shape;
     public float power;
     public float lifetime;
     public float size;

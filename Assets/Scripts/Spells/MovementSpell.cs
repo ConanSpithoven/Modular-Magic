@@ -5,12 +5,14 @@ using UnityEngine;
 public class MovementSpell : MonoBehaviour
 {
     [SerializeField] private LayerMask obstacles = default;
+    private enum SpellShape { dash, teleport, push }
+
     private Element element;
     private float speed = 1f;
     private float damage = 1f;
     private float lifetime = 1f;
     private int instances = 1;
-    private string shape = "dash";
+    private SpellShape shape = default;
     private float size = 1f;
     private float currentDistance = default;
     private float travelDistance = default;
@@ -40,7 +42,7 @@ public class MovementSpell : MonoBehaviour
         }
             switch (shape)
         {
-            case "dash":
+            case SpellShape.dash:
                 if (currentDistance < travelDistance)
                 {
                     float step = speed * Time.deltaTime;
@@ -62,7 +64,7 @@ public class MovementSpell : MonoBehaviour
                 }
                 break;
             default:
-            case "Teleport":
+            case SpellShape.teleport:
                 if (!spellInventory.GetCooldownStatus(spellSlot) && instances <= 0)
                 {
                     StartCooldown();
@@ -96,14 +98,14 @@ public class MovementSpell : MonoBehaviour
         this.size = size;
     }
 
-    public void SetShape(string shape)
+    public void SetShape(int shape)
     {
-        this.shape = shape;
+        this.shape = (SpellShape)shape;
     }
 
-    public string GetShape()
+    public int GetShape()
     {
-        return shape;
+        return (int)shape;
     }
 
     public void SetDamage(float damage)
@@ -138,19 +140,19 @@ public class MovementSpell : MonoBehaviour
             gameObject.SetActive(true);
             Setup();
         }
-        if (caster.TryGetComponent(out PlayerManager playerManager) && shape != "push")
+        if (caster.TryGetComponent(out PlayerManager playerManager) && shape != SpellShape.push)
         {
             playerManager.AllowMovement(false);
         }
         switch (shape)
         {
-            case "dash":
+            case SpellShape.dash:
                 Dash();
                 break;
-            case "teleport":
+            case SpellShape.teleport:
                 Teleport();
                 break;
-            case "push":
+            case SpellShape.push:
                 Push();
                 Destroy(gameObject, lifetime);
                 break;
@@ -161,16 +163,16 @@ public class MovementSpell : MonoBehaviour
     {
         switch (shape)
         {
-            case "dash":
+            case SpellShape.dash:
                 size += damage;
                 speed *= 10f;
                 RecastCheck();
                 break;
-            case "teleport":
+            case SpellShape.teleport:
                 size += damage + speed;
                 RecastCheck();
                 break;
-            case "push":
+            case SpellShape.push:
                 speed *= 15f;
                 break;
         }

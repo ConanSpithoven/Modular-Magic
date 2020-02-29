@@ -46,7 +46,7 @@ public class SpellManager : MonoBehaviour
         switch (spell.shape)
         {
             default:
-            case "orb":
+            case 0:
                 if (spell.instances <= 1)
                 {
                     GameObject aoeObject = Instantiate(spell.aoe, Vector3.zero, Model.rotation);
@@ -60,7 +60,7 @@ public class SpellManager : MonoBehaviour
                     StartCoroutine("AoEInstanceHandler", spell);
                 }
                 break;
-            case "orbit":
+            case 1:
                 for (int i = 0; i < spell.instances; i++)
                 {
                     Quaternion rotation = CalcRotation(spell.instances, i, 360f);
@@ -71,7 +71,7 @@ public class SpellManager : MonoBehaviour
                     aoe.Activate();
                 }
                 break;
-            case "point":
+            case 2:
                 if (spell.instances <= 1)
                 {
                     Vector3 targetPos;
@@ -100,14 +100,14 @@ public class SpellManager : MonoBehaviour
 
     private void ActivateProjectileSpell(Spell spell)
     {
-        if (spell.shape == "ball" || spell.shape == "line")
+        if (spell.shape == 0 || spell.shape == 1)
         {
             if (spell.instances <= 1)
             {
                 GameObject projectileObject = Instantiate(spell.projectile, Firepos.position, Model.rotation);
                 ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
                 projectileObject.transform.SetParent(Firepos);
-                if (spell.shape == "ball")
+                if (spell.shape == 1)
                 {
                     projectileObject.transform.SetParent(null, true);
                 }
@@ -119,7 +119,7 @@ public class SpellManager : MonoBehaviour
                 ProjectileInstanceHandler(spell);
             }
         }
-        else if (spell.shape == "chain")
+        else if (spell.shape == 2)
         {
             GameObject projectileObject = Instantiate(spell.projectile, Firepos.position, Model.rotation);
             ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
@@ -140,13 +140,13 @@ public class SpellManager : MonoBehaviour
                 switch (spell.shape)
                 {
                     default:
-                    case "barrier":
+                    case 0:
                         UtilityBarrierHandler(spell);
                         break;
-                    case "shield":
+                    case 1:
                         UtilityShieldHandler(spell);
                         break;
-                    case "deploy":
+                    case 2:
                         UtilityDeployHandler(spell);
                         break;
                 }
@@ -164,13 +164,13 @@ public class SpellManager : MonoBehaviour
     {
         switch (spell.shape)
         {
-            case "sword":
+            case 0:
                 StartCoroutine("MeleeSwordHandler", spell);
                 break;
-            case "spear":
+            case 1:
                 StartCoroutine("MeleeSpearHandler", spell);
                 break;
-            case "axe":
+            case 2:
                 StartCoroutine("MeleeAxeHandler", spell);
                 break;
         }
@@ -178,7 +178,7 @@ public class SpellManager : MonoBehaviour
 
     private void ActivateMovementSpell(Spell spell)
     {
-        if (spell.shape == "dash" || spell.shape == "teleport")
+        if (spell.shape == 0 || spell.shape == 1)
         {
             if (GetComponentInChildren<MovementSpell>() != null)
                 if (GetComponentInChildren<MovementSpell>().GetShape() == spell.shape) { return; }
@@ -189,7 +189,7 @@ public class SpellManager : MonoBehaviour
             MovementSpellHandler(spell, movementSpell);
             movementSpell.Activate();
         }
-        else if (spell.shape == "push")
+        else if (spell.shape == 2)
         {
             PushInstanceHandler(spell);
         }
@@ -197,55 +197,55 @@ public class SpellManager : MonoBehaviour
 
     private void ActivateSummoningSpell(Spell spell)
     {
-        if (spell.shape == "chaser")
+        switch (spell.shape)
         {
-            if (spell.instances <= 1)
-            {
-                GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
-                SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
-                summonObject.transform.SetParent(transform, true);
-                summonObject.transform.localPosition = Vector3.zero;
-                SummoningSpellHandler(spell, summon);
-                summon.Activate();
-            }
-            else if (spell.instances > 1)
-            {
-                SummonInstanceHandler(spell);
-            }
-        }
-        if (spell.shape == "ranged")
-        {
-            if (spell.instances <= 1)
-            {
-                GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
-                SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
-                summonObject.transform.SetParent(transform, true);
-                summonObject.transform.localPosition = Vector3.up;
-                summonObject.transform.Translate(Vector3.back * 1f);
-                SummoningSpellHandler(spell, summon);
-                summon.Activate();
-            }
-            else if (spell.instances > 1)
-            {
-                SummonInstanceHandler(spell);
-            }
-        }
-        if (spell.shape == "melee")
-        {
-            if (spell.instances <= 1)
-            {
-                GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
-                SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
-                summonObject.transform.SetParent(transform, true);
-                summonObject.transform.localPosition = Vector3.up;
-                summonObject.transform.Translate(Vector3.forward * 1f);
-                SummoningSpellHandler(spell, summon);
-                summon.Activate();
-            }
-            else if (spell.instances > 1)
-            {
-                SummonInstanceHandler(spell);
-            }
+            case 0:
+                if (spell.instances <= 1)
+                {
+                    GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
+                    SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
+                    summonObject.transform.SetParent(transform, true);
+                    summonObject.transform.localPosition = Vector3.zero;
+                    SummoningSpellHandler(spell, summon);
+                    summon.Activate();
+                }
+                else if (spell.instances > 1)
+                {
+                    SummonInstanceHandler(spell);
+                }
+                break;
+            case 1:
+                if (spell.instances <= 1)
+                {
+                    GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
+                    SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
+                    summonObject.transform.SetParent(transform, true);
+                    summonObject.transform.localPosition = Vector3.up;
+                    summonObject.transform.Translate(Vector3.back * 1f);
+                    SummoningSpellHandler(spell, summon);
+                    summon.Activate();
+                }
+                else if (spell.instances > 1)
+                {
+                    SummonInstanceHandler(spell);
+                }
+                break;
+            case 2:
+                if (spell.instances <= 1)
+                {
+                    GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
+                    SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
+                    summonObject.transform.SetParent(transform, true);
+                    summonObject.transform.localPosition = Vector3.up;
+                    summonObject.transform.Translate(Vector3.forward * 1f);
+                    SummoningSpellHandler(spell, summon);
+                    summon.Activate();
+                }
+                else if (spell.instances > 1)
+                {
+                    SummonInstanceHandler(spell);
+                }
+                break;
         }
     }
 
@@ -384,7 +384,7 @@ public class SpellManager : MonoBehaviour
     {
         int instances = spell.instances;
         float spreadAngle = 0f;
-        if (spell.shape == "line" || spell.shape == "ball")
+        if (spell.shape == 0 || spell.shape == 1)
         {
             spreadAngle = 15f * instances;
             spreadAngle = Mathf.Clamp(spreadAngle, 30f, 160f);
@@ -395,12 +395,12 @@ public class SpellManager : MonoBehaviour
         for (int i = 0; i < instances; i++)
         {
             GameObject projectileObject;
-            if (spell.shape == "ball" || spell.shape == "line")
+            if (spell.shape == 0 || spell.shape == 1)
             {
                 projectileObject = Instantiate(spell.projectile, Firepos.position, Model.rotation);
                 projectileObject.transform.SetParent(Firepos);
                 projectileObject.transform.Rotate(Vector3.up, startAngle + i * perBulletAngle);
-                if (spell.shape == "ball")
+                if (spell.shape == 0)
                 {
                     projectileObject.transform.SetParent(null, true);
                 }
@@ -418,34 +418,34 @@ public class SpellManager : MonoBehaviour
         for (int i = 0; i < instances; i++)
         {
             GameObject summonObject;
-            if (spell.shape == "chaser")
+            switch (spell.shape)
             {
-                summonObject = Instantiate(spell.summon, Firepos.position, CalcRotation(spell.instances, i, 360f));
-                summonObject.transform.SetParent(transform, true);
-                summonObject.transform.localPosition = Vector3.zero;
-                SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
-                SummoningSpellHandler(spell, summon);
-                summon.Activate();
-            }
-            if (spell.shape == "ranged")
-            {
-                summonObject = Instantiate(spell.summon, transform.position, CalcRotation(spell.instances, i, 140f));
-                SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
-                summonObject.transform.SetParent(transform, true);
-                summonObject.transform.localPosition = Vector3.up;
-                summonObject.transform.Translate(Vector3.back * 3f);
-                SummoningSpellHandler(spell, summon);
-                summon.Activate();
-            }
-            if (spell.shape == "melee")
-            {
-                summonObject = Instantiate(spell.summon, transform.position, CalcRotation(spell.instances, i, 140f));
-                SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
-                summonObject.transform.SetParent(transform, true);
-                summonObject.transform.localPosition = Vector3.up;
-                summonObject.transform.Translate(Vector3.forward * 3f);
-                SummoningSpellHandler(spell, summon);
-                summon.Activate();
+                case 0:
+                    summonObject = Instantiate(spell.summon, Firepos.position, CalcRotation(spell.instances, i, 360f));
+                    summonObject.transform.SetParent(transform, true);
+                    summonObject.transform.localPosition = Vector3.zero;
+                    SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
+                    SummoningSpellHandler(spell, summon);
+                    summon.Activate();
+                    break;
+                case 1:
+                    summonObject = Instantiate(spell.summon, transform.position, CalcRotation(spell.instances, i, 140f));
+                    SummoningSpell summon2 = summonObject.GetComponent<SummoningSpell>();
+                    summonObject.transform.SetParent(transform, true);
+                    summonObject.transform.localPosition = Vector3.up;
+                    summonObject.transform.Translate(Vector3.back * 3f);
+                    SummoningSpellHandler(spell, summon2);
+                    summon2.Activate();
+                    break;
+                case 2:
+                    summonObject = Instantiate(spell.summon, transform.position, CalcRotation(spell.instances, i, 140f));
+                    SummoningSpell summon3 = summonObject.GetComponent<SummoningSpell>();
+                    summonObject.transform.SetParent(transform, true);
+                    summonObject.transform.localPosition = Vector3.up;
+                    summonObject.transform.Translate(Vector3.forward * 3f);
+                    SummoningSpellHandler(spell, summon3);
+                    summon3.Activate();
+                    break;
             }
         }
     }
@@ -473,7 +473,7 @@ public class SpellManager : MonoBehaviour
     private IEnumerator AoEInstanceHandler(Spell spell)
     {
         Vector3 pos = Vector3.zero;
-        if (spell.shape == "point")
+        if (spell.shape == 2)
         {
             if (casterType == 1)
             {

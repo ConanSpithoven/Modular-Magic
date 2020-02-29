@@ -5,10 +5,11 @@ using UnityEngine;
 public class ShieldSpell : MonoBehaviour
 {
     private Element element;
+    private enum SpellShape { barrier, shield, deploy }
     private float damage = 1f;
     private float lifetime = 1f;
     private int instances= 1;
-    private string shape = "barrier";
+    private SpellShape shape = default;
     private float speed = 1f;
     private float size = 1f;
     private Transform caster = default;
@@ -26,7 +27,7 @@ public class ShieldSpell : MonoBehaviour
 
     private void Update()
     {
-        if (shape == "shield")
+        if (shape == SpellShape.shield)
         {
             if (setup)
             {
@@ -38,7 +39,7 @@ public class ShieldSpell : MonoBehaviour
                 Setup();
             }
         }
-        else if (shape == "deploy")
+        else if (shape == SpellShape.deploy)
         {
             if (!setup)
                 Setup();
@@ -60,8 +61,9 @@ public class ShieldSpell : MonoBehaviour
         this.element = element;
     }
 
-    public void SetShape(string shape){
-        this.shape = shape;
+    public void SetShape(int shape)
+    {
+        this.shape = (SpellShape)shape;
     }
 
     public void SetDamage(float damage)
@@ -99,15 +101,15 @@ public class ShieldSpell : MonoBehaviour
         gameObject.SetActive(true);
         switch (shape)
         {
-            case "barrier":
+            case SpellShape.barrier:
                 damage += (speed + size) * 0.2f;
                 damage *= instances;
                 break;
-            case "shield":
+            case SpellShape.shield:
                 damage *= 1.5f;
                 transform.localScale *= 0;
                 break;
-            case "deploy":
+            case SpellShape.deploy:
                 transform.localScale *= 0;
                 size *= 2;
                 startPos = caster.position;
@@ -178,7 +180,7 @@ public class ShieldSpell : MonoBehaviour
 
     private void Setup()
     {
-        if (shape == "shield")
+        if (shape == SpellShape.shield)
         {
             if (currentSize >= size && Vector3.Distance(caster.position, transform.position) >= size)
             {
@@ -190,7 +192,7 @@ public class ShieldSpell : MonoBehaviour
             if (Vector3.Distance(caster.position, transform.position) < size)
                 SetupDistance();
         }
-        else if (shape == "deploy")
+        else if (shape == SpellShape.deploy)
         {
             if (currentSize >= size && Vector3.Distance(startPos, transform.position) >= size)
             {
@@ -208,7 +210,7 @@ public class ShieldSpell : MonoBehaviour
     {
         currentSize += 2f * speed * Time.deltaTime;
         float sizelimited = Mathf.Clamp(currentSize, 0f, size);
-        if (shape == "shield" || shape == "deploy")
+        if (shape == SpellShape.shield || shape == SpellShape.deploy)
         {
             transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited * 0.2f);
         }
@@ -223,7 +225,6 @@ public class ShieldSpell : MonoBehaviour
 
     private void OnCollisionEnter(Collision col)
     {
-        if (shape != "orbit") { return; }
         if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Shield_Spell"))
         {
             if (col.gameObject.TryGetComponent(out EnemyManager enemy))

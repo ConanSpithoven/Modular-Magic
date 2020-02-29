@@ -5,8 +5,9 @@ using UnityEngine;
 public class HealSpell : MonoBehaviour
 {
     private Element element;
+    private enum SpellShape { instant, dot, percent }
     private float lifetime = 0f;
-    private string shape = "instant";
+    private SpellShape shape = default;
     private float damage = 0f;
     private int instances = 0;
     private float speed = 0f;
@@ -22,7 +23,7 @@ public class HealSpell : MonoBehaviour
 
     void Update()
     {
-        if (shape == "instant")
+        if (shape == SpellShape.instant)
         {
             transform.localPosition += new Vector3(0f, -0.1f, 0f);
             transform.localScale += new Vector3(0.05f * Time.deltaTime, 0f, 0.05f * Time.deltaTime);
@@ -49,9 +50,9 @@ public class HealSpell : MonoBehaviour
         this.lifetime = lifetime;
     }
 
-    public void SetShape(string shape)
+    public void SetShape(int shape)
     {
-        this.shape = shape;
+        this.shape = (SpellShape)shape;
     }
 
     public void SetDamage(float damage)
@@ -85,7 +86,7 @@ public class HealSpell : MonoBehaviour
         switch (shape)
         {
             default:
-            case "instant":
+            case SpellShape.instant:
                 damage += (speed + size) * 0.2f;
                 damage *= instances;
                 transform.localPosition = new Vector3(0f, 1.5f, 0f);
@@ -94,7 +95,7 @@ public class HealSpell : MonoBehaviour
                     player.Heal(damage);
                 }
                 break;
-            case "dot":
+            case SpellShape.dot:
                 damage += size;
                 instances *= 5;
                 if (caster.TryGetComponent(out PlayerManager playerDOT))
@@ -102,7 +103,7 @@ public class HealSpell : MonoBehaviour
                     playerDOT.DOTHeal(damage, instances, (1f / speed));
                 }
                 break;
-            case "percent":
+            case SpellShape.percent:
                 damage += (speed + size) * 0.2f;
                 damage *= instances;
                 damage = Mathf.Clamp(damage, 0f, 100f);
