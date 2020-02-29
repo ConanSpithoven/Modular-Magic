@@ -27,7 +27,16 @@ public class ProjectileSpell : MonoBehaviour
     {
         if (shape == "line")
         {
-            currentsize += 10f * Time.deltaTime;
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+            {
+                currentsize = hit.distance / 2f;
+            }
+            else
+            {
+                currentsize += 10f * Time.deltaTime;
+            }
             float sizelimited = Mathf.Clamp(currentsize, 0f, size);
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, sizelimited);
         }
