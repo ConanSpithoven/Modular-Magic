@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Light Heal
   m_EditorClassIdentifier: 
   spellType: 0
-  cooldownTime: 10
+  cooldownTime: 12
   onCooldown: 0
   shape: instant
   power: 10

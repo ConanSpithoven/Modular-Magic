@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Whitetower Teleportation
   m_EditorClassIdentifier: 
   spellType: 0
-  cooldownTime: 2
+  cooldownTime: 5
   onCooldown: 0
   shape: teleport
   power: 1

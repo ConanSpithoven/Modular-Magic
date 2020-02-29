@@ -103,7 +103,7 @@ public class ProjectileSpell : MonoBehaviour
                 }
                 Rigidbody rb = GetComponent<Rigidbody>();
                 transform.localScale *= (size / 5f);
-                rb.velocity = transform.forward * speed * Time.deltaTime * 100f;
+                rb.velocity = transform.forward * (speed + 9) * Time.deltaTime * 100f;
                 Destroy(gameObject, lifetime);
                 break;
             case "line":

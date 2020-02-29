@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Magic Missile Bouncing
   m_EditorClassIdentifier: 
   spellType: 1
-  cooldownTime: 0.3
+  cooldownTime: 1
   onCooldown: 0
   shape: ball
   power: 1
   lifetime: 1
   size: 1
   instances: 1
-  speed: 10
+  speed: 1
   unique: 2
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   aoe: {fileID: 0}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: The Dunker
   m_EditorClassIdentifier: 
   spellType: 3
-  cooldownTime: 0
+  cooldownTime: 5
   onCooldown: 0
   shape: axe
   power: 1

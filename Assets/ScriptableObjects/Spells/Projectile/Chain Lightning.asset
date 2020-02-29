@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Chain Lightning
   m_EditorClassIdentifier: 
   spellType: 1
-  cooldownTime: 0
+  cooldownTime: 2
   onCooldown: 0
   shape: chain
   power: 1

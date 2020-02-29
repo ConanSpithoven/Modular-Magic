@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Indestructible Shield
   m_EditorClassIdentifier: 
   spellType: 0
-  cooldownTime: 12
+  cooldownTime: 8
   onCooldown: 0
   shape: deploy
   power: 1

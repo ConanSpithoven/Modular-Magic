@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Death Knight
   m_EditorClassIdentifier: 
   spellType: 4
-  cooldownTime: 0
+  cooldownTime: 10
   onCooldown: 0
   shape: melee
   power: 2

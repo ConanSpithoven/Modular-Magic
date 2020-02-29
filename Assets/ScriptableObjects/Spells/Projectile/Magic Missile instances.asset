@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Magic Missile instances
   m_EditorClassIdentifier: 
   spellType: 1
-  cooldownTime: 0
+  cooldownTime: 1
   onCooldown: 0
   shape: ball
   power: 1

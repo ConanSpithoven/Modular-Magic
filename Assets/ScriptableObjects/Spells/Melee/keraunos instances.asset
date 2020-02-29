@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: keraunos instances
   m_EditorClassIdentifier: 
   spellType: 3
-  cooldownTime: 0
+  cooldownTime: 3
   onCooldown: 0
   shape: spear
   power: 1
