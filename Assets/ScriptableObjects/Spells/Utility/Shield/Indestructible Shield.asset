@@ -15,7 +15,7 @@ MonoBehaviour:
   spellType: 0
   cooldownTime: 8
   onCooldown: 0
-  shape: deploy
+  shape: 2
   power: 1
   lifetime: 10
   size: 1

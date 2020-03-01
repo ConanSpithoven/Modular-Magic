@@ -15,7 +15,7 @@ MonoBehaviour:
   spellType: 4
   cooldownTime: 10
   onCooldown: 0
-  shape: melee
+  shape: 2
   power: 2
   lifetime: 5
   size: 1

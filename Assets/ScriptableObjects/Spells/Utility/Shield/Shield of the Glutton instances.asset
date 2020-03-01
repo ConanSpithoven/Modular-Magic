@@ -15,7 +15,7 @@ MonoBehaviour:
   spellType: 0
   cooldownTime: 5
   onCooldown: 0
-  shape: shield
+  shape: 1
   power: 1
   lifetime: 10
   size: 1

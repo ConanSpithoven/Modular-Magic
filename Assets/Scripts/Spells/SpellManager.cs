@@ -107,7 +107,7 @@ public class SpellManager : MonoBehaviour
                 GameObject projectileObject = Instantiate(spell.projectile, Firepos.position, Model.rotation);
                 ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
                 projectileObject.transform.SetParent(Firepos);
-                if (spell.shape == 1)
+                if (spell.shape == 0)
                 {
                     projectileObject.transform.SetParent(null, true);
                 }
