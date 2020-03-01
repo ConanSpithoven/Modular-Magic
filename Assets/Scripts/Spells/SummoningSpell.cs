@@ -6,11 +6,12 @@ using UnityEngine.AI;
 public class SummoningSpell : MonoBehaviour
 {
     [SerializeField] private LayerMask obstacles = default;
+    private enum SpellShape { chaser, ranged, melee }
     private Element element;
     private float speed = 1f;
     private float damage = 1f;
     private float lifetime = 1f;
-    private string shape = "ball";
+    private SpellShape shape = default;
     private int instances = 1;
     private int unique = 0;
     private float size = 1f;
@@ -43,7 +44,7 @@ public class SummoningSpell : MonoBehaviour
     {
         switch (shape)
         {
-            case "chaser":
+            case SpellShape.chaser:
                 if (setup)
                 {
                     if (!targetFound)
@@ -66,7 +67,7 @@ public class SummoningSpell : MonoBehaviour
                     Setup();
                 }
                 break;
-            case "ranged":
+            case SpellShape.ranged:
                 TargetFinder();
                 if (Vector3.Distance(transform.position, caster.position) > 2f)
                 {
@@ -94,7 +95,7 @@ public class SummoningSpell : MonoBehaviour
                     transform.rotation = Quaternion.Euler(0, rotation, 0);
                 }
                 break;
-            case "melee":
+            case SpellShape.melee:
                 TargetFinder();
                 if (Vector3.Distance(transform.position, caster.position) > 2f)
                 {
@@ -161,9 +162,9 @@ public class SummoningSpell : MonoBehaviour
         this.size = size;
     }
 
-    public void SetShape(string shape)
+    public void SetShape(int shape)
     {
-        this.shape = shape;
+        this.shape = (SpellShape)shape;
     }
 
     public void SetDamage(float damage)
@@ -196,11 +197,11 @@ public class SummoningSpell : MonoBehaviour
         gameObject.SetActive(true);
         switch (shape)
         {
-            case "chaser":
+            case SpellShape.chaser:
                 StartCoroutine("ChaserTimer");
                 transform.localScale *= 0;
                 break;
-            case "ranged":
+            case SpellShape.ranged:
                 agent = GetComponent<NavMeshAgent>();
                 attackRate = (1f / (speed / 5f));
                 hp = damage * 2f;
@@ -208,7 +209,7 @@ public class SummoningSpell : MonoBehaviour
                 summonSpellInventory = GetComponent<SpellInventory>();
                 Destroy(gameObject, lifetime*5f);
                 break;
-            case "melee":
+            case SpellShape.melee:
                 agent = GetComponent<NavMeshAgent>();
                 attackRate = (1f / (speed / 3f));
                 hp = damage * 5f;
@@ -250,7 +251,7 @@ public class SummoningSpell : MonoBehaviour
     private void TargetFinder()
     {
         float searchSize;
-        if (shape == "ranged")
+        if (shape == SpellShape.ranged)
         {
             searchSize = size * 6f;
         }
@@ -286,7 +287,7 @@ public class SummoningSpell : MonoBehaviour
         {
             target = closestTarget;
             targetFound = true;
-            if(shape == "ranged")
+            if(shape == SpellShape.ranged)
             {
                 summonSpellInventory.SetTargetFound(true);
                 summonSpellInventory.SetTarget(target);
@@ -296,7 +297,7 @@ public class SummoningSpell : MonoBehaviour
         {
             target = null;
             targetFound = false;
-            if(shape == "ranged")
+            if(shape == SpellShape.ranged)
             {
                 summonSpellInventory.SetTargetFound(false);
                 summonSpellInventory.SetTarget(null);
@@ -338,7 +339,7 @@ public class SummoningSpell : MonoBehaviour
             {
                 summon.ReducePower(damage, element);
             }
-            if(shape == "chaser")
+            if(shape == SpellShape.chaser)
                 Destroy(gameObject);
         }
         else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
@@ -351,13 +352,13 @@ public class SummoningSpell : MonoBehaviour
             {
                 summon.ReducePower(damage, element);
             }
-            if(shape == "chaser")
+            if(shape == SpellShape.chaser)
                 Destroy(gameObject);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
             col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
-            if(shape == "chaser")
+            if(shape == SpellShape.chaser)
                 Destroy(gameObject);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
@@ -366,14 +367,14 @@ public class SummoningSpell : MonoBehaviour
             {
                 projectile.ReducePower(damage, element);
             }
-            if(shape == "chaser")
+            if(shape == SpellShape.chaser)
                 Destroy(gameObject);
         }
     }
 
     private void OnTriggerEnter(Collider col)
     {
-        if (shape == "chaser")
+        if (shape == SpellShape.chaser)
         {
             if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
             {
@@ -394,7 +395,7 @@ public class SummoningSpell : MonoBehaviour
             }
                 return;
         }
-        else if (shape == "melee")
+        else if (shape == SpellShape.melee)
         {
             if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Summon_Spell"))
             {
@@ -406,7 +407,7 @@ public class SummoningSpell : MonoBehaviour
                 {
                     summon.ReducePower(damage, element);
                 }
-                if(shape == "chaser")
+                if(shape == SpellShape.chaser)
                     Destroy(gameObject);
             }
             else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Summon_Spell")))
@@ -419,13 +420,13 @@ public class SummoningSpell : MonoBehaviour
                 {
                     summon.ReducePower(damage, element);
                 }
-                if(shape == "chaser")
+                if(shape == SpellShape.chaser)
                     Destroy(gameObject);
             }
             else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Summon_Spell")))
             {
                 col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
-                if(shape == "chaser")
+                if(shape == SpellShape.chaser)
                     Destroy(gameObject);
             }
             else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Summon_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")))
@@ -434,7 +435,7 @@ public class SummoningSpell : MonoBehaviour
                 {
                     projectile.ReducePower(damage, element);
                 }
-                if(shape == "chaser")
+                if(shape == SpellShape.chaser)
                     Destroy(gameObject);
             }
         }

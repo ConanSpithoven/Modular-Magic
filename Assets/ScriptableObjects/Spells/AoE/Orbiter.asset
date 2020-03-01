@@ -15,7 +15,7 @@ MonoBehaviour:
   spellType: 2
   cooldownTime: 12
   onCooldown: 0
-  shape: orbit
+  shape: 1
   power: 1
   lifetime: 5
   size: 1

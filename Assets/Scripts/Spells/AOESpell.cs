@@ -4,12 +4,13 @@ using UnityEngine;
 public class AOESpell : MonoBehaviour
 {
     private Element element;
+    private enum SpellShape { orb, orbit, point }
     private float damage = 1f;
     private float lifetime = 1f;
     private float size = 1f;
     private float speed = 1f;
     private float currentsize = 0f;
-    private string shape = "orb";
+    private SpellShape shape = default;
     private SpellInventory spellInventory = default;
     private int spellSlot = 1;
     private Transform caster = default;
@@ -24,7 +25,7 @@ public class AOESpell : MonoBehaviour
 
     void Update()
     {
-        if (shape == "orb" || shape == "point")
+        if (shape == SpellShape.orb || shape == SpellShape.point)
         {
             if (currentsize < size)
             {
@@ -40,7 +41,7 @@ public class AOESpell : MonoBehaviour
             }
             return;
         }
-        else if (shape == "orbit")
+        else if (shape == SpellShape.orbit)
         {
             if (currentSize >= size && Vector3.Distance(caster.position, transform.position) >= 2f)
             {
@@ -89,9 +90,9 @@ public class AOESpell : MonoBehaviour
         this.speed = speed;
     }
 
-    public void SetShape(string shape)
+    public void SetShape(int shape)
     {
-        this.shape = shape;
+        this.shape = (SpellShape)shape;
     }
 
     public void SetCaster(Transform caster)
@@ -105,13 +106,13 @@ public class AOESpell : MonoBehaviour
         transform.localScale *= 0;
         switch (shape)
         {
-            case "orb":
+            case SpellShape.orb:
                 size *= 2f;
                 transform.SetParent(null, true);
                 break;
-            case "orbit":
+            case SpellShape.orbit:
                 break;
-            case "point":
+            case SpellShape.point:
                 size *= 1.5f;
                 break;
         }
@@ -124,14 +125,7 @@ public class AOESpell : MonoBehaviour
     {
         currentSize += 2f * speed * Time.deltaTime;
         float sizelimited = Mathf.Clamp(currentSize, 0f, size);
-        if (shape == "shield")
-        {
-            transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited * 0.2f);
-        }
-        else
-        {
-            transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited);
-        }
+        transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited);
     }
 
     private void SetupDistance()

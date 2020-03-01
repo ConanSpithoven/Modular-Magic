@@ -15,7 +15,7 @@ MonoBehaviour:
   spellType: 3
   cooldownTime: 3
   onCooldown: 0
-  shape: spear
+  shape: 1
   power: 1
   lifetime: 1
   size: 1
