@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeSpell : MonoBehaviour
+public class MeleeSpell : Spell
 {
-    private Element element;
     private enum SpellShape { sword, spear, axe }
-    private float damage = 1f;
-    private float lifetime = 1f;
-    private float size = 1f;
-    private float speed = 1f;
-    private SpellShape shape = default;
+    private SpellShape variant = default;
     private SpellInventory spellInventory = default;
-    private int spellSlot = 1;
     private bool invert = false;
     private Vector3 targetPos = default;
     private Vector3 oldPos = default;
@@ -20,14 +14,9 @@ public class MeleeSpell : MonoBehaviour
     private float travelDistance = default;
     private Transform FirePos = default;
 
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
-
     private void Update()
     {
-        switch (shape)
+        switch (variant)
         {
             case SpellShape.sword: 
                 if (transform.localRotation.y < Quaternion.Euler(0, 80, 0).y && transform.localRotation.y > Quaternion.Euler(0, -80, 0).y)
@@ -79,44 +68,9 @@ public class MeleeSpell : MonoBehaviour
         }
     }
 
-    public void SetSlot(int spellSlot)
-    {
-        this.spellSlot = spellSlot;
-    }
-
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
-    }
-
-    public void SetElement(Element element)
-    {
-        this.element = element;
-    }
-
-    public void SetLifetime(float lifetime)
-    {
-        this.lifetime = lifetime;
-    }
-
-    public void SetSize(float size)
-    {
-        this.size = size;
-    }
-
-    public void SetDamage(float damage)
-    {
-        this.damage = damage;
-    }
-
-    public void SetSpeed(float speed)
-    {
-        this.speed = speed;
-    }
-
-    public void SetShape(int shape)
-    {
-        this.shape = (SpellShape)shape;
     }
 
     public void SetDirection(bool invert)
@@ -131,9 +85,9 @@ public class MeleeSpell : MonoBehaviour
 
     public void Activate()
     {
-        gameObject.SetActive(true);
+        variant = (SpellShape)shape;
         transform.localScale *= size;
-        switch (shape)
+        switch (variant)
         {
             case SpellShape.sword:
                 speed *= 250f;
@@ -194,7 +148,7 @@ public class MeleeSpell : MonoBehaviour
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
@@ -203,7 +157,7 @@ public class MeleeSpell : MonoBehaviour
                 projectile.ReducePower(damage, element);
             }
         }
-        if (shape == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
+        if (variant == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
             Destroy(gameObject);
     }
 }

@@ -1,32 +1,19 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class ProjectileSpell : MonoBehaviour
+public class ProjectileSpell : Spell
 {
     [SerializeField] private LayerMask obstacles = default;
     private enum SpellShape { ball, line, chain }
-    private Element element;
-    private float speed = 1f;
-    private float damage = 1f;
-    private float lifetime = 1f;
-    private SpellShape shape = default;
-    private int instances = 1;
-    private int unique = 0;
-    private float size = 1f;
+    private SpellShape variant = default;
     private bool hit = true;
     private float currentsize = 0f;
     private SpellInventory spellInventory = default;
-    private int spellSlot = 1;
     private Transform FirePos = default;
-
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
 
     private void Update()
     {
-        if (shape == SpellShape.line)
+        if (variant == SpellShape.line)
         {
 
             RaycastHit hit;
@@ -43,67 +30,20 @@ public class ProjectileSpell : MonoBehaviour
         }
     }
 
-    public void SetSlot(int spellSlot)
+    public void SetFirePos(Transform FirePos)
     {
-        this.spellSlot = spellSlot;
+        this.FirePos = FirePos;
     }
 
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
     }
-    public void SetElement(Element element)
-    {
-        this.element = element;
-    }
-
-    public void SetUnique(int unique) {
-        this.unique = unique;
-    }
-
-    public void SetSpeed(float speed)
-    {
-        this.speed = speed;
-    }
-
-    public void SetSize(float size)
-    {
-        this.size = size;
-    }
-
-    public void SetShape(int shape){
-        this.shape = (SpellShape)shape;
-    }
-
-    public void SetDamage(float damage)
-    {
-        this.damage = damage;
-    }
-
-    public void SetLifetime(float lifetime)
-    {
-        this.lifetime = lifetime;
-    }
-
-    public void SetInstances(int instances)
-    {
-        this.instances = instances;
-    }
-
-    public void SetFirePos(Transform FirePos)
-    {
-        this.FirePos = FirePos;
-    }
-
-    public float GetDamage()
-    {
-        return damage;
-    }
 
     public void Activate()
     {
-        gameObject.SetActive(true);
-        switch (shape)
+        variant = (SpellShape)shape;
+        switch (variant)
         {
             case SpellShape.ball:
                 if (unique >= 1)
@@ -155,7 +95,7 @@ public class ProjectileSpell : MonoBehaviour
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
@@ -164,11 +104,11 @@ public class ProjectileSpell : MonoBehaviour
                 projectile.ReducePower(damage, element);
             }
         }
-        if (unique > 0 && shape != SpellShape.line)
+        if (unique > 0 && variant != SpellShape.line)
         {
             unique -= 1;
         }
-        else if (unique <= 0 && shape != SpellShape.line)
+        else if (unique <= 0 && variant != SpellShape.line)
         {
             Destroy(gameObject);
         }
@@ -176,7 +116,7 @@ public class ProjectileSpell : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if(shape == SpellShape.chain && col.gameObject.CompareTag("Wall"))
+        if(variant == SpellShape.chain && col.gameObject.CompareTag("Wall"))
         {
             Destroy(gameObject, 0.1f);
         }
@@ -192,11 +132,11 @@ public class ProjectileSpell : MonoBehaviour
                     summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
-                if (shape == SpellShape.chain && instances > 0)
+                if (variant == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
                 }
-                else if (shape == SpellShape.chain && instances <= 0)
+                else if (variant == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
@@ -215,11 +155,11 @@ public class ProjectileSpell : MonoBehaviour
                     summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
-                if (shape == SpellShape.chain && instances > 0)
+                if (variant == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
                 }
-                else if (shape == SpellShape.chain && instances <= 0)
+                else if (variant == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
@@ -229,7 +169,7 @@ public class ProjectileSpell : MonoBehaviour
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -261,11 +201,11 @@ public class ProjectileSpell : MonoBehaviour
                     summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
-                if (shape == SpellShape.chain && instances > 0)
+                if (variant == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
                 }
-                else if (shape == SpellShape.chain && instances <= 0)
+                else if (variant == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
@@ -285,11 +225,11 @@ public class ProjectileSpell : MonoBehaviour
                     summon.ReducePower(damage, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
-                if (shape == SpellShape.chain && instances > 0)
+                if (variant == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
                 }
-                else if (shape == SpellShape.chain && instances <= 0)
+                else if (variant == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
@@ -299,7 +239,7 @@ public class ProjectileSpell : MonoBehaviour
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -375,56 +315,5 @@ public class ProjectileSpell : MonoBehaviour
         hit = false;
         yield return new WaitForSeconds(0.5f / speed);
         hit = true;
-    }
-
-    public void ReducePower(float damage, Element element)
-    {
-        float totalDamage = damage * CheckElement(element);
-        this.damage -= totalDamage;
-        if (this.damage <= 0f)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private float CheckElement(Element element)
-    {
-        float modifier = 1f;
-        if (element.ElementName == this.element.ElementName)
-        {
-            modifier = 0.5f;
-        }
-        else
-        {
-            foreach (string strength in element.ElementStrengths)
-            {
-                if (strength == this.element.ElementName || strength == "All")
-                {
-                    modifier = 1.25f;
-                }
-            }
-            foreach (string weakness in element.ElementWeaknesses)
-            {
-                if (weakness == this.element.ElementName || weakness == "All")
-                {
-                    modifier = 0.75f;
-                }
-            }
-            foreach (string strength in this.element.ElementStrengths)
-            {
-                if (strength == element.ElementName || strength == "All")
-                {
-                    modifier = 0.75f;
-                }
-            }
-            foreach (string weakness in this.element.ElementWeaknesses)
-            {
-                if (weakness == element.ElementName || weakness == "All")
-                {
-                    modifier = 1.25f;
-                }
-            }
-        }
-        return modifier;
     }
 }

@@ -2055,20 +2055,20 @@ PrefabInstance:
         type: 3}
       propertyPath: slotTwo
       value: 
-      objectReference: {fileID: 11400000, guid: 7471a254dfec95144a1c825d151ff0fe,
-        type: 2}
+      objectReference: {fileID: 5376322008537632172, guid: 2c99bd0d8841f20498a350735d1e0ee3,
+        type: 3}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}
       propertyPath: slotThree
       value: 
-      objectReference: {fileID: 11400000, guid: a2f09fd548258334ab41f160f240856a,
-        type: 2}
+      objectReference: {fileID: 8537072114484458321, guid: ed23ad64c3675fd439e1f8b6b298509b,
+        type: 3}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}
       propertyPath: slotOne
       value: 
-      objectReference: {fileID: 11400000, guid: 6a77b56360b7e0847b45ac7f074e11ac,
-        type: 2}
+      objectReference: {fileID: 1823565709972484459, guid: aa871fee6a7bc2741ab3fa4880271e98,
+        type: 3}
     - target: {fileID: 5390303322027678984, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}
       propertyPath: m_Constraints
@@ -2090,5 +2090,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f,
         type: 2}
+    - target: {fileID: 5390303322027678983, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
+        type: 3}
+      propertyPath: HP
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa2b021256a721d4ea4cd8f0a54c20ae, type: 3}

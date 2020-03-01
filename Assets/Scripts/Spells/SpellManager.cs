@@ -20,7 +20,7 @@ public class SpellManager : MonoBehaviour
 
     public void ActivateSpell(Spell spell, int spellSlot)
     {
-        spell.SetSpellSlot(spellSlot);
+        spell.SetSlot(spellSlot);
         switch (spell.spellType)
         {
             case SpellType.AOE:
@@ -29,8 +29,14 @@ public class SpellManager : MonoBehaviour
             case SpellType.Projectile:
                 ActivateProjectileSpell(spell);
                 break;
-            case SpellType.Utility:
-                ActivateUtilitySpell(spell);
+            case SpellType.Shield:
+                ActivateShieldSpell(spell);
+                break;
+            case SpellType.Heal:
+                ActvivateHealSpell(spell);
+                break;
+            case SpellType.Movement:
+                ActivateMovementSpell(spell);
                 break;
             case SpellType.Melee:
                 ActivateMeleeSpell(spell);
@@ -49,7 +55,7 @@ public class SpellManager : MonoBehaviour
             case 0:
                 if (spell.instances <= 1)
                 {
-                    GameObject aoeObject = Instantiate(spell.aoe, Vector3.zero, Model.rotation);
+                    GameObject aoeObject = Instantiate(spell.gameObject, Vector3.zero, Model.rotation);
                     AOESpell aoe = aoeObject.GetComponent<AOESpell>();
                     aoe.transform.SetParent(transform, false);
                     AoESpellHandler(spell, aoe);
@@ -64,7 +70,7 @@ public class SpellManager : MonoBehaviour
                 for (int i = 0; i < spell.instances; i++)
                 {
                     Quaternion rotation = CalcRotation(spell.instances, i, 360f);
-                    GameObject aoeObject = Instantiate(spell.aoe, Vector3.zero, rotation);
+                    GameObject aoeObject = Instantiate(spell.gameObject, Vector3.zero, rotation);
                     AOESpell aoe = aoeObject.GetComponent<AOESpell>();
                     aoeObject.transform.SetParent(transform, false);
                     AoESpellHandler(spell, aoe);
@@ -85,7 +91,7 @@ public class SpellManager : MonoBehaviour
                     {
                         targetPos = target.position;
                     }
-                    GameObject aoeObject = Instantiate(spell.aoe, targetPos, Model.transform.rotation);
+                    GameObject aoeObject = Instantiate(spell.gameObject, targetPos, Model.transform.rotation);
                     AOESpell aoe = aoeObject.GetComponent<AOESpell>();
                     AoESpellHandler(spell, aoe);
                     aoe.Activate();
@@ -104,7 +110,7 @@ public class SpellManager : MonoBehaviour
         {
             if (spell.instances <= 1)
             {
-                GameObject projectileObject = Instantiate(spell.projectile, Firepos.position, Model.rotation);
+                GameObject projectileObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
                 ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
                 projectileObject.transform.SetParent(Firepos);
                 if (spell.shape == 0)
@@ -121,7 +127,7 @@ public class SpellManager : MonoBehaviour
         }
         else if (spell.shape == 2)
         {
-            GameObject projectileObject = Instantiate(spell.projectile, Firepos.position, Model.rotation);
+            GameObject projectileObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
             ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
             projectileObject.transform.SetParent(Firepos);
             projectileObject.transform.SetParent(null, true);
@@ -132,32 +138,30 @@ public class SpellManager : MonoBehaviour
         }
     }
 
-    private void ActivateUtilitySpell(Spell spell)
+    private void ActivateShieldSpell(Spell spell)
     {
-        switch (spell.utilityType)
+        switch (spell.shape)
         {
-            case (UtilityType.Shield):
-                switch (spell.shape)
-                {
-                    default:
-                    case 0:
-                        UtilityBarrierHandler(spell);
-                        break;
-                    case 1:
-                        UtilityShieldHandler(spell);
-                        break;
-                    case 2:
-                        UtilityDeployHandler(spell);
-                        break;
-                }
+            default:
+            case 0:
+                UtilityBarrierHandler(spell);
                 break;
-            case (UtilityType.Heal):
-                HealSpellHandler(spell);
+            case 1:
+                UtilityShieldHandler(spell);
                 break;
-            case (UtilityType.Movement):
-                ActivateMovementSpell(spell);
+            case 2:
+                UtilityDeployHandler(spell);
                 break;
         }
+    }
+
+    private void ActvivateHealSpell(Spell spell) 
+    {
+        GameObject healObject = Instantiate(spell.gameObject, Vector3.zero, Quaternion.identity);
+        HealSpell heal = healObject.GetComponent<HealSpell>();
+        heal.transform.SetParent(transform, false);
+        HealSpellHandler(spell, heal);
+        heal.Activate();
     }
 
     private void ActivateMeleeSpell(Spell spell)
@@ -183,7 +187,7 @@ public class SpellManager : MonoBehaviour
             if (GetComponentInChildren<MovementSpell>() != null)
                 if (GetComponentInChildren<MovementSpell>().GetShape() == spell.shape) { return; }
 
-            GameObject movementObject = Instantiate(spell.utility, Vector3.zero, Model.rotation);
+            GameObject movementObject = Instantiate(spell.gameObject, Vector3.zero, Model.rotation);
             MovementSpell movementSpell = movementObject.GetComponent<MovementSpell>();
             movementSpell.transform.SetParent(transform, false);
             MovementSpellHandler(spell, movementSpell);
@@ -202,7 +206,7 @@ public class SpellManager : MonoBehaviour
             case 0:
                 if (spell.instances <= 1)
                 {
-                    GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
+                    GameObject summonObject = Instantiate(spell.gameObject, transform.position, Model.rotation);
                     SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
                     summonObject.transform.SetParent(transform, true);
                     summonObject.transform.localPosition = Vector3.zero;
@@ -217,7 +221,7 @@ public class SpellManager : MonoBehaviour
             case 1:
                 if (spell.instances <= 1)
                 {
-                    GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
+                    GameObject summonObject = Instantiate(spell.gameObject, transform.position, Model.rotation);
                     SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
                     summonObject.transform.SetParent(transform, true);
                     summonObject.transform.localPosition = Vector3.up;
@@ -233,7 +237,7 @@ public class SpellManager : MonoBehaviour
             case 2:
                 if (spell.instances <= 1)
                 {
-                    GameObject summonObject = Instantiate(spell.summon, transform.position, Model.rotation);
+                    GameObject summonObject = Instantiate(spell.gameObject, transform.position, Model.rotation);
                     SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
                     summonObject.transform.SetParent(transform, true);
                     summonObject.transform.localPosition = Vector3.up;
@@ -255,7 +259,7 @@ public class SpellManager : MonoBehaviour
         projectile.SetUnique(spell.unique);
         projectile.SetSpeed(spell.speed);
         projectile.SetShape(spell.shape);
-        projectile.SetDamage(spell.power);
+        projectile.SetDamage(spell.damage);
         projectile.SetSize(spell.size);
         projectile.SetLifetime(spell.lifetime);
         projectile.SetSlot(spell.GetSpellSlot());
@@ -267,7 +271,7 @@ public class SpellManager : MonoBehaviour
         aoe.SetElement(spell.element);
         aoe.SetCaster(transform);
         aoe.SetSpeed(spell.speed);
-        aoe.SetDamage(spell.power);
+        aoe.SetDamage(spell.damage);
         aoe.SetSize(spell.size);
         aoe.SetLifetime(spell.lifetime);
         aoe.SetShape(spell.shape);
@@ -277,7 +281,7 @@ public class SpellManager : MonoBehaviour
 
     private void UtilityBarrierHandler(Spell spell)
     {
-        GameObject barrierObject = Instantiate(spell.utility, Vector3.zero, Model.rotation);
+        GameObject barrierObject = Instantiate(spell.gameObject, Vector3.zero, Model.rotation);
         ShieldSpell barrier = barrierObject.GetComponent<ShieldSpell>();
         barrier.transform.SetParent(transform, false);
         ShieldSpellHandler(spell, barrier);
@@ -289,7 +293,7 @@ public class SpellManager : MonoBehaviour
         for (int i = 0; i < spell.instances; i++)
         {
             Quaternion rotation = CalcRotation(spell.instances, i, 360f);
-            GameObject shieldObject = Instantiate(spell.utility, Vector3.zero, rotation);
+            GameObject shieldObject = Instantiate(spell.gameObject, Vector3.zero, rotation);
             ShieldSpell shield = shieldObject.GetComponent<ShieldSpell>();
             shieldObject.transform.SetParent(transform, false);
             ShieldSpellHandler(spell, shield);
@@ -301,8 +305,10 @@ public class SpellManager : MonoBehaviour
     {
         for (int i = 0; i < spell.instances; i++)
         {
-            Quaternion rotation = CalcRotation(spell.instances, i, 360f);
-            GameObject deployObject = Instantiate(spell.utility, transform.position, rotation);
+            GameObject deployObject = Instantiate(spell.gameObject, transform.position, Model.rotation);
+            deployObject.transform.SetParent(Firepos);
+            deployObject.transform.Rotate(Vector3.up, (360f / spell.instances) * i);
+            deployObject.transform.SetParent(null, true);
             ShieldSpell deploy = deployObject.GetComponent<ShieldSpell>();
             ShieldSpellHandler(spell, deploy);
             deploy.Activate();
@@ -314,10 +320,11 @@ public class SpellManager : MonoBehaviour
         weapon.SetElement(spell.element);
         weapon.SetLifetime(spell.lifetime);
         weapon.SetSpeed(spell.speed);
-        weapon.SetDamage(spell.power);
+        weapon.SetDamage(spell.damage);
         weapon.SetShape(spell.shape);
         weapon.SetSize(spell.size);
         weapon.SetSlot(spell.GetSpellSlot());
+        weapon.SetFirePos(Firepos);
         weapon.SetSpellInventory(spellInventory);
     }
 
@@ -327,29 +334,25 @@ public class SpellManager : MonoBehaviour
         shield.SetCaster(transform);
         shield.SetLifetime(spell.lifetime);
         shield.SetSpeed(spell.speed);
-        shield.SetDamage(spell.power);
+        shield.SetDamage(spell.damage);
         shield.SetShape(spell.shape);
         shield.SetSize(spell.size);
         shield.SetSlot(spell.GetSpellSlot());
         shield.SetSpellInventory(spellInventory);
     }
 
-    private void HealSpellHandler(Spell spell)
+    private void HealSpellHandler(Spell spell, HealSpell heal)
     {
-        GameObject healObject = Instantiate(spell.utility, Vector3.zero, Quaternion.identity);
-        HealSpell heal = healObject.GetComponent<HealSpell>();
-        heal.transform.SetParent(transform, false);
         heal.SetElement(spell.element);
         heal.SetShape(spell.shape);
         heal.SetLifetime(spell.lifetime);
-        heal.SetDamage(spell.power);
+        heal.SetDamage(spell.damage);
         heal.SetSpeed(spell.speed);
         heal.SetInstances(spell.instances);
         heal.SetSize(spell.size);
         heal.SetCaster(gameObject);
         heal.SetSlot(spell.GetSpellSlot());
         heal.SetSpellInventory(spellInventory);
-        heal.Activate();
     }
 
     private void MovementSpellHandler(Spell spell, MovementSpell movement)
@@ -357,7 +360,7 @@ public class SpellManager : MonoBehaviour
         movement.SetElement(spell.element);
         movement.SetShape(spell.shape);
         movement.SetLifetime(spell.lifetime);
-        movement.SetDamage(spell.power);
+        movement.SetDamage(spell.damage);
         movement.SetSpeed(spell.speed);
         movement.SetInstances(spell.instances);
         movement.SetSize(spell.size);
@@ -372,7 +375,7 @@ public class SpellManager : MonoBehaviour
         summon.SetElement(spell.element);
         summon.SetSpeed(spell.speed);
         summon.SetShape(spell.shape);
-        summon.SetDamage(spell.power);
+        summon.SetDamage(spell.damage);
         summon.SetSize(spell.size);
         summon.SetLifetime(spell.lifetime);
         summon.SetSlot(spell.GetSpellSlot());
@@ -397,7 +400,7 @@ public class SpellManager : MonoBehaviour
             GameObject projectileObject;
             if (spell.shape == 0 || spell.shape == 1)
             {
-                projectileObject = Instantiate(spell.projectile, Firepos.position, Model.rotation);
+                projectileObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
                 projectileObject.transform.SetParent(Firepos);
                 projectileObject.transform.Rotate(Vector3.up, startAngle + i * perBulletAngle);
                 if (spell.shape == 0)
@@ -421,7 +424,7 @@ public class SpellManager : MonoBehaviour
             switch (spell.shape)
             {
                 case 0:
-                    summonObject = Instantiate(spell.summon, Firepos.position, CalcRotation(spell.instances, i, 360f));
+                    summonObject = Instantiate(spell.gameObject, Firepos.position, CalcRotation(spell.instances, i, 360f));
                     summonObject.transform.SetParent(transform, true);
                     summonObject.transform.localPosition = Vector3.zero;
                     SummoningSpell summon = summonObject.GetComponent<SummoningSpell>();
@@ -429,7 +432,7 @@ public class SpellManager : MonoBehaviour
                     summon.Activate();
                     break;
                 case 1:
-                    summonObject = Instantiate(spell.summon, transform.position, CalcRotation(spell.instances, i, 140f));
+                    summonObject = Instantiate(spell.gameObject, transform.position, CalcRotation(spell.instances, i, 140f));
                     SummoningSpell summon2 = summonObject.GetComponent<SummoningSpell>();
                     summonObject.transform.SetParent(transform, true);
                     summonObject.transform.localPosition = Vector3.up;
@@ -438,7 +441,7 @@ public class SpellManager : MonoBehaviour
                     summon2.Activate();
                     break;
                 case 2:
-                    summonObject = Instantiate(spell.summon, transform.position, CalcRotation(spell.instances, i, 140f));
+                    summonObject = Instantiate(spell.gameObject, transform.position, CalcRotation(spell.instances, i, 140f));
                     SummoningSpell summon3 = summonObject.GetComponent<SummoningSpell>();
                     summonObject.transform.SetParent(transform, true);
                     summonObject.transform.localPosition = Vector3.up;
@@ -460,7 +463,7 @@ public class SpellManager : MonoBehaviour
         for (int i = 0; i < instances; i++)
         {
             GameObject pushObject;
-            pushObject = Instantiate(spell.utility, Firepos.position, Model.rotation);
+            pushObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
             pushObject.transform.SetParent(Firepos);
             pushObject.transform.Rotate(Vector3.up, startAngle + i * perBulletAngle);
             pushObject.transform.SetParent(null, true);
@@ -489,7 +492,7 @@ public class SpellManager : MonoBehaviour
         int instances = spell.instances;
         for (int i = 0; i < instances; i++)
         {
-            GameObject aoeObject = Instantiate(spell.aoe, pos, Model.rotation);
+            GameObject aoeObject = Instantiate(spell.gameObject, pos, Model.rotation);
             AOESpell aoe = aoeObject.GetComponent<AOESpell>();
             aoe.transform.SetParent(transform, false);
             AoESpellHandler(spell, aoe);
@@ -503,7 +506,7 @@ public class SpellManager : MonoBehaviour
         bool invert = false;
         for (int i = 0; i < spell.instances; i++)
         {
-            GameObject swordObject = Instantiate(spell.melee, Firepos.position, Model.rotation);
+            GameObject swordObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
             if (invert)
                 swordObject.transform.Rotate(Vector3.up, 75f);
             else
@@ -523,7 +526,7 @@ public class SpellManager : MonoBehaviour
     {
         for (int i = 0; i < spell.instances; i++)
         {
-            GameObject spearObject = Instantiate(spell.melee, Firepos.position, Model.rotation);
+            GameObject spearObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
             spearObject.transform.SetParent(Firepos, true);
             spearObject.transform.Translate(new Vector3(Random.Range(0.75f + (spell.size/4f), 1.25f + (spell.size / 4f)), Random.Range(0f, 0.5f + (spell.size / 4f)), -1f));
             MeleeSpell spear = spearObject.GetComponent<MeleeSpell>();
@@ -537,7 +540,7 @@ public class SpellManager : MonoBehaviour
     {
         for (int i = 0; i < spell.instances; i++)
         {
-            GameObject axeObject = Instantiate(spell.melee, Firepos.position, Model.rotation);
+            GameObject axeObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
             axeObject.transform.Rotate(Vector3.right, -45f);
             axeObject.transform.Rotate(Vector3.forward, Random.Range(-5f, 5f));
             axeObject.transform.SetParent(Firepos, true);

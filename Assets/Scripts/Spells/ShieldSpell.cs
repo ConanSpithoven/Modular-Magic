@@ -2,32 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldSpell : MonoBehaviour
+public class ShieldSpell : Spell
 {
-    private Element element;
     private enum SpellShape { barrier, shield, deploy }
-    private float damage = 1f;
-    private float lifetime = 1f;
-    private int instances= 1;
-    private SpellShape shape = default;
-    private float speed = 1f;
-    private float size = 1f;
+    private SpellShape variant = default;
     private Transform caster = default;
     private float currentSize = 0f;
     private float currentDistance = 0f;
     private SpellInventory spellInventory = default;
-    private int spellSlot = 1;
     private bool setup = false;
     private Vector3 startPos = default;
 
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
-
     private void Update()
     {
-        if (shape == SpellShape.shield)
+        if (variant == SpellShape.shield)
         {
             if (setup)
             {
@@ -39,7 +27,7 @@ public class ShieldSpell : MonoBehaviour
                 Setup();
             }
         }
-        else if (shape == SpellShape.deploy)
+        else if (variant == SpellShape.deploy)
         {
             if (!setup)
                 Setup();
@@ -47,48 +35,9 @@ public class ShieldSpell : MonoBehaviour
         }
     }
 
-    public void SetSlot(int spellSlot)
-    {
-        this.spellSlot = spellSlot;
-    }
-
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
-    }
-    public void SetElement(Element element)
-    {
-        this.element = element;
-    }
-
-    public void SetShape(int shape)
-    {
-        this.shape = (SpellShape)shape;
-    }
-
-    public void SetDamage(float damage)
-    {
-        this.damage = damage;
-    }
-
-    public void SetLifetime(float lifetime)
-    {
-        this.lifetime = lifetime;
-    }
-
-    public void SetInstances(int instances)
-    {
-        this.instances = instances;
-    }
-
-    public void SetSpeed(float speed)
-    {
-        this.speed = speed;
-    }
-
-    public void SetSize(float size)
-    {
-        this.size = size;
     }
 
     public void SetCaster(Transform caster)
@@ -98,8 +47,8 @@ public class ShieldSpell : MonoBehaviour
 
     public void Activate()
     {
-        gameObject.SetActive(true);
-        switch (shape)
+        variant = (SpellShape)shape;
+        switch (variant)
         {
             case SpellShape.barrier:
                 damage += (speed + size) * 0.2f;
@@ -122,65 +71,9 @@ public class ShieldSpell : MonoBehaviour
         Destroy(gameObject, lifetime);
     }
 
-    public void Hit(float damageTaken, Element element)
-    {
-        float totalDamage = damageTaken * CheckElement(element);
-        TakeDamage(totalDamage);
-    }
-
-    private void TakeDamage(float damageTaken)
-    {
-        damage -= damageTaken;
-        if (damage <= 0f)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private float CheckElement(Element element)
-    {
-        float modifier = 1f;
-        if (element.ElementName == this.element.ElementName)
-        {
-            modifier = 0.5f;
-        }
-        else
-        {
-            foreach (string strength in element.ElementStrengths)
-            {
-                if (strength == this.element.ElementName || strength == "All")
-                {
-                    modifier = 1.25f;
-                }
-            }
-            foreach (string weakness in element.ElementWeaknesses)
-            {
-                if (weakness == this.element.ElementName || weakness == "All")
-                {
-                    modifier = 0.75f;
-                }
-            }
-            foreach (string strength in this.element.ElementStrengths)
-            {
-                if (strength == element.ElementName || strength == "All")
-                {
-                    modifier = 0.75f;
-                }
-            }
-            foreach (string weakness in this.element.ElementWeaknesses)
-            {
-                if (weakness == element.ElementName || weakness == "All")
-                {
-                    modifier = 1.25f;
-                }
-            }
-        }
-        return modifier;
-    }
-
     private void Setup()
     {
-        if (shape == SpellShape.shield)
+        if (variant == SpellShape.shield)
         {
             if (currentSize >= size && Vector3.Distance(caster.position, transform.position) >= size)
             {
@@ -192,7 +85,7 @@ public class ShieldSpell : MonoBehaviour
             if (Vector3.Distance(caster.position, transform.position) < size)
                 SetupDistance();
         }
-        else if (shape == SpellShape.deploy)
+        else if (variant == SpellShape.deploy)
         {
             if (currentSize >= size && Vector3.Distance(startPos, transform.position) >= size)
             {
@@ -210,7 +103,7 @@ public class ShieldSpell : MonoBehaviour
     {
         currentSize += 2f * speed * Time.deltaTime;
         float sizelimited = Mathf.Clamp(currentSize, 0f, size);
-        if (shape == SpellShape.shield || shape == SpellShape.deploy)
+        if (variant == SpellShape.shield || variant == SpellShape.deploy)
         {
             transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited * 0.2f);
         }
@@ -225,35 +118,9 @@ public class ShieldSpell : MonoBehaviour
 
     private void OnCollisionEnter(Collision col)
     {
-        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Shield_Spell"))
+        if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Shield_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Shield_Spell")))
         {
-            if (col.gameObject.TryGetComponent(out EnemyManager enemy))
-            {
-                enemy.Hit(damage / 2f, element);
-            }
-            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
-            {
-                summon.ReducePower(damage / 2f, element);
-            }
-        }
-        else if ((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Shield_Spell"))
-        {
-            if (col.gameObject.TryGetComponent(out PlayerManager player))
-            {
-                player.Hit(damage / 2f, element);
-            }
-            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
-            {
-                summon.ReducePower(damage / 2f, element);
-            }
-        }
-        else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Shield_Spell")) || (col.gameObject.CompareTag("enemy_Shield_Spell") && gameObject.CompareTag("Shield_Spell")))
-        {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage / 2f, element);
-        }
-        else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Shield_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Shield_Spell")))
-        {
-            col.gameObject.GetComponent<ProjectileSpell>().ReducePower(damage / 2f, element);
+            col.gameObject.GetComponent<ProjectileSpell>().ReducePower(damage, element);
         }
     }
 }

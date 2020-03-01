@@ -124,6 +124,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bf29b9bf098e644b3fabbec606a08c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellType: 2
+  cooldownTime: 0
+  onCooldown: 0
+  shape: 0
+  damage: 1
+  lifetime: 1
+  size: 1
+  instances: 1
+  speed: 1
+  unique: 0
+  spellSlot: 0
+  element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
 --- !u!54 &888164610907674547
 Rigidbody:
   m_ObjectHideFlags: 0
