@@ -92,6 +92,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f9f4bd123c5105448f62fb37191390e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellType: 1
+  cooldownTime: 0
+  onCooldown: 0
+  shape: 0
+  damage: 0
+  lifetime: 1
+  size: 1
+  instances: 1
+  speed: 1
+  unique: 0
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
 --- !u!136 &8964444968500025839
 CapsuleCollider:
   m_ObjectHideFlags: 0

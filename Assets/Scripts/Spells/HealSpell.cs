@@ -2,77 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealSpell : MonoBehaviour
+public class HealSpell : Spell
 {
-    private Element element;
     private enum SpellShape { instant, dot, percent }
-    private float lifetime = 0f;
-    private SpellShape shape = default;
-    private float damage = 0f;
-    private int instances = 0;
-    private float speed = 0f;
-    private float size = 0f;
+    private SpellShape variant = default;
     private GameObject caster = default;
     private SpellInventory spellInventory = default;
-    private int spellSlot = 1;
-
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
 
     void Update()
     {
-        if (shape == SpellShape.instant)
+        if (variant == SpellShape.instant)
         {
             transform.localPosition += new Vector3(0f, -0.1f, 0f);
             transform.localScale += new Vector3(0.05f * Time.deltaTime, 0f, 0.05f * Time.deltaTime);
         }
     }
 
-    public void SetSlot(int spellSlot)
-    {
-        this.spellSlot = spellSlot;
-    }
-
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
-    }
-
-    public void SetElement(Element element)
-    {
-        this.element = element;
-    }
-
-    public void SetLifetime(float lifetime)
-    {
-        this.lifetime = lifetime;
-    }
-
-    public void SetShape(int shape)
-    {
-        this.shape = (SpellShape)shape;
-    }
-
-    public void SetDamage(float damage)
-    {
-        this.damage = damage;
-    }
-
-    public void SetInstances(int instances)
-    {
-        this.instances = instances;
-    }
-
-    public void SetSpeed(float speed)
-    {
-        this.speed = speed;
-    }
-
-    public void SetSize(float size)
-    {
-        this.size = size;
     }
 
     public void SetCaster(GameObject caster)
@@ -82,8 +30,8 @@ public class HealSpell : MonoBehaviour
 
     public void Activate()
     {
-        gameObject.SetActive(true);
-        switch (shape)
+        variant = (SpellShape)shape;
+        switch (variant)
         {
             default:
             case SpellShape.instant:

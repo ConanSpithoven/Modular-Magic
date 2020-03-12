@@ -2,33 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementSpell : MonoBehaviour
+public class MovementSpell : Spell
 {
     [SerializeField] private LayerMask obstacles = default;
     private enum SpellShape { dash, teleport, push }
-
-    private Element element;
-    private float speed = 1f;
-    private float damage = 1f;
-    private float lifetime = 1f;
-    private int instances = 1;
-    private SpellShape shape = default;
-    private float size = 1f;
+    private SpellShape variant = default;
     private float currentDistance = default;
     private float travelDistance = default;
     private GameObject caster = default;
     private SpellInventory spellInventory = default;
-    private int spellSlot = 1;
     private bool stop = false;
     private Vector3 oldPos = default;
     private Vector3 goal = default;
     private Transform FirePos = default;
     private bool Enabled = default;
-
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
 
     private void Update()
     {
@@ -40,7 +27,7 @@ public class MovementSpell : MonoBehaviour
         {
             Recaster();
         }
-            switch (shape)
+            switch (variant)
         {
             case SpellShape.dash:
                 if (currentDistance < travelDistance)
@@ -73,49 +60,14 @@ public class MovementSpell : MonoBehaviour
         }
     }
 
-    public void SetSlot(int spellSlot)
-    {
-        this.spellSlot = spellSlot;
-    }
-
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
     }
 
-    public void SetElement(Element element)
-    {
-        this.element = element;
-    }
-
-    public void SetSpeed(float speed)
-    {
-        this.speed = speed;
-    }
-
-    public void SetSize(float size)
-    {
-        this.size = size;
-    }
-
-    public void SetShape(int shape)
-    {
-        this.shape = (SpellShape)shape;
-    }
-
     public int GetShape()
     {
-        return (int)shape;
-    }
-
-    public void SetDamage(float damage)
-    {
-        this.damage = damage;
-    }
-
-    public void SetInstances(int instances)
-    {
-        this.instances = instances;
+        return (int)variant;
     }
     
     public void SetCaster(GameObject caster)
@@ -128,23 +80,15 @@ public class MovementSpell : MonoBehaviour
         this.FirePos = FirePos;
     }
 
-    public void SetLifetime(float lifetime)
-    {
-        this.lifetime = lifetime;
-    }
-
     public void Activate()
     {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-            Setup();
-        }
-        if (caster.TryGetComponent(out PlayerManager playerManager) && shape != SpellShape.push)
+        variant = (SpellShape)shape;
+        Setup();
+        if (caster.TryGetComponent(out PlayerManager playerManager) && variant != SpellShape.push)
         {
             playerManager.AllowMovement(false);
         }
-        switch (shape)
+        switch (variant)
         {
             case SpellShape.dash:
                 Dash();
@@ -161,7 +105,7 @@ public class MovementSpell : MonoBehaviour
 
     private void Setup()
     {
-        switch (shape)
+        switch (variant)
         {
             case SpellShape.dash:
                 size += damage;
@@ -293,7 +237,7 @@ public class MovementSpell : MonoBehaviour
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {

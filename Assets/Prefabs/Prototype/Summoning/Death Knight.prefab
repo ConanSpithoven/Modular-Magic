@@ -297,6 +297,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a41b666e81703f447a1b694b016a626d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellType: 6
+  cooldownTime: 0
+  onCooldown: 0
+  shape: 2
+  damage: 1
+  lifetime: 5
+  size: 1
+  instances: 1
+  speed: 1
+  unique: 0
+  spellSlot: 3
+  element: {fileID: 11400000, guid: 93f62f583be8f004596b36a790cbe5b9, type: 2}
   obstacles:
     serializedVersion: 2
     m_Bits: 33280

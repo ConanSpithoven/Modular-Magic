@@ -1,31 +1,20 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class AOESpell : MonoBehaviour
+public class AOESpell : Spell
 {
-    private Element element;
     private enum SpellShape { orb, orbit, point }
-    private float damage = 1f;
-    private float lifetime = 1f;
-    private float size = 1f;
-    private float speed = 1f;
     private float currentsize = 0f;
-    private SpellShape shape = default;
+    private SpellShape variant = default;
     private SpellInventory spellInventory = default;
-    private int spellSlot = 1;
     private Transform caster = default;
     private float currentSize = 0f;
     private float currentDistance = 0f;
     private bool hit = true;
 
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
-
     void Update()
     {
-        if (shape == SpellShape.orb || shape == SpellShape.point)
+        if (variant == SpellShape.orb || variant == SpellShape.point)
         {
             if (currentsize < size)
             {
@@ -41,7 +30,7 @@ public class AOESpell : MonoBehaviour
             }
             return;
         }
-        else if (shape == SpellShape.orbit)
+        else if (variant == SpellShape.orbit)
         {
             if (currentSize >= size && Vector3.Distance(caster.position, transform.position) >= 2f)
             {
@@ -56,43 +45,9 @@ public class AOESpell : MonoBehaviour
         }
     }
 
-    public void SetSlot(int spellSlot)
-    {
-        this.spellSlot = spellSlot;
-    }
-
     public void SetSpellInventory(SpellInventory spellInventory)
     {
         this.spellInventory = spellInventory;
-    }
-
-    public void SetElement(Element element)
-    {
-        this.element = element;
-    }
-
-    public void SetLifetime(float lifetime)
-    {
-        this.lifetime = lifetime;
-    }
-
-    public void SetSize(float size){
-        this.size = size;
-    }
-
-    public void SetDamage(float damage)
-    {
-        this.damage = damage;
-    }
-
-    public void SetSpeed(float speed)
-    {
-        this.speed = speed;
-    }
-
-    public void SetShape(int shape)
-    {
-        this.shape = (SpellShape)shape;
     }
 
     public void SetCaster(Transform caster)
@@ -102,9 +57,9 @@ public class AOESpell : MonoBehaviour
 
     public void Activate()
     {
-        gameObject.SetActive(true);
+        variant = (SpellShape)shape;
         transform.localScale *= 0;
-        switch (shape)
+        switch (variant)
         {
             case SpellShape.orb:
                 size *= 2f;
@@ -171,7 +126,7 @@ public class AOESpell : MonoBehaviour
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -222,7 +177,7 @@ public class AOESpell : MonoBehaviour
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().Hit(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -233,56 +188,5 @@ public class AOESpell : MonoBehaviour
         hit = false;
         yield return new WaitForSeconds(0.5f / speed);
         hit = true;
-    }
-
-    public void ReducePower(float damage, Element element)
-    {
-        float totalDamage = damage * CheckElement(element);
-        this.damage -= totalDamage;
-        if (this.damage <= 0f)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private float CheckElement(Element element)
-    {
-        float modifier = 1f;
-        if (element.ElementName == this.element.ElementName)
-        {
-            modifier = 0.5f;
-        }
-        else
-        {
-            foreach (string strength in element.ElementStrengths)
-            {
-                if (strength == this.element.ElementName || strength == "All")
-                {
-                    modifier = 1.25f;
-                }
-            }
-            foreach (string weakness in element.ElementWeaknesses)
-            {
-                if (weakness == this.element.ElementName || weakness == "All")
-                {
-                    modifier = 0.75f;
-                }
-            }
-            foreach (string strength in this.element.ElementStrengths)
-            {
-                if (strength == element.ElementName || strength == "All")
-                {
-                    modifier = 0.75f;
-                }
-            }
-            foreach (string weakness in this.element.ElementWeaknesses)
-            {
-                if (weakness == element.ElementName || weakness == "All")
-                {
-                    modifier = 1.25f;
-                }
-            }
-        }
-        return modifier;
     }
 }

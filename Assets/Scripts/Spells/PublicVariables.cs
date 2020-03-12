@@ -1,2 +1,1 @@
-﻿public enum UtilityType { Movement, Heal, Shield };
-public enum SpellType { Utility, Projectile, AOE, Melee, Summon };
+﻿public enum SpellType { Projectile, AOE, Melee, Movement, Heal, Shield, Summon };
