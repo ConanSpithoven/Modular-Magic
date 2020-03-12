@@ -40,13 +40,14 @@ public class SummoningSpell : Spell
                 {
                     if (!targetFound)
                     {
-                        transform.RotateAround(caster.position, Vector3.up, (speed * 35f) * Time.deltaTime);
+                        TargetFinder();
+                        transform.RotateAround(caster.position, Vector3.up, ((speed + 2f) * 35f) * Time.deltaTime);
                         var lookDir = Vector3.Cross(caster.position - transform.position, Vector3.up);
                         transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
                     }
                     else
                     {
-                        float step = speed * Time.deltaTime;
+                        float step = (speed + 4f) * Time.deltaTime;
                         transform.position = Vector3.MoveTowards(transform.position, target.position, step);
                         Vector3 targetDirection = target.position - transform.position;
                         Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, 360f, 360f);
@@ -198,13 +199,18 @@ public class SummoningSpell : Spell
     private void TargetFinder()
     {
         float searchSize;
-        if (variant == SpellShape.ranged)
+        switch (variant)
         {
-            searchSize = size * 6f;
-        }
-        else
-        {
-            searchSize = size * 3f;
+            default:
+            case SpellShape.chaser:
+                searchSize = size + 4f;
+                break;
+            case SpellShape.melee:
+                searchSize = size + 3f;
+                break;
+            case SpellShape.ranged:
+                searchSize = size + 5f;
+                break;
         }
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, searchSize);
         Transform closestTarget = transform;
@@ -238,6 +244,13 @@ public class SummoningSpell : Spell
             {
                 summonSpellInventory.SetTargetFound(true);
                 summonSpellInventory.SetTarget(target);
+            }
+            if (variant == SpellShape.chaser)
+            {
+                Debug.Log(closestTarget.gameObject.name);
+                StopCoroutine("ChaserTimer");
+                transform.SetParent(null, true);
+                Destroy(gameObject, lifetime);
             }
         }
         else
@@ -317,32 +330,17 @@ public class SummoningSpell : Spell
             if(variant == SpellShape.chaser)
                 Destroy(gameObject);
         }
+
+
+        if (variant == SpellShape.chaser && col.gameObject.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider col)
     {
-        if (variant == SpellShape.chaser)
-        {
-            if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
-            {
-                target = col.gameObject.transform;
-                targetFound = true;
-                StopCoroutine("ChaserTimer");
-                transform.SetParent(null, true);
-                GetComponent<CapsuleCollider>().enabled = false;
-                Destroy(gameObject, lifetime);
-            }
-            else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
-            {
-                target = col.gameObject.transform;
-                targetFound = true;
-                StopCoroutine("ChaserTimer");
-                GetComponentInChildren<CapsuleCollider>().enabled = false;
-                Destroy(gameObject, lifetime);
-            }
-                return;
-        }
-        else if (variant == SpellShape.melee)
+        if (variant == SpellShape.melee)
         {
             if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Summon_Spell"))
             {
@@ -354,8 +352,6 @@ public class SummoningSpell : Spell
                 {
                     summon.ReducePower(damage, element);
                 }
-                if(variant == SpellShape.chaser)
-                    Destroy(gameObject);
             }
             else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Summon_Spell")))
             {
@@ -367,14 +363,10 @@ public class SummoningSpell : Spell
                 {
                     summon.ReducePower(damage, element);
                 }
-                if(variant == SpellShape.chaser)
-                    Destroy(gameObject);
             }
             else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Summon_Spell")))
             {
                 col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
-                if(variant == SpellShape.chaser)
-                    Destroy(gameObject);
             }
             else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Summon_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")))
             {
@@ -382,8 +374,6 @@ public class SummoningSpell : Spell
                 {
                     projectile.ReducePower(damage, element);
                 }
-                if(variant == SpellShape.chaser)
-                    Destroy(gameObject);
             }
         }
     }

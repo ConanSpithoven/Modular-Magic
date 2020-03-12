@@ -15,6 +15,8 @@ public class Spell : MonoBehaviour
     public int unique;
     public int spellSlot;
     public Element element;
+    private GameObject[] upgradeSlots;
+    public int upgradeLimit;
 
     public void SetSlot(int spellSlot)
     {
@@ -120,5 +122,51 @@ public class Spell : MonoBehaviour
             }
         }
         return modifier;
+    }
+
+    public void AddUpgrade(GameObject upgrade)
+    {
+        for (int i = 0; i < upgradeLimit-1; i++)
+        {
+            if (upgradeSlots[i] == null)
+            {
+                upgradeSlots[i] = upgrade;
+            }
+        }
+        ProcessUpgrade(upgrade.GetComponent<Pattern>(), true);
+    }
+
+    public void RemoveUpgrade(GameObject upgrade)
+    {
+        for (int i = 0; i < upgradeSlots.Length; i++)
+        {
+            if (upgradeSlots[i] == upgrade)
+            {
+                upgradeSlots[i] = null;
+            }
+        }
+        ProcessUpgrade(upgrade.GetComponent<Pattern>(), false);
+    }
+
+    private void ProcessUpgrade(Pattern upgrade, bool status)
+    {
+        if (status)
+        {
+            damage += upgrade.damage;
+            lifetime += upgrade.lifetime;
+            size += upgrade.size;
+            instances += upgrade.instances;
+            speed += upgrade.speed;
+            unique += upgrade.unique;
+        }
+        else 
+        {
+            damage -= upgrade.damage;
+            lifetime -= upgrade.lifetime;
+            size -= upgrade.size;
+            instances -= upgrade.instances;
+            speed -= upgrade.speed;
+            unique -= upgrade.unique;
+        }
     }
 }
