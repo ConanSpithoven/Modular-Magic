@@ -247,7 +247,6 @@ public class SummoningSpell : Spell
             }
             if (variant == SpellShape.chaser)
             {
-                Debug.Log(closestTarget.gameObject.name);
                 StopCoroutine("ChaserTimer");
                 transform.SetParent(null, true);
                 Destroy(gameObject, lifetime);

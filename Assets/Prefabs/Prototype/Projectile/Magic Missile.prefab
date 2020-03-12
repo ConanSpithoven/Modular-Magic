@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4820860642451385150}
   - component: {fileID: 6548513910101488603}
   - component: {fileID: 3012771352340038946}
-  - component: {fileID: 9015165158825462895}
+  - component: {fileID: -6819513519902978391}
   m_Layer: 10
   m_Name: Magic Missile
   m_TagString: Attack_Spell
@@ -119,21 +119,22 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
+  spellSlot: 0
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  upgradeLimit: 0
   obstacles:
     serializedVersion: 2
     m_Bits: 0
---- !u!136 &9015165158825462895
-CapsuleCollider:
+--- !u!135 &-6819513519902978391
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4820860642451385088}
-  m_Material: {fileID: 13400000, guid: 8a252c8f0cadda3448ff091b6fb89d16, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.49999997
-  m_Height: 1
-  m_Direction: 2
+  serializedVersion: 2
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
