@@ -307,8 +307,9 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 3
+  spellSlot: 2
   element: {fileID: 11400000, guid: 93f62f583be8f004596b36a790cbe5b9, type: 2}
+  upgradeLimit: 0
   obstacles:
     serializedVersion: 2
     m_Bits: 33280

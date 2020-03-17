@@ -129,4 +129,9 @@ public class PlayerManager : MonoBehaviour
     public void AllowMovement(bool status) {
         allowMovement = status;
     }
+
+    public SpellInventory GetSpellInventory()
+    {
+        return gameObject.GetComponent<SpellInventory>();
+    }
 }

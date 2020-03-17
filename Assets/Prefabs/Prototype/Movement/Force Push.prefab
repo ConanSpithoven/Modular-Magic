@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 3
-  cooldownTime: 0
+  cooldownTime: 1
   onCooldown: 0
   shape: 2
   damage: 1
@@ -103,7 +103,9 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
+  spellSlot: 3
   element: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
+  upgradeLimit: 0
   obstacles:
     serializedVersion: 2
     m_Bits: 32768

@@ -159,6 +159,7 @@ public class SummoningSpell : Spell
                 break;
             case SpellShape.melee:
                 agent = GetComponent<NavMeshAgent>();
+                transform.localScale *= size;
                 attackRate = (1f / (speed / 3f));
                 hp = damage * 5f;
                 transform.SetParent(null, true);

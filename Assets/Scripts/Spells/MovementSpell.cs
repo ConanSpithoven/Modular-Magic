@@ -145,7 +145,7 @@ public class MovementSpell : Spell
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.velocity = transform.forward * speed * Time.deltaTime * 100f;
-        if (!spellInventory.GetCooldownStatus(spellSlot) && instances <= 0)
+        if (!spellInventory.GetCooldownStatus(spellSlot))
         {
             spellInventory.StartCooldown(spellSlot);
         }

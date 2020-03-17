@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SpellInventory : MonoBehaviour
 {
@@ -43,6 +42,8 @@ public class SpellInventory : MonoBehaviour
         switch (casterType)
         {
             case Caster.Player:
+                if (EventSystem.current.IsPointerOverGameObject()) return;
+
                 if ((Input.GetKey(KeyCode.Alpha1) || Input.GetMouseButton(0)) && slotOne != null && !slotOne.onCooldown)
                 {
                     spellManager.ActivateSpell(slotOne, 1);
@@ -182,6 +183,20 @@ public class SpellInventory : MonoBehaviour
         if (GetCooldownStatus(attack))
         {
             Attack();
+        }
+    }
+
+    public Spell GetSpell(int slot)
+    {
+        switch (slot)
+        {
+            default:
+            case 1:
+                return slotOne;
+            case 2:
+                return slotTwo;
+            case 3:
+                return slotThree;
         }
     }
 }

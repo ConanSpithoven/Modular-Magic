@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Spell : MonoBehaviour
 {
@@ -15,7 +17,7 @@ public class Spell : MonoBehaviour
     public int unique;
     public int spellSlot;
     public Element element;
-    private GameObject[] upgradeSlots;
+    public List<Pattern> patterns = new List<Pattern>();
     public int upgradeLimit;
 
     public void SetSlot(int spellSlot)
@@ -124,49 +126,39 @@ public class Spell : MonoBehaviour
         return modifier;
     }
 
-    public void AddUpgrade(GameObject upgrade)
+    public bool AddPattern(Pattern pattern)
     {
-        for (int i = 0; i < upgradeLimit-1; i++)
+        if (patterns.Count >= upgradeLimit)
         {
-            if (upgradeSlots[i] == null)
-            {
-                upgradeSlots[i] = upgrade;
-            }
+            Debug.Log("Not enough slots.");
+            return false;
         }
-        ProcessUpgrade(upgrade.GetComponent<Pattern>(), true);
+
+        patterns.Add(pattern);
+        
+        return true;
     }
 
-    public void RemoveUpgrade(GameObject upgrade)
+    public void RemovePattern(Pattern newPattern)
     {
-        for (int i = 0; i < upgradeSlots.Length; i++)
-        {
-            if (upgradeSlots[i] == upgrade)
-            {
-                upgradeSlots[i] = null;
-            }
-        }
-        ProcessUpgrade(upgrade.GetComponent<Pattern>(), false);
+        patterns.Remove(newPattern);
+        ProcessPattern(newPattern, false);
     }
 
-    private void ProcessUpgrade(Pattern upgrade, bool status)
+    public void ProcessPattern(Pattern newPattern, bool status)
     {
         if (status)
         {
-            damage += upgrade.damage;
-            lifetime += upgrade.lifetime;
-            size += upgrade.size;
-            instances += upgrade.instances;
-            speed += upgrade.speed;
-            unique += upgrade.unique;
+            Debug.Log("adding pattern");
         }
         else 
         {
-            damage -= upgrade.damage;
-            lifetime -= upgrade.lifetime;
-            size -= upgrade.size;
-            instances -= upgrade.instances;
-            speed -= upgrade.speed;
-            unique -= upgrade.unique;
+            Debug.Log("removing pattern");
         }
+    }
+
+    public int GetUpgradeLimit()
+    {
+        return upgradeLimit;
     }
 }

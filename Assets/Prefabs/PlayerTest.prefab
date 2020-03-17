@@ -229,6 +229,7 @@ GameObject:
   - component: {fileID: 5390303322027678985}
   - component: {fileID: 5390303322027678982}
   - component: {fileID: 5390303322027678983}
+  - component: {fileID: 5507054081014341052}
   - component: {fileID: 5390303322027678984}
   m_Layer: 8
   m_Name: PlayerTest
@@ -278,9 +279,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106cf09bcb9320846bcbd52dfb8af83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotOne: {fileID: 11400000, guid: ba7a5c34e11f69840a6e0516a3f887bc, type: 2}
-  slotTwo: {fileID: 11400000, guid: 0a4fd2940f0ec0747a6727177cecd96e, type: 2}
-  slotThree: {fileID: 11400000, guid: 4845ee9f61058cc43a98284ee1eec1ca, type: 2}
+  casterType: 0
+  slotOne: {fileID: 0}
+  slotTwo: {fileID: 0}
+  slotThree: {fileID: 0}
 --- !u!114 &5390303322027678982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,6 +312,19 @@ MonoBehaviour:
   HP: 100
   hpMax: 100
   speed: 5
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+--- !u!114 &5507054081014341052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5390303322027678976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e7e0995b6379c4b969819a4bea9d0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &5390303322027678984
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -324,5 +339,5 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
-  m_CollisionDetection: 0
+  m_Constraints: 126
+  m_CollisionDetection: 1

@@ -47,15 +47,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellType: 0
   cooldownTime: 0
-  onCooldown: 0
+  onCooldown: 1
   shape: 1
   damage: 0
-  lifetime: 1
+  lifetime: 5
   size: 1
   instances: 1
   speed: 1
   unique: 0
+  spellSlot: 2
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  upgradeLimit: 0
   obstacles:
     serializedVersion: 2
     m_Bits: 32768

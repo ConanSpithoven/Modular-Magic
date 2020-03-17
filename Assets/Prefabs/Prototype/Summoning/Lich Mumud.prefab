@@ -144,8 +144,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   casterType: 2
   slotOne: {fileID: 3012771352340038946, guid: 7eb5bb91981c14b43ae5ae07555c6549, type: 3}
-  slotTwo: {fileID: 0}
-  slotThree: {fileID: 0}
+  slotTwo: {fileID: 7476773926420336499, guid: d17260cf82fd8be48a5487c65ab4a49e, type: 3}
+  slotThree: {fileID: 223394519749793522, guid: 090b435c51ca1bd4aa6f1e3c14f0366b,
+    type: 3}
 --- !u!114 &5376322008537632173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,8 +183,9 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 0
+  spellSlot: 3
   element: {fileID: 11400000, guid: 93f62f583be8f004596b36a790cbe5b9, type: 2}
+  upgradeLimit: 0
   obstacles:
     serializedVersion: 2
     m_Bits: 33280
