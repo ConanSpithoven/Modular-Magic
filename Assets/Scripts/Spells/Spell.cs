@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Spell : MonoBehaviour
 {
@@ -17,7 +18,6 @@ public class Spell : MonoBehaviour
     public int unique;
     public int spellSlot;
     public Element element;
-    public List<Pattern> patterns = new List<Pattern>();
     public int upgradeLimit;
 
     public void SetSlot(int spellSlot)
@@ -124,37 +124,6 @@ public class Spell : MonoBehaviour
             }
         }
         return modifier;
-    }
-
-    public bool AddPattern(Pattern pattern)
-    {
-        if (patterns.Count >= upgradeLimit)
-        {
-            Debug.Log("Not enough slots.");
-            return false;
-        }
-
-        patterns.Add(pattern);
-        
-        return true;
-    }
-
-    public void RemovePattern(Pattern newPattern)
-    {
-        patterns.Remove(newPattern);
-        ProcessPattern(newPattern, false);
-    }
-
-    public void ProcessPattern(Pattern newPattern, bool status)
-    {
-        if (status)
-        {
-            Debug.Log("adding pattern");
-        }
-        else 
-        {
-            Debug.Log("removing pattern");
-        }
     }
 
     public int GetUpgradeLimit()

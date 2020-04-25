@@ -14,6 +14,7 @@ public class ItemPickup : MonoBehaviour
         {
             float step = 2f * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, player.position, step);
+            transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
         }
     }
 

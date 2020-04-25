@@ -14,6 +14,7 @@ TagManager:
   - Heal_Spell
   - Summon_Spell
   - Enemy_Summon_Spell
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -34,7 +35,7 @@ TagManager:
   - Heal_Spell
   - Summon_Spell
   - Enemy_Summon_Spell
-  - 
+  - Item
   - 
   - 
   - 

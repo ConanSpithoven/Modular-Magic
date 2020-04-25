@@ -27,7 +27,7 @@ public class InventorySlot : MonoBehaviour
 
     public void OnRemoveButton()
     {
-        //rework to drop the item
+        //rework to drop the item?
         Inventory.instance.Remove(item);
     }
 
@@ -37,10 +37,5 @@ public class InventorySlot : MonoBehaviour
         {
             item.Use();
         }
-    }
-
-    public void RemovePattern()
-    { 
-        
     }
 }
