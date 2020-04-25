@@ -47,6 +47,8 @@ public class SpellManager : MonoBehaviour
         }
     }
 
+    #region Activators
+
     private void ActivateAOESpell(Spell spell)
     {
         switch (spell.shape)
@@ -253,32 +255,6 @@ public class SpellManager : MonoBehaviour
         }
     }
 
-    private void ProjectileSpellHandler(Spell spell, ProjectileSpell projectile) 
-    {
-        projectile.SetElement(spell.element);
-        projectile.SetUnique(spell.unique);
-        projectile.SetSpeed(spell.speed);
-        projectile.SetShape(spell.shape);
-        projectile.SetDamage(spell.damage);
-        projectile.SetSize(spell.size);
-        projectile.SetLifetime(spell.lifetime);
-        projectile.SetSlot(spell.GetSpellSlot());
-        projectile.SetSpellInventory(spellInventory);
-    }
-
-    private void AoESpellHandler(Spell spell, AOESpell aoe)
-    {
-        aoe.SetElement(spell.element);
-        aoe.SetCaster(transform);
-        aoe.SetSpeed(spell.speed);
-        aoe.SetDamage(spell.damage);
-        aoe.SetSize(spell.size);
-        aoe.SetLifetime(spell.lifetime);
-        aoe.SetShape(spell.shape);
-        aoe.SetSlot(spell.GetSpellSlot());
-        aoe.SetSpellInventory(spellInventory);
-    }
-
     private void UtilityBarrierHandler(Spell spell)
     {
         GameObject barrierObject = Instantiate(spell.gameObject, Vector3.zero, Model.rotation);
@@ -313,6 +289,35 @@ public class SpellManager : MonoBehaviour
             ShieldSpellHandler(spell, deploy);
             deploy.Activate();
         }
+    }
+
+    #endregion
+
+    #region Handlers
+    private void ProjectileSpellHandler(Spell spell, ProjectileSpell projectile)
+    {
+        projectile.SetElement(spell.element);
+        projectile.SetUnique(spell.unique);
+        projectile.SetSpeed(spell.speed);
+        projectile.SetShape(spell.shape);
+        projectile.SetDamage(spell.damage);
+        projectile.SetSize(spell.size);
+        projectile.SetLifetime(spell.lifetime);
+        projectile.SetSlot(spell.GetSpellSlot());
+        projectile.SetSpellInventory(spellInventory);
+    }
+
+    private void AoESpellHandler(Spell spell, AOESpell aoe)
+    {
+        aoe.SetElement(spell.element);
+        aoe.SetCaster(transform);
+        aoe.SetSpeed(spell.speed);
+        aoe.SetDamage(spell.damage);
+        aoe.SetSize(spell.size);
+        aoe.SetLifetime(spell.lifetime);
+        aoe.SetShape(spell.shape);
+        aoe.SetSlot(spell.GetSpellSlot());
+        aoe.SetSpellInventory(spellInventory);
     }
 
     private void MeleeSpellHandler(Spell spell, MeleeSpell weapon)
@@ -382,6 +387,10 @@ public class SpellManager : MonoBehaviour
         summon.SetSpellInventory(spellInventory);
         summon.SetCaster(transform);
     }
+
+    #endregion
+
+    #region InstanceHandlers
 
     private void ProjectileInstanceHandler(Spell spell)
     {
@@ -511,7 +520,7 @@ public class SpellManager : MonoBehaviour
                 swordObject.transform.Rotate(Vector3.up, 75f);
             else
                 swordObject.transform.Rotate(Vector3.up, -75f);
-            swordObject.transform.Rotate(Vector3.right, Random.Range(-30f,30f));
+            swordObject.transform.Rotate(Vector3.right, Random.Range(-30f, 30f));
             swordObject.transform.SetParent(Firepos, true);
             MeleeSpell sword = swordObject.GetComponent<MeleeSpell>();
             MeleeSpellHandler(spell, sword);
@@ -522,13 +531,13 @@ public class SpellManager : MonoBehaviour
         }
     }
 
-    private IEnumerator MeleeSpearHandler(Spell spell) 
+    private IEnumerator MeleeSpearHandler(Spell spell)
     {
         for (int i = 0; i < spell.instances; i++)
         {
             GameObject spearObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
             spearObject.transform.SetParent(Firepos, true);
-            spearObject.transform.Translate(new Vector3(Random.Range(0.75f + (spell.size/4f), 1.25f + (spell.size / 4f)), Random.Range(0f, 0.5f + (spell.size / 4f)), -1f));
+            spearObject.transform.Translate(new Vector3(Random.Range(0.75f + (spell.size / 4f), 1.25f + (spell.size / 4f)), Random.Range(0f, 0.5f + (spell.size / 4f)), -1f));
             MeleeSpell spear = spearObject.GetComponent<MeleeSpell>();
             MeleeSpellHandler(spell, spear);
             spear.Activate();
@@ -547,9 +556,11 @@ public class SpellManager : MonoBehaviour
             MeleeSpell axe = axeObject.GetComponent<MeleeSpell>();
             MeleeSpellHandler(spell, axe);
             axe.Activate();
-            yield return new WaitForSeconds(1f / (spell.speed *2f));
+            yield return new WaitForSeconds(1f / (spell.speed * 2f));
         }
     }
+
+    #endregion
 
     private Quaternion CalcRotation(int instances, int index, float rotationMax)
     {
