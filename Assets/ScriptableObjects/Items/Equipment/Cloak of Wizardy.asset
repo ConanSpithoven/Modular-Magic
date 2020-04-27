@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Cloak of Wizardy
   type: 2
-  icon: {fileID: 21300000, guid: 9e39561d7bfa00b44967bd281f526ab2, type: 3}
+  icon: {fileID: 21300000, guid: 2d6ff99e12bfe1b4f910b86b0bab693d, type: 3}
   equipType: 1
   maxhealthModifier: 0
   powerModifier: 0
@@ -23,7 +23,7 @@ MonoBehaviour:
   sizeModifier: 0
   instancesModifier: 2
   speedModifier: 0
-  movementspeedModifier: 0
+  movementspeedModifier: 2
   uniqueModifier: 0
   cooldownReductionModifier: 0
   elementModifier: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
