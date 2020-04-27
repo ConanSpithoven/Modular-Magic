@@ -629,7 +629,7 @@ GameObject:
   - component: {fileID: 156214842}
   - component: {fileID: 156214841}
   m_Layer: 0
-  m_Name: Big Stick
+  m_Name: Stick of Chungus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3360,7 +3360,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1327452691}
   m_LocalRotation: {x: 0.6933751, y: 0.1386759, z: -0.1386759, w: 0.6933751}
-  m_LocalPosition: {x: -5.74, y: 0.43, z: 1.55}
+  m_LocalPosition: {x: -6.69, y: 0.43, z: 0.97}
   m_LocalScale: {x: 0.4421326, y: 0.4421326, z: 0.4421326}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5605,6 +5605,46 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1781430983}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2103607559 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5390303322027678976, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 5390303321787316577}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2103607565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103607559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511c0217432dc284eb87056e70c745d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth:
+    baseValue: 100
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  baseElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  power:
+    baseValue: 0
+  armor:
+    baseValue: 0
+  movementspeed:
+    baseValue: 5
+  lifetime:
+    baseValue: 0
+  size:
+    baseValue: 0
+  speed:
+    baseValue: 0
+  instances:
+    baseValue: 0
+  unique:
+    baseValue: 0
+  cooldownReduction:
+    baseValue: 0
 --- !u!1 &2116727068
 GameObject:
   m_ObjectHideFlags: 0
@@ -6127,7 +6167,7 @@ PrefabInstance:
         type: 3}
       propertyPath: slotTwo
       value: 
-      objectReference: {fileID: 2675785919471812800, guid: 9c9bdf23e958b784a94601b0224af74d,
+      objectReference: {fileID: 7476773926420336499, guid: d17260cf82fd8be48a5487c65ab4a49e,
         type: 3}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}

@@ -108,12 +108,12 @@ public class MovementSpell : Spell
         switch (variant)
         {
             case SpellShape.dash:
-                size += damage;
+                size += power;
                 speed *= 10f;
                 RecastCheck();
                 break;
             case SpellShape.teleport:
-                size += damage + speed;
+                size += power + speed;
                 RecastCheck();
                 break;
             case SpellShape.push:
@@ -229,21 +229,21 @@ public class MovementSpell : Spell
     {
         if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(damage, element);
+            col.gameObject.GetComponent<EnemyManager>().Hit(power, element);
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(damage, element);
+            col.gameObject.GetComponent<PlayerManager>().Hit(power, element);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage, element);
+                projectile.ReducePower(power, element);
             }
         }
     }

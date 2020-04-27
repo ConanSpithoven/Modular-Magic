@@ -10,7 +10,7 @@ public class Spell : MonoBehaviour
     public float cooldownTime;
     public bool onCooldown;
     public int shape;
-    public float damage;
+    public float power;
     public float lifetime;
     public float size;
     public int instances;
@@ -67,19 +67,19 @@ public class Spell : MonoBehaviour
 
     public void SetDamage(float damage)
     {
-        this.damage = damage;
+        this.power = damage;
     }
 
     public float GetDamage()
     {
-        return damage;
+        return power;
     }
 
     public void ReducePower(float damage, Element element)
     {
         float totalDamage = damage * CheckElement(element);
-        this.damage -= totalDamage;
-        if (this.damage <= 0f)
+        this.power -= totalDamage;
+        if (this.power <= 0f)
         {
             Destroy(gameObject);
         }

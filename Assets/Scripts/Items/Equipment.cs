@@ -7,14 +7,17 @@ public class Equipment : Item
 {
     public EquipmentType equipType;
 
-    public float damage = 0;
-    public float lifetime = 0;
-    public float size = 0;
-    public int instances = 0;
-    public float speed = 0;
-    public int unique = 0;
-    public float cooldownReduction = 0f;
-    public Element element = default;
+    public float maxhealthModifier = 0;
+    public float powerModifier = 0;
+    public float armorModifier = 0;
+    public float lifetimeModifier = 0;
+    public float sizeModifier = 0;
+    public int instancesModifier = 0;
+    public float speedModifier = 0;
+    public float movementspeedModifier = 0;
+    public int uniqueModifier = 0;
+    public float cooldownReductionModifier = 0f;
+    public Element elementModifier = default;
 
     public override void Use()
     {

@@ -37,6 +37,14 @@ public class SpellInventory : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (casterType == Caster.Player)
+        {
+            EquipmentManager.instance.onEquipmentChanged += onEquipmentChange;
+        }
+    }
+
     private void Update()
     {
         switch (casterType)
@@ -117,7 +125,7 @@ public class SpellInventory : MonoBehaviour
     private IEnumerator Cooldown(Spell spell)
     {
         spell.onCooldown = true;
-        float totalCooldownTime = ((((spell.damage * 0.2f - 0.2f) * spell.cooldownTime) + spell.lifetime + ((spell.size * 0.1f - 0.1f) * spell.cooldownTime) - ((spell.speed * 0.1f - 0.1f) * spell.cooldownTime)) * (spell.instances * 0.3f + 0.7f))/* * spell.cdr*/;
+        float totalCooldownTime = ((((spell.power * 0.2f - 0.2f) * spell.cooldownTime) + spell.lifetime + ((spell.size * 0.1f - 0.1f) * spell.cooldownTime) - ((spell.speed * 0.1f - 0.1f) * spell.cooldownTime)) * (spell.instances * 0.3f + 0.7f))/* * spell.cdr*/;
         totalCooldownTime = Mathf.Clamp(totalCooldownTime, 0.1f, 120f);
         yield return new WaitForSeconds(totalCooldownTime);
         spell.onCooldown = false;
@@ -169,11 +177,11 @@ public class SpellInventory : MonoBehaviour
         {
             default:
             case Caster.Player:
-                return 1;
+                return 0;
             case Caster.Enemy:
-                return 2;
+                return 1;
             case Caster.Summon:
-                return 3;
+                return 2;
         }
     }
 
@@ -198,5 +206,59 @@ public class SpellInventory : MonoBehaviour
             case 3:
                 return slotThree;
         }
+    }
+
+    public void onEquipmentChange(Equipment newItem, Equipment oldItem)
+    {
+        if (newItem != null)
+        {
+            //remove old equipment bonusses
+            if (oldItem != null)
+            {
+                if (slotOne != null)
+                    RemoveEquipEffect(slotOne, oldItem);
+                if (slotTwo != null)
+                    RemoveEquipEffect(slotTwo, oldItem);
+                if (slotThree != null)
+                    RemoveEquipEffect(slotThree, oldItem);
+            }
+            //add equipment bonusses
+            if (slotOne != null)
+                AddEquipEffect(slotOne, newItem);
+            if (slotTwo != null)
+                AddEquipEffect(slotTwo, newItem);
+            if (slotThree != null)
+                AddEquipEffect(slotThree, newItem);
+        }
+        else if(oldItem != null)
+        {
+            //remove old equipment bonusses
+            if (slotOne != null)
+                RemoveEquipEffect(slotOne, oldItem);
+            if (slotTwo != null)
+                RemoveEquipEffect(slotTwo, oldItem);
+            if (slotThree != null)
+                RemoveEquipEffect(slotThree, oldItem);
+        }
+    }
+
+    private void AddEquipEffect(Spell slot, Equipment item)
+    {
+        slot.power += item.powerModifier;
+        slot.lifetime += item.lifetimeModifier;
+        slot.size += item.sizeModifier;
+        slot.instances += item.instancesModifier;
+        slot.speed += item.speedModifier;
+        slot.unique += item.uniqueModifier;
+    }
+
+    private void RemoveEquipEffect(Spell slot, Equipment item)
+    {
+        slot.power -= item.powerModifier;
+        slot.lifetime -= item.lifetimeModifier;
+        slot.size -= item.sizeModifier;
+        slot.instances -= item.instancesModifier;
+        slot.speed -= item.speedModifier;
+        slot.unique -= item.uniqueModifier;
     }
 }

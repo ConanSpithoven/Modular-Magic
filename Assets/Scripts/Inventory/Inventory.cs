@@ -32,10 +32,8 @@ public class Inventory : MonoBehaviour
     {
         if (items.Count >= space)
         {
-            Debug.Log("Not enough room.");
             return false;
         }
-        Debug.Log("adding " + item.name);
         items.Add(item);
         if (onItemChangedCallback != null)
         {

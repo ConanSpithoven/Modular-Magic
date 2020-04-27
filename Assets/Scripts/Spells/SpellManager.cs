@@ -83,7 +83,7 @@ public class SpellManager : MonoBehaviour
                 if (spell.instances <= 1)
                 {
                     Vector3 targetPos;
-                    if (casterType == 1)
+                    if (casterType == 0)
                     {
                         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         mousePos.y = 0f;
@@ -300,7 +300,7 @@ public class SpellManager : MonoBehaviour
         projectile.SetUnique(spell.unique);
         projectile.SetSpeed(spell.speed);
         projectile.SetShape(spell.shape);
-        projectile.SetDamage(spell.damage);
+        projectile.SetDamage(spell.power);
         projectile.SetSize(spell.size);
         projectile.SetLifetime(spell.lifetime);
         projectile.SetSlot(spell.GetSpellSlot());
@@ -312,7 +312,7 @@ public class SpellManager : MonoBehaviour
         aoe.SetElement(spell.element);
         aoe.SetCaster(transform);
         aoe.SetSpeed(spell.speed);
-        aoe.SetDamage(spell.damage);
+        aoe.SetDamage(spell.power);
         aoe.SetSize(spell.size);
         aoe.SetLifetime(spell.lifetime);
         aoe.SetShape(spell.shape);
@@ -325,7 +325,7 @@ public class SpellManager : MonoBehaviour
         weapon.SetElement(spell.element);
         weapon.SetLifetime(spell.lifetime);
         weapon.SetSpeed(spell.speed);
-        weapon.SetDamage(spell.damage);
+        weapon.SetDamage(spell.power);
         weapon.SetShape(spell.shape);
         weapon.SetSize(spell.size);
         weapon.SetSlot(spell.GetSpellSlot());
@@ -339,7 +339,7 @@ public class SpellManager : MonoBehaviour
         shield.SetCaster(transform);
         shield.SetLifetime(spell.lifetime);
         shield.SetSpeed(spell.speed);
-        shield.SetDamage(spell.damage);
+        shield.SetDamage(spell.power);
         shield.SetShape(spell.shape);
         shield.SetSize(spell.size);
         shield.SetSlot(spell.GetSpellSlot());
@@ -351,7 +351,7 @@ public class SpellManager : MonoBehaviour
         heal.SetElement(spell.element);
         heal.SetShape(spell.shape);
         heal.SetLifetime(spell.lifetime);
-        heal.SetDamage(spell.damage);
+        heal.SetDamage(spell.power);
         heal.SetSpeed(spell.speed);
         heal.SetInstances(spell.instances);
         heal.SetSize(spell.size);
@@ -365,7 +365,7 @@ public class SpellManager : MonoBehaviour
         movement.SetElement(spell.element);
         movement.SetShape(spell.shape);
         movement.SetLifetime(spell.lifetime);
-        movement.SetDamage(spell.damage);
+        movement.SetDamage(spell.power);
         movement.SetSpeed(spell.speed);
         movement.SetInstances(spell.instances);
         movement.SetSize(spell.size);
@@ -380,7 +380,7 @@ public class SpellManager : MonoBehaviour
         summon.SetElement(spell.element);
         summon.SetSpeed(spell.speed);
         summon.SetShape(spell.shape);
-        summon.SetDamage(spell.damage);
+        summon.SetDamage(spell.power);
         summon.SetSize(spell.size);
         summon.SetLifetime(spell.lifetime);
         summon.SetSlot(spell.GetSpellSlot());
@@ -485,25 +485,26 @@ public class SpellManager : MonoBehaviour
     private IEnumerator AoEInstanceHandler(Spell spell)
     {
         Vector3 pos = Vector3.zero;
-        if (spell.shape == 2)
-        {
-            if (casterType == 1)
-            {
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                mousePos.y = 0f;
-                pos = mousePos;
-            }
-            else
-            {
-                pos = target.position;
-            }
-        }
+        
         int instances = spell.instances;
         for (int i = 0; i < instances; i++)
         {
+            if (spell.shape == 2)
+            {
+                if (casterType == 0)
+                {
+                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    mousePos.y = 0f;
+                    pos = mousePos;
+                }
+                else
+                {
+                    pos = target.position;
+                }
+            }
             GameObject aoeObject = Instantiate(spell.gameObject, pos, Model.rotation);
             AOESpell aoe = aoeObject.GetComponent<AOESpell>();
-            aoe.transform.SetParent(transform, false);
+            aoe.transform.SetParent(transform, true);
             AoESpellHandler(spell, aoe);
             aoe.Activate();
             yield return new WaitForSeconds(1f / (spell.speed * 2f));

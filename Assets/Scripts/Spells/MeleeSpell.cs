@@ -128,33 +128,33 @@ public class MeleeSpell : Spell
         {
             if (col.gameObject.TryGetComponent(out EnemyManager enemy))
             {
-                enemy.Hit(damage, element);
+                enemy.Hit(power, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage, element);
+                summon.ReducePower(power, element);
             }
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
             if (col.gameObject.TryGetComponent(out PlayerManager player))
             {
-                player.Hit(damage, element);
+                player.Hit(power, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage, element);
+                summon.ReducePower(power, element);
             }
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage, element);
+                projectile.ReducePower(power, element);
             }
         }
         if (variant == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))

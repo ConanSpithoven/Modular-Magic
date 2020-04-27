@@ -33,10 +33,6 @@ public class EquipmentSlot : MonoBehaviour
             icon.sprite = null;
             icon.enabled = false;
         }
-        else 
-        {
-            Debug.Log("Nothing Equipped here");
-        }
     }
 
     public Equipment GetEquipment()

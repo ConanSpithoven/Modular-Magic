@@ -15,8 +15,8 @@ public class EquipmentManager : MonoBehaviour
 
     public Equipment[] currentEquipment;
 
-    public delegate void OnEquipmentChanged(Equipment newItem, Equipment oldItem);
-    public OnEquipmentChanged onEquipmentChange;
+    public delegate void OnEquipmentChanged (Equipment newItem, Equipment oldItem);
+    public OnEquipmentChanged onEquipmentChanged;
 
     Inventory inventory;
 
@@ -39,9 +39,9 @@ public class EquipmentManager : MonoBehaviour
             inventory.Add(oldItem);
         }
 
-        if (onEquipmentChange != null)
+        if (onEquipmentChanged != null)
         {
-            onEquipmentChange.Invoke(newItem, oldItem);
+            onEquipmentChanged.Invoke(newItem, oldItem);
         }
 
         currentEquipment[slotIndex] = newItem;
@@ -56,9 +56,9 @@ public class EquipmentManager : MonoBehaviour
 
             currentEquipment[slotIndex] = null;
 
-            if (onEquipmentChange != null)
+            if (onEquipmentChanged != null)
             {
-                onEquipmentChange.Invoke(null, oldItem);
+                onEquipmentChanged.Invoke(null, oldItem);
             }
         }
     }

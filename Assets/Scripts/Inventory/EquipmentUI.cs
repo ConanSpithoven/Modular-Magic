@@ -12,7 +12,7 @@ public class EquipmentUI : MonoBehaviour
     void Start()
     {
         equipmentManager = EquipmentManager.instance;
-        equipmentManager.onEquipmentChange += UpdateEquipmentUI;
+        equipmentManager.onEquipmentChanged += UpdateEquipmentUI;
 
         slots = equipsParent.GetComponentsInChildren<EquipmentSlot>();
     }
@@ -30,7 +30,6 @@ public class EquipmentUI : MonoBehaviour
     {
         if (newItem == null)
         {
-            Debug.Log("no new item, unequip");
             slots[(int)oldItem.equipType].ClearSlot();
         }
         else 

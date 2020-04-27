@@ -16,11 +16,14 @@ MonoBehaviour:
   type: 2
   icon: {fileID: 21300000, guid: 65442e48fe61ea748bfb507621472f16, type: 3}
   equipType: 0
-  damage: 1
-  lifetime: 0
-  size: 0
-  instances: 0
-  speed: 0
-  unique: 0
-  cooldownReduction: 0
-  element: {fileID: 11400000, guid: 9ccf9b38c594beb499c2e6281d4b9692, type: 2}
+  maxhealthModifier: 0
+  powerModifier: 1
+  armorModifier: 0
+  lifetimeModifier: 0
+  sizeModifier: 0
+  instancesModifier: 0
+  speedModifier: 0
+  movementspeedModifier: 0
+  uniqueModifier: 0
+  cooldownReductionModifier: 0
+  elementModifier: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}

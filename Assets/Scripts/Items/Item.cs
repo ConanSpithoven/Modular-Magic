@@ -11,7 +11,6 @@ public class Item : ScriptableObject
     public virtual void Use()
     {
         //Use Item
-        Debug.Log("Using " + name);
     }
 
     public void RemoveFromInventory()
