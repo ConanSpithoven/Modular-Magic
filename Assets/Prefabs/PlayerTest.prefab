@@ -85,6 +85,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -180,6 +181,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -229,7 +231,6 @@ GameObject:
   - component: {fileID: 5390303322027678985}
   - component: {fileID: 5390303322027678982}
   - component: {fileID: 5390303322027678983}
-  - component: {fileID: 5507054081014341052}
   - component: {fileID: 5390303322027678984}
   m_Layer: 8
   m_Name: PlayerTest
@@ -307,22 +308,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77318b047c4d49a47a2217f55bfe3fbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 100
-  hpMax: 100
-  speed: 5
-  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
---- !u!114 &5507054081014341052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5390303322027678976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7e7e0995b6379c4b969819a4bea9d0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!54 &5390303322027678984

@@ -6,6 +6,7 @@ public class Inventory : MonoBehaviour
 {
     #region Singleton
 
+    public PlayerManager playerManager;
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
 
@@ -24,6 +25,12 @@ public class Inventory : MonoBehaviour
         }
 
         instance = this;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (playerManager == null)
+            playerManager = FindObjectOfType<PlayerManager>().transform.GetComponent<PlayerManager>();
     }
 
     #endregion

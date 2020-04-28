@@ -17,7 +17,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 7b1b2c9e1389e3944ab5aaf95f9694f4, type: 3}
   equipType: 0
   maxhealthModifier: 0
-  powerModifier: 0
+  powerModifier: 2
   armorModifier: 0
   lifetimeModifier: 0
   sizeModifier: 3

@@ -18,7 +18,7 @@ MonoBehaviour:
   equipType: 1
   maxhealthModifier: 0
   powerModifier: 0
-  armorModifier: 0
+  armorModifier: 2
   lifetimeModifier: 0
   sizeModifier: 0
   instancesModifier: 2
