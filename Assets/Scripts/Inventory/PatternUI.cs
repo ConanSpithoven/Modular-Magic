@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class PatternUI : MonoBehaviour
 {
@@ -34,19 +35,55 @@ public class PatternUI : MonoBehaviour
 
     void UpdatePatternUI(Pattern newItem, Pattern oldItem, int formulaNumber)
     {
+        Pattern item;
+        if (newItem != null)
+        {
+            item = newItem;
+        }
+        else
+        {
+            item = oldItem;
+        }
         switch (formulaNumber)
         {
             case 1:
-                for (int i = 0; i < slots1.Length; i++)
+                switch (item.patternType)
                 {
-                    if (i < patternManager.currentPattern1.Count)
-                    {
-                        slots1[i].AddItem(patternManager.currentPattern1[i]);
-                    }
-                    else
-                    {
-                        slots1[i].ClearSlot();
-                    }
+                    case PatternType.Empowerment:
+                        List<Pattern> patterns = patternManager.GetEmpowermentPatterns(formulaNumber);
+                        int addedEmpowermentPatterns = 0;
+                        for (int i = 0; i < slots1.Length; i++)
+                        {
+                            if (slots1[i].patternType == PatternType.Empowerment)
+                            {
+                                if (addedEmpowermentPatterns < patterns.Count)
+                                {
+                                    slots1[i].AddItem(patterns[addedEmpowermentPatterns]);
+                                    addedEmpowermentPatterns++;
+                                }
+                                else
+                                {
+                                    slots1[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
+                    case PatternType.Elemental:
+                        for (int i = 0; i < slots1.Length; i++)
+                        {
+                            if (slots1[i].patternType == PatternType.Elemental)
+                            {
+                                if (newItem != null)
+                                {
+                                    slots1[i].AddItem(newItem);
+                                }
+                                else 
+                                {
+                                    slots1[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
                 }
                 break;
             case 2:

@@ -51,15 +51,51 @@ public class PatternManager : MonoBehaviour
 
     public void Equip(Pattern newItem)
     {
-        Debug.Log("adding " + newItem.name);
-        Debug.Log(activeFormula);
         switch (activeFormula)
         {
             case 1:
-                if (currentPattern1.Count < slotOne.GetUpgradeLimit())
+                switch (newItem.patternType)
                 {
-                    currentPattern1.Add(newItem);
-                    inventory.Remove(newItem);
+                    case PatternType.Empowerment:
+                        int upgradeCount = 0;
+                        foreach (Pattern pattern in currentPattern1)
+                        {
+                            if (pattern.patternType == PatternType.Empowerment)
+                            {
+                                upgradeCount++;
+                            }
+                        }
+                        if (upgradeCount < slotOne.GetUpgradeLimit())
+                        {
+                            currentPattern1.Add(newItem);
+                            inventory.Remove(newItem);
+                        }
+                        else 
+                        {
+                            return;
+                        }
+                        break;
+                    case PatternType.Elemental:
+                        Pattern oldItem;
+                        foreach (Pattern pattern in currentPattern1)
+                        {
+                            if (pattern.patternType == PatternType.Elemental)
+                            {
+                                oldItem = pattern;
+                                currentPattern1.Remove(oldItem);
+                                inventory.Add(oldItem);
+                                currentPattern1.Add(newItem);
+                                inventory.Remove(newItem);
+                                if (onPatternChanged != null)
+                                {
+                                    onPatternChanged.Invoke(newItem, oldItem, activeFormula);
+                                }
+                                return;
+                            }
+                        }
+                        currentPattern1.Add(newItem);
+                        inventory.Remove(newItem);
+                        break;
                 }
                 break;
             case 2:
@@ -85,8 +121,6 @@ public class PatternManager : MonoBehaviour
 
     public void UnEquip(Pattern oldItem)
     {
-        Debug.Log("Unequipping" + oldItem.name);
-        Debug.Log(activeFormula);
         switch (activeFormula)
         {
             case 1:
@@ -112,5 +146,71 @@ public class PatternManager : MonoBehaviour
     {
         activeFormula = formulaNumber;
         onFormulaChanged.Invoke(formulaNumber);
+    }
+
+    private int GetEmpowermentCount(int formulaNumber)
+    {
+        int empowermentCount = 0;
+        switch (formulaNumber)
+        {
+            case 1:
+                foreach (Pattern pattern in currentPattern1)
+                {
+                    if (pattern.patternType == PatternType.Empowerment)
+                    {
+                        empowermentCount++;
+                    }
+                }
+                break;
+            case 2:
+                foreach (Pattern pattern in currentPattern2)
+                {
+                    if (pattern.patternType == PatternType.Empowerment)
+                    {
+                        empowermentCount++;
+                    }
+                }
+                break;
+            case 3:
+                foreach (Pattern pattern in currentPattern3)
+                {
+                    if (pattern.patternType == PatternType.Empowerment)
+                    {
+                        empowermentCount++;
+                    }
+                }
+                break;
+        }
+        return empowermentCount;
+    }
+
+    public List<Pattern> GetEmpowermentPatterns(int formulaNumber)
+    {
+        List<Pattern> patterns = new List<Pattern>(GetEmpowermentCount(formulaNumber));
+        switch (formulaNumber)
+        {
+            case 1:
+                foreach (Pattern pattern in currentPattern1)
+                {
+                    if (pattern.patternType == PatternType.Empowerment)
+                        patterns.Add(pattern);
+                }
+                break;
+            case 2:
+                foreach (Pattern pattern in currentPattern2)
+                {
+                    if (pattern.patternType == PatternType.Empowerment)
+                        patterns.Add(pattern);
+                }
+                break;
+            case 3:
+                foreach (Pattern pattern in currentPattern3)
+                {
+                    if (pattern.patternType == PatternType.Empowerment)
+                        patterns.Add(pattern);
+                }
+                break;
+        }
+        return patterns;
     }
 }

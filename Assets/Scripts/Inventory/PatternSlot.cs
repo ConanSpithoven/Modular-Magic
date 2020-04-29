@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class PatternSlot : MonoBehaviour
 {
+    public PatternType patternType;
     public Image icon;
     Pattern pattern;
     Inventory inventory;

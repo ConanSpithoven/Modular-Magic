@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Blessing of the Wind
   type: 0
-  icon: {fileID: 21300000, guid: aa8c975145a57a84ea794d28e985fe70, type: 3}
+  icon: {fileID: 21300000, guid: 5f0985f05577101479f649b53bab0ebd, type: 3}
+  patternType: 0
   powerModifier: 0
   lifetimeModifier: 0
   sizeModifier: 0
@@ -24,3 +25,4 @@ MonoBehaviour:
   cooldownReductionModifier: 0
   upgradeLimitModifier: 0
   elementModifier: {fileID: 0}
+  shapeModifier: 1

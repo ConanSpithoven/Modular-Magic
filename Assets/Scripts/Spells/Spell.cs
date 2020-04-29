@@ -10,6 +10,7 @@ public class Spell : MonoBehaviour
     public float cooldownTime;
     public bool onCooldown;
     public int shape;
+    [SerializeField] private int originShape;
     public float power;
     public float lifetime;
     public float size;
@@ -18,6 +19,7 @@ public class Spell : MonoBehaviour
     public int unique;
     public int spellSlot;
     public Element element;
+    [SerializeField]private Element originElement;
     public int upgradeLimit = 5;
 
     public void SetSlot(int spellSlot)
@@ -129,5 +131,29 @@ public class Spell : MonoBehaviour
     public int GetUpgradeLimit()
     {
         return upgradeLimit;
+    }
+
+    public void ModifyElement(Element newElement, bool status)
+    {
+        if (status)
+        {
+            element = newElement;
+        }
+        else 
+        {
+            element = originElement;
+        }
+    }
+
+    public void ModifyShape(int newShape, bool status)
+    {
+        if (status)
+        {
+            shape = newShape;
+        }
+        else
+        {
+            shape = originShape;
+        }
     }
 }

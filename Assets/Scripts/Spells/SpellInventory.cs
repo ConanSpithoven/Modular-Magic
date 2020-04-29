@@ -265,6 +265,27 @@ public class SpellInventory : MonoBehaviour
 
     public void OnPatternChange(Pattern newItem, Pattern oldItem, int formulaNumber)
     {
+        if (oldItem != null)
+        {
+            Spell slot = GetSpell(formulaNumber);
+            slot.power -= oldItem.powerModifier;
+            slot.lifetime -= oldItem.lifetimeModifier;
+            slot.size -= oldItem.sizeModifier;
+            slot.instances -= oldItem.instancesModifier;
+            slot.speed -= oldItem.speedModifier;
+            slot.unique -= oldItem.uniqueModifier;
+            switch (oldItem.patternType)
+            {
+                default:
+                    break;
+                case PatternType.Variant:
+                    slot.ModifyShape(oldItem.shapeModifier, false);
+                    break;
+                case PatternType.Elemental:
+                    slot.ModifyElement(oldItem.elementModifier, false);
+                    break;
+            }
+        }
         if (newItem != null)
         {
             Spell slot = GetSpell(formulaNumber);
@@ -274,16 +295,17 @@ public class SpellInventory : MonoBehaviour
             slot.instances += newItem.instancesModifier;
             slot.speed += newItem.speedModifier;
             slot.unique += newItem.uniqueModifier;
-        }
-        else if (oldItem != null)
-        {
-            Spell slot = GetSpell(formulaNumber);
-            slot.power -= oldItem.powerModifier;
-            slot.lifetime -= oldItem.lifetimeModifier;
-            slot.size -= oldItem.sizeModifier;
-            slot.instances -= oldItem.instancesModifier;
-            slot.speed -= oldItem.speedModifier;
-            slot.unique -= oldItem.uniqueModifier;
+            switch (newItem.patternType)
+            {
+                default:
+                    break;
+                case PatternType.Variant:
+                    slot.ModifyShape(newItem.shapeModifier, true);
+                    break;
+                case PatternType.Elemental:
+                    slot.ModifyElement(newItem.elementModifier, true);
+                    break;
+            }
         }
     }
 }
