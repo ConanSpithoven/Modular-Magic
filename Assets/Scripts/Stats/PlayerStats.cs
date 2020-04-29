@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerStats : CharacterStats
 {
+    public Stat upgradeLimit;
 
     void Start()
     {
@@ -18,6 +19,7 @@ public class PlayerStats : CharacterStats
             armor.AddModifier(newItem.armorModifier);
             movementspeed.AddModifier(newItem.movementspeedModifier);
             cooldownReduction.AddModifier(newItem.cooldownReductionModifier);
+            upgradeLimit.AddModifier(newItem.upgradeLimitModifier);
 
         }
 
@@ -27,6 +29,7 @@ public class PlayerStats : CharacterStats
             armor.RemoveModifier(oldItem.armorModifier);
             movementspeed.RemoveModifier(oldItem.movementspeedModifier);
             cooldownReduction.RemoveModifier(oldItem.cooldownReductionModifier);
+            upgradeLimit.RemoveModifier(oldItem.upgradeLimitModifier);
         }
     }
 }

@@ -42,6 +42,7 @@ public class SpellInventory : MonoBehaviour
         if (casterType == Caster.Player)
         {
             EquipmentManager.instance.onEquipmentChanged += onEquipmentChange;
+            PatternManager.instance.onPatternChanged += OnPatternChange;
         }
     }
 
@@ -260,5 +261,29 @@ public class SpellInventory : MonoBehaviour
         slot.instances -= item.instancesModifier;
         slot.speed -= item.speedModifier;
         slot.unique -= item.uniqueModifier;
+    }
+
+    public void OnPatternChange(Pattern newItem, Pattern oldItem, int formulaNumber)
+    {
+        if (newItem != null)
+        {
+            Spell slot = GetSpell(formulaNumber);
+            slot.power += newItem.powerModifier;
+            slot.lifetime += newItem.lifetimeModifier;
+            slot.size += newItem.sizeModifier;
+            slot.instances += newItem.instancesModifier;
+            slot.speed += newItem.speedModifier;
+            slot.unique += newItem.uniqueModifier;
+        }
+        else if (oldItem != null)
+        {
+            Spell slot = GetSpell(formulaNumber);
+            slot.power -= oldItem.powerModifier;
+            slot.lifetime -= oldItem.lifetimeModifier;
+            slot.size -= oldItem.sizeModifier;
+            slot.instances -= oldItem.instancesModifier;
+            slot.speed -= oldItem.speedModifier;
+            slot.unique -= oldItem.uniqueModifier;
+        }
     }
 }

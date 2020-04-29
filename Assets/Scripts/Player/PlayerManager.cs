@@ -26,11 +26,6 @@ public class PlayerManager : MonoBehaviour
     {
         if (allowMovement)
             HandleMovement();
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            playerstats.TakeDamage(10);
-        }
     }
 
     private void HandleMovement() {

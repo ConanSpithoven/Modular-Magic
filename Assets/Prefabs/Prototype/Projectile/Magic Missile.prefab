@@ -122,7 +122,7 @@ MonoBehaviour:
   unique: 0
   spellSlot: 1
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
-  upgradeLimit: 0
+  upgradeLimit: 5
   obstacles:
     serializedVersion: 2
     m_Bits: 0

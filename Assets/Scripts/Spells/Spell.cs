@@ -13,12 +13,12 @@ public class Spell : MonoBehaviour
     public float power;
     public float lifetime;
     public float size;
-    public int instances;
+    public int instances = 1;
     public float speed;
     public int unique;
     public int spellSlot;
     public Element element;
-    public int upgradeLimit;
+    public int upgradeLimit = 5;
 
     public void SetSlot(int spellSlot)
     {

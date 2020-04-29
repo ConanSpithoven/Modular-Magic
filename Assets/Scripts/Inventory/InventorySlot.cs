@@ -27,7 +27,6 @@ public class InventorySlot : MonoBehaviour
 
     public void OnRemoveButton()
     {
-        //rework to drop the item?
         Inventory.instance.Remove(item);
     }
 

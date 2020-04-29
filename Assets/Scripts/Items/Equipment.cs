@@ -17,6 +17,7 @@ public class Equipment : Item
     public float movementspeedModifier = 0;
     public int uniqueModifier = 0;
     public float cooldownReductionModifier = 0f;
+    public int upgradeLimitModifier = 0;
     public Element elementModifier = default;
 
     public override void Use()

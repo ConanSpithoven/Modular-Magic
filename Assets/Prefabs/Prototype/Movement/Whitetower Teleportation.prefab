@@ -47,7 +47,7 @@ MonoBehaviour:
   cooldownTime: 0
   onCooldown: 0
   shape: 1
-  damage: 1
+  power: 0
   lifetime: 1
   size: 1
   instances: 1
@@ -55,7 +55,7 @@ MonoBehaviour:
   unique: 0
   spellSlot: 2
   element: {fileID: 11400000, guid: 674630d1aabef614e88bfe8cec831218, type: 2}
-  upgradeLimit: 0
+  upgradeLimit: 5
   obstacles:
     serializedVersion: 2
     m_Bits: 32768

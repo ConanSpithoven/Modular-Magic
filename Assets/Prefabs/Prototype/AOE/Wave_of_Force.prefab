@@ -105,7 +105,7 @@ MonoBehaviour:
   unique: 0
   spellSlot: 3
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
-  upgradeLimit: 0
+  upgradeLimit: 5
 --- !u!136 &8964444968500025839
 CapsuleCollider:
   m_ObjectHideFlags: 0

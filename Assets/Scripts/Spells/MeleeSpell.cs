@@ -97,7 +97,7 @@ public class MeleeSpell : Spell
                 size *= 4f;
                 oldPos = transform.position;
                 transform.SetParent(null, true);
-                if (spellInventory.GetCasterType() == 1)
+                if (spellInventory.GetCasterType() == 0)
                 {
                     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     mousePos.y = FirePos.position.y;

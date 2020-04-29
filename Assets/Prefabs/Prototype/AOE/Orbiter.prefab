@@ -118,4 +118,4 @@ MonoBehaviour:
   unique: 0
   spellSlot: 3
   element: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
-  upgradeLimit: 0
+  upgradeLimit: 5

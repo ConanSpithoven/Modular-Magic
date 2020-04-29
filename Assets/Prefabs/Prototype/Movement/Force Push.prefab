@@ -57,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -97,7 +98,7 @@ MonoBehaviour:
   cooldownTime: 1
   onCooldown: 0
   shape: 2
-  damage: 1
+  power: 0
   lifetime: 1
   size: 1
   instances: 1
@@ -105,7 +106,7 @@ MonoBehaviour:
   unique: 0
   spellSlot: 3
   element: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
-  upgradeLimit: 0
+  upgradeLimit: 5
   obstacles:
     serializedVersion: 2
     m_Bits: 32768
