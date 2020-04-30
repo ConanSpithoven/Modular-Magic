@@ -99,17 +99,93 @@ public class PatternManager : MonoBehaviour
                 }
                 break;
             case 2:
-                if (currentPattern2.Count < slotTwo.GetUpgradeLimit())
+                switch (newItem.patternType)
                 {
-                    currentPattern2.Add(newItem);
-                    inventory.Remove(newItem);
+                    case PatternType.Empowerment:
+                        int upgradeCount = 0;
+                        foreach (Pattern pattern in currentPattern2)
+                        {
+                            if (pattern.patternType == PatternType.Empowerment)
+                            {
+                                upgradeCount++;
+                            }
+                        }
+                        if (upgradeCount < slotTwo.GetUpgradeLimit())
+                        {
+                            currentPattern2.Add(newItem);
+                            inventory.Remove(newItem);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
+                    case PatternType.Elemental:
+                        Pattern oldItem;
+                        foreach (Pattern pattern in currentPattern2)
+                        {
+                            if (pattern.patternType == PatternType.Elemental)
+                            {
+                                oldItem = pattern;
+                                currentPattern2.Remove(oldItem);
+                                inventory.Add(oldItem);
+                                currentPattern2.Add(newItem);
+                                inventory.Remove(newItem);
+                                if (onPatternChanged != null)
+                                {
+                                    onPatternChanged.Invoke(newItem, oldItem, activeFormula);
+                                }
+                                return;
+                            }
+                        }
+                        currentPattern2.Add(newItem);
+                        inventory.Remove(newItem);
+                        break;
                 }
                 break;
             case 3:
-                if (currentPattern3.Count < slotThree.GetUpgradeLimit())
+                switch (newItem.patternType)
                 {
-                    currentPattern3.Add(newItem);
-                    inventory.Remove(newItem);
+                    case PatternType.Empowerment:
+                        int upgradeCount = 0;
+                        foreach (Pattern pattern in currentPattern3)
+                        {
+                            if (pattern.patternType == PatternType.Empowerment)
+                            {
+                                upgradeCount++;
+                            }
+                        }
+                        if (upgradeCount < slotThree.GetUpgradeLimit())
+                        {
+                            currentPattern3.Add(newItem);
+                            inventory.Remove(newItem);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
+                    case PatternType.Elemental:
+                        Pattern oldItem;
+                        foreach (Pattern pattern in currentPattern3)
+                        {
+                            if (pattern.patternType == PatternType.Elemental)
+                            {
+                                oldItem = pattern;
+                                currentPattern3.Remove(oldItem);
+                                inventory.Add(oldItem);
+                                currentPattern3.Add(newItem);
+                                inventory.Remove(newItem);
+                                if (onPatternChanged != null)
+                                {
+                                    onPatternChanged.Invoke(newItem, oldItem, activeFormula);
+                                }
+                                return;
+                            }
+                        }
+                        currentPattern3.Add(newItem);
+                        inventory.Remove(newItem);
+                        break;
                 }
                 break;
         }

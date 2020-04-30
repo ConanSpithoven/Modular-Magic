@@ -50,6 +50,7 @@ MonoBehaviour:
   cooldownTime: 0
   onCooldown: 0
   shape: 2
+  originShape: 0
   power: 0
   lifetime: 1
   size: 1
@@ -58,6 +59,7 @@ MonoBehaviour:
   unique: 0
   spellSlot: 3
   element: {fileID: 11400000, guid: 6519e511c6e7c7c4ea5b8f78926f60e7, type: 2}
+  originElement: {fileID: 11400000, guid: 6519e511c6e7c7c4ea5b8f78926f60e7, type: 2}
   upgradeLimit: 5
 --- !u!54 &3941325700018770673
 Rigidbody:

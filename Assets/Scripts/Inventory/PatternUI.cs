@@ -87,29 +87,83 @@ public class PatternUI : MonoBehaviour
                 }
                 break;
             case 2:
-                for (int i = 0; i < slots2.Length; i++)
+                switch (item.patternType)
                 {
-                    if (i < patternManager.currentPattern2.Count)
-                    {
-                        slots2[i].AddItem(patternManager.currentPattern2[i]);
-                    }
-                    else
-                    {
-                        slots2[i].ClearSlot();
-                    }
+                    case PatternType.Empowerment:
+                        List<Pattern> patterns = patternManager.GetEmpowermentPatterns(formulaNumber);
+                        int addedEmpowermentPatterns = 0;
+                        for (int i = 0; i < slots2.Length; i++)
+                        {
+                            if (slots2[i].patternType == PatternType.Empowerment)
+                            {
+                                if (addedEmpowermentPatterns < patterns.Count)
+                                {
+                                    slots2[i].AddItem(patterns[addedEmpowermentPatterns]);
+                                    addedEmpowermentPatterns++;
+                                }
+                                else
+                                {
+                                    slots2[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
+                    case PatternType.Elemental:
+                        for (int i = 0; i < slots2.Length; i++)
+                        {
+                            if (slots2[i].patternType == PatternType.Elemental)
+                            {
+                                if (newItem != null)
+                                {
+                                    slots2[i].AddItem(newItem);
+                                }
+                                else
+                                {
+                                    slots2[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
                 }
                 break;
             case 3:
-                for (int i = 0; i < slots3.Length; i++)
+                switch (item.patternType)
                 {
-                    if (i < patternManager.currentPattern3.Count)
-                    {
-                        slots3[i].AddItem(patternManager.currentPattern3[i]);
-                    }
-                    else
-                    {
-                        slots3[i].ClearSlot();
-                    }
+                    case PatternType.Empowerment:
+                        List<Pattern> patterns = patternManager.GetEmpowermentPatterns(formulaNumber);
+                        int addedEmpowermentPatterns = 0;
+                        for (int i = 0; i < slots3.Length; i++)
+                        {
+                            if (slots3[i].patternType == PatternType.Empowerment)
+                            {
+                                if (addedEmpowermentPatterns < patterns.Count)
+                                {
+                                    slots3[i].AddItem(patterns[addedEmpowermentPatterns]);
+                                    addedEmpowermentPatterns++;
+                                }
+                                else
+                                {
+                                    slots3[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
+                    case PatternType.Elemental:
+                        for (int i = 0; i < slots3.Length; i++)
+                        {
+                            if (slots3[i].patternType == PatternType.Elemental)
+                            {
+                                if (newItem != null)
+                                {
+                                    slots3[i].AddItem(newItem);
+                                }
+                                else
+                                {
+                                    slots3[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
                 }
                 break;
         }
