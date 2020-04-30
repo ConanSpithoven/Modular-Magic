@@ -16,7 +16,7 @@ public class Pattern : Item
     public float cooldownReductionModifier = 0f;
     public int upgradeLimitModifier = 0;
     public Element elementModifier = default;
-    public int shapeModifier = 1;
+    public int shapeModifier = 0;
 
     public override void Use()
     {

@@ -84,6 +84,22 @@ public class PatternUI : MonoBehaviour
                             }
                         }
                         break;
+                    case PatternType.Variant:
+                        for (int i = 0; i < slots1.Length; i++)
+                        {
+                            if (slots1[i].patternType == PatternType.Variant)
+                            {
+                                if (newItem != null)
+                                {
+                                    slots1[i].AddItem(newItem);
+                                }
+                                else
+                                {
+                                    slots1[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
                 }
                 break;
             case 2:
@@ -124,6 +140,22 @@ public class PatternUI : MonoBehaviour
                             }
                         }
                         break;
+                    case PatternType.Variant:
+                        for (int i = 0; i < slots2.Length; i++)
+                        {
+                            if (slots2[i].patternType == PatternType.Variant)
+                            {
+                                if (newItem != null)
+                                {
+                                    slots2[i].AddItem(newItem);
+                                }
+                                else
+                                {
+                                    slots2[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
                 }
                 break;
             case 3:
@@ -152,6 +184,22 @@ public class PatternUI : MonoBehaviour
                         for (int i = 0; i < slots3.Length; i++)
                         {
                             if (slots3[i].patternType == PatternType.Elemental)
+                            {
+                                if (newItem != null)
+                                {
+                                    slots3[i].AddItem(newItem);
+                                }
+                                else
+                                {
+                                    slots3[i].ClearSlot();
+                                }
+                            }
+                        }
+                        break;
+                    case PatternType.Variant:
+                        for (int i = 0; i < slots3.Length; i++)
+                        {
+                            if (slots3[i].patternType == PatternType.Variant)
                             {
                                 if (newItem != null)
                                 {

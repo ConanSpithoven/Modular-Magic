@@ -6,12 +6,10 @@ public class EquipmentSlot : MonoBehaviour
     public EquipmentType equipmentType;
     public Image icon;
     Equipment equipment;
-    Inventory inventory;
     EquipmentManager equipmentManager;
 
     public void Start()
     {
-        inventory = Inventory.instance;
         equipmentManager = EquipmentManager.instance;
     }
 

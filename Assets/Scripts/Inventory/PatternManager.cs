@@ -51,6 +51,7 @@ public class PatternManager : MonoBehaviour
 
     public void Equip(Pattern newItem)
     {
+        Pattern oldItem;
         switch (activeFormula)
         {
             case 1:
@@ -76,10 +77,29 @@ public class PatternManager : MonoBehaviour
                         }
                         break;
                     case PatternType.Elemental:
-                        Pattern oldItem;
                         foreach (Pattern pattern in currentPattern1)
                         {
                             if (pattern.patternType == PatternType.Elemental)
+                            {
+                                oldItem = pattern;
+                                currentPattern1.Remove(oldItem);
+                                inventory.Add(oldItem);
+                                currentPattern1.Add(newItem);
+                                inventory.Remove(newItem);
+                                if (onPatternChanged != null)
+                                {
+                                    onPatternChanged.Invoke(newItem, oldItem, activeFormula);
+                                }
+                                return;
+                            }
+                        }
+                        currentPattern1.Add(newItem);
+                        inventory.Remove(newItem);
+                        break;
+                    case PatternType.Variant:
+                        foreach (Pattern pattern in currentPattern1)
+                        {
+                            if (pattern.patternType == PatternType.Variant)
                             {
                                 oldItem = pattern;
                                 currentPattern1.Remove(oldItem);
@@ -121,10 +141,29 @@ public class PatternManager : MonoBehaviour
                         }
                         break;
                     case PatternType.Elemental:
-                        Pattern oldItem;
                         foreach (Pattern pattern in currentPattern2)
                         {
                             if (pattern.patternType == PatternType.Elemental)
+                            {
+                                oldItem = pattern;
+                                currentPattern2.Remove(oldItem);
+                                inventory.Add(oldItem);
+                                currentPattern2.Add(newItem);
+                                inventory.Remove(newItem);
+                                if (onPatternChanged != null)
+                                {
+                                    onPatternChanged.Invoke(newItem, oldItem, activeFormula);
+                                }
+                                return;
+                            }
+                        }
+                        currentPattern2.Add(newItem);
+                        inventory.Remove(newItem);
+                        break;
+                    case PatternType.Variant:
+                        foreach (Pattern pattern in currentPattern1)
+                        {
+                            if (pattern.patternType == PatternType.Variant)
                             {
                                 oldItem = pattern;
                                 currentPattern2.Remove(oldItem);
@@ -166,10 +205,29 @@ public class PatternManager : MonoBehaviour
                         }
                         break;
                     case PatternType.Elemental:
-                        Pattern oldItem;
                         foreach (Pattern pattern in currentPattern3)
                         {
                             if (pattern.patternType == PatternType.Elemental)
+                            {
+                                oldItem = pattern;
+                                currentPattern3.Remove(oldItem);
+                                inventory.Add(oldItem);
+                                currentPattern3.Add(newItem);
+                                inventory.Remove(newItem);
+                                if (onPatternChanged != null)
+                                {
+                                    onPatternChanged.Invoke(newItem, oldItem, activeFormula);
+                                }
+                                return;
+                            }
+                        }
+                        currentPattern3.Add(newItem);
+                        inventory.Remove(newItem);
+                        break;
+                    case PatternType.Variant:
+                        foreach (Pattern pattern in currentPattern1)
+                        {
+                            if (pattern.patternType == PatternType.Variant)
                             {
                                 oldItem = pattern;
                                 currentPattern3.Remove(oldItem);

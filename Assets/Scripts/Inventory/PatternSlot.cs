@@ -6,12 +6,10 @@ public class PatternSlot : MonoBehaviour
     public PatternType patternType;
     public Image icon;
     Pattern pattern;
-    Inventory inventory;
     PatternManager patternManager;
 
     public void Start()
     {
-        inventory = Inventory.instance;
         patternManager = PatternManager.instance;
     }
 

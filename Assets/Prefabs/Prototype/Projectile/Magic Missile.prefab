@@ -119,7 +119,7 @@ MonoBehaviour:
   lifetime: 1
   size: 1
   instances: 1
-  speed: 3
+  speed: 1
   unique: 0
   spellSlot: 1
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
@@ -127,7 +127,7 @@ MonoBehaviour:
   upgradeLimit: 5
   obstacles:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32768
 --- !u!135 &-6819513519902978391
 SphereCollider:
   m_ObjectHideFlags: 0
