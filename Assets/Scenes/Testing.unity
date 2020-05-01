@@ -9117,7 +9117,7 @@ PrefabInstance:
         type: 3}
       propertyPath: slotTwo
       value: 
-      objectReference: {fileID: 128461788573279179, guid: cb4418fd61e36754c940e81f58014f48,
+      objectReference: {fileID: 2675785919471812800, guid: 0d8d83f465dfd0641b785e1dd90d390a,
         type: 3}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}
@@ -9129,7 +9129,7 @@ PrefabInstance:
         type: 3}
       propertyPath: slotOne
       value: 
-      objectReference: {fileID: 3012771352340038946, guid: 7eb5bb91981c14b43ae5ae07555c6549,
+      objectReference: {fileID: 2675785919471812800, guid: c14e82aba1d296c41bba82b424580d04,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa2b021256a721d4ea4cd8f0a54c20ae, type: 3}

@@ -48,7 +48,7 @@ public class ProjectileSpell : Spell
             case SpellShape.ball:
                 if (unique >= 1)
                 {
-                    Collider col = GetComponent<Collider>();
+                    Collider col = GetModel().GetComponent<Collider>();
                     col.material.bounciness = 1;
                 }
                 Rigidbody rb = GetComponent<Rigidbody>();
@@ -67,7 +67,7 @@ public class ProjectileSpell : Spell
                 transform.localScale = new Vector3(0.5f, 0.5f, 0f);
                 size *= 3f;
                 Vector3 targetPos;
-                if (spellInventory.GetCasterType() == 1)
+                if (spellInventory.GetCasterType() == 0)
                 {
                     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     mousePos.y = FirePos.position.y;
@@ -104,11 +104,11 @@ public class ProjectileSpell : Spell
                 projectile.ReducePower(power, element);
             }
         }
-        if (unique > 0 && variant != SpellShape.line)
+        if (unique > 0 && variant == SpellShape.ball)
         {
             unique -= 1;
         }
-        else if (unique <= 0 && variant != SpellShape.line)
+        else if (unique <= 0 && variant == SpellShape.ball)
         {
             Destroy(gameObject);
         }

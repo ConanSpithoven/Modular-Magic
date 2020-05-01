@@ -46,11 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 0
-  cooldownTime: 0
+  cooldownTime: 1
   onCooldown: 0
   shape: 1
   originShape: 0
-  power: 0
+  power: 1
   lifetime: 5
   size: 1
   instances: 1
@@ -58,8 +58,9 @@ MonoBehaviour:
   unique: 0
   spellSlot: 2
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
-  originElement: {fileID: 0}
+  originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5
+  model: {fileID: 2675785919613463042}
   obstacles:
     serializedVersion: 2
     m_Bits: 32768

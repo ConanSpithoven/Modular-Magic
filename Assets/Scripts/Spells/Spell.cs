@@ -21,6 +21,8 @@ public class Spell : MonoBehaviour
     public Element element;
     [SerializeField]private Element originElement;
     public int upgradeLimit = 5;
+    [SerializeField] private GameObject model;
+    private Rigidbody rb;
 
     public void SetSlot(int spellSlot)
     {
@@ -75,6 +77,11 @@ public class Spell : MonoBehaviour
     public float GetDamage()
     {
         return power;
+    }
+
+    public GameObject GetModel()
+    {
+        return model;
     }
 
     public void ReducePower(float damage, Element element)
@@ -143,6 +150,7 @@ public class Spell : MonoBehaviour
         {
             element = originElement;
         }
+        ElementMaterialModifier();
     }
 
     public void ModifyShape(int newShape, bool status)
@@ -154,6 +162,124 @@ public class Spell : MonoBehaviour
         else
         {
             shape = originShape;
+        }
+        SpellMeshModifier();
+    }
+
+    private void ElementMaterialModifier()
+    {
+        string type = "";
+        switch (spellType)
+        {
+            case SpellType.Projectile:
+                type = "Projectile";
+                break;
+            case SpellType.AOE:
+                type = "AoE";
+                break;
+            case SpellType.Melee:
+                type = "Melee";
+                break;
+            case SpellType.Movement:
+                type = "Movement";
+                break;
+            case SpellType.Heal:
+                type = "Heal";
+                break;
+            case SpellType.Shield:
+                type = "Shield";
+                break;
+            case SpellType.Summon:
+                type = "Summon";
+                break;
+        }
+        Debug.Log(element.ElementName);
+        GameObject newMaterial = Resources.Load<GameObject>("Materials/Elements/Spells/" + type + "/" + element.ElementName);
+        Debug.Log(newMaterial.GetComponent<Renderer>().sharedMaterials);
+        model.GetComponent<Renderer>().sharedMaterials = newMaterial.GetComponent<Renderer>().sharedMaterials;
+        SpellMeshModifier();
+    }
+
+    private void SpellMeshModifier()
+    {
+        switch (spellType)
+        {
+            case SpellType.Projectile:
+                ProjectileSpellShapeModifier();
+                break;
+            case SpellType.AOE:
+                break;
+            case SpellType.Melee:
+                break;
+            case SpellType.Movement:
+                break;
+            case SpellType.Heal:
+                break;
+            case SpellType.Shield:
+                break;
+            case SpellType.Summon:
+                break;
+        }
+    }
+
+    private void ProjectileSpellShapeModifier()
+    {
+        rb = GetComponent<Rigidbody>();
+        BoxCollider col = model.GetComponent<BoxCollider>();
+        
+        switch (shape)
+        {
+            case 0:
+                model.transform.rotation = Quaternion.Euler(0,0,0);
+                col.isTrigger = false;
+                col.size = new Vector3(1,1,1);
+                rb.constraints = RigidbodyConstraints.None;
+                rb.constraints = RigidbodyConstraints.FreezePositionY;
+                MeshSetter();
+                break;
+            case 1:
+            case 2:
+                model.transform.rotation = Quaternion.Euler(90, 0, 0);
+                col.isTrigger = true;
+                col.size = new Vector3(1,2,1);
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+                MeshSetter();
+                break;
+        }
+    }
+
+    private void MeshSetter()
+    {
+        string type = "";
+        switch (spellType)
+        {
+            case SpellType.Projectile:
+                type = "Projectile";
+                break;
+            case SpellType.AOE:
+                type = "AoE";
+                break;
+            case SpellType.Melee:
+                type = "Melee";
+                break;
+            case SpellType.Movement:
+                type = "Movement";
+                break;
+            case SpellType.Heal:
+                type = "Heal";
+                break;
+            case SpellType.Shield:
+                type = "Shield";
+                break;
+            case SpellType.Summon:
+                type = "Summon";
+                break;
+        }
+        
+        if (model.GetComponent<MeshFilter>() != null)
+        {
+            GameObject newMesh = Resources.Load<GameObject>("Models/Spells/" + type + "/" + element.ElementName + "/" + shape);
+            model.GetComponent<MeshFilter>().sharedMesh = newMesh.GetComponent<MeshFilter>().sharedMesh;
         }
     }
 }
