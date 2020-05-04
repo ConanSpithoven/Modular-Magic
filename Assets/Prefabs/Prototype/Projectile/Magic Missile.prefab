@@ -50,10 +50,10 @@ MonoBehaviour:
   onCooldown: 0
   shape: 0
   originShape: 0
-  power: 3
+  power: 7
   lifetime: 1
-  size: 1
-  instances: 1
+  size: 7
+  instances: 5
   speed: 1
   unique: 0
   spellSlot: 1
@@ -63,7 +63,10 @@ MonoBehaviour:
   model: {fileID: 2675785919613463042}
   obstacles:
     serializedVersion: 2
-    m_Bits: 37376
+    m_Bits: 49152
+  chainables:
+    serializedVersion: 2
+    m_Bits: 270848
 --- !u!54 &8423369965014548514
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -172,4 +175,4 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0.0000005364418, y: 0.0000019073486, z: 0.0000011622906}
+  m_Center: {x: 0, y: 0, z: 0}

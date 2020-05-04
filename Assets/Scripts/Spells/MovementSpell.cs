@@ -16,6 +16,7 @@ public class MovementSpell : Spell
     private Vector3 goal = default;
     private Transform FirePos = default;
     private bool Enabled = default;
+    private GameObject model = default;
 
     private void Update()
     {
@@ -40,8 +41,8 @@ public class MovementSpell : Spell
                 {
                     if (Enabled)
                     {
-                        GetComponent<MeshRenderer>().enabled = false;
-                        GetComponent<Collider>().enabled = false;
+                        model.GetComponent<MeshRenderer>().enabled = false;
+                        model.GetComponent<Collider>().enabled = false;
                         Enabled = false;
                     }
                     if (!spellInventory.GetCooldownStatus(spellSlot) && instances <= 0)
@@ -82,6 +83,7 @@ public class MovementSpell : Spell
 
     public void Activate()
     {
+        model = GetModel();
         variant = (SpellShape)shape;
         Setup();
         if (caster.TryGetComponent(out PlayerManager playerManager) && variant != SpellShape.push)
@@ -128,8 +130,8 @@ public class MovementSpell : Spell
         currentDistance = 0f;
         if (!Enabled)
         {
-            GetComponent<MeshRenderer>().enabled = true;
-            GetComponent<Collider>().enabled = true;
+            model.GetComponent<MeshRenderer>().enabled = true;
+            model.GetComponent<Collider>().enabled = true;
             Enabled = true;
         }
         CalcDestination();
@@ -154,25 +156,32 @@ public class MovementSpell : Spell
     private void CalcDestination()
     {
         instances--;
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.y = 1f;
         RaycastHit hit;
-        if (Physics.Raycast(caster.transform.position, FirePos.forward, out hit, size, obstacles, QueryTriggerInteraction.Ignore) && hit.distance < Vector3.Distance(caster.transform.position, mousePos))
+        Vector3 targetPos = Vector3.zero;
+        if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, obstacles))
+        {
+            targetPos = hit.point;
+        }
+        else if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, Mathf.Infinity, obstacles))
+        {
+            targetPos = hit.point;
+        }
+        if (Physics.Raycast(caster.transform.position, FirePos.forward, out hit, size, obstacles, QueryTriggerInteraction.Ignore) && hit.distance < Vector3.Distance(caster.transform.position, targetPos))
         {
             travelDistance = hit.distance - 0.5f;
             goal = hit.point;
         }
         else
         {
-            if (size <= Vector3.Distance(caster.transform.position, mousePos))
+            if (size <= Vector3.Distance(caster.transform.position, targetPos))
             {
                 travelDistance = size;
-                goal = mousePos;
+                goal = targetPos;
             }
             else
             {
-                travelDistance = Vector3.Distance(caster.transform.position, mousePos);
-                goal = mousePos;
+                travelDistance = Vector3.Distance(caster.transform.position, targetPos);
+                goal = targetPos;
             }
             
         }
@@ -250,6 +259,7 @@ public class MovementSpell : Spell
 
     private void OnCollisionEnter(Collision col)
     {
-        Destroy(gameObject);
+        if(!col.gameObject.CompareTag("Ground"))
+            Destroy(gameObject);
     }
 }

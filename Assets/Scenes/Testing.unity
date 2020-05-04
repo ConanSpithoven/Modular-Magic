@@ -3901,8 +3901,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
   m_IsActive: 1
---- !u!64 &916268300
-MeshCollider:
+--- !u!65 &916268300
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3911,10 +3911,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 2
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &916268301
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8441,13 +8440,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2116727068}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalRotation: {x: 0.60876137, y: 0, z: 0, w: 0.7933534}
+  m_LocalPosition: {x: 0, y: 25.5, z: -6.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 75, y: 0, z: 0}
 --- !u!224 &2125226849 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3819493807113941484, guid: f6242a5ab7beb1a4480ac40529ecf9cf,
@@ -9117,19 +9116,19 @@ PrefabInstance:
         type: 3}
       propertyPath: slotTwo
       value: 
-      objectReference: {fileID: 2675785919471812800, guid: 0d8d83f465dfd0641b785e1dd90d390a,
+      objectReference: {fileID: 128461788573279179, guid: 4e399b5a6f013004398eb61ffdcb32c2,
         type: 3}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}
       propertyPath: slotThree
       value: 
-      objectReference: {fileID: 7476773926420336499, guid: d17260cf82fd8be48a5487c65ab4a49e,
+      objectReference: {fileID: 7476773926420336499, guid: aaa9a2f6e9d49d448bb892628e5b5091,
         type: 3}
     - target: {fileID: 5390303322027678985, guid: fa2b021256a721d4ea4cd8f0a54c20ae,
         type: 3}
       propertyPath: slotOne
       value: 
-      objectReference: {fileID: 2675785919471812800, guid: c14e82aba1d296c41bba82b424580d04,
+      objectReference: {fileID: 223394519749793522, guid: 090b435c51ca1bd4aa6f1e3c14f0366b,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa2b021256a721d4ea4cd8f0a54c20ae, type: 3}

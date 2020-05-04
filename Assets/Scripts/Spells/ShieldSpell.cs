@@ -105,7 +105,7 @@ public class ShieldSpell : Spell
         float sizelimited = Mathf.Clamp(currentSize, 0f, size);
         if (variant == SpellShape.shield || variant == SpellShape.deploy)
         {
-            transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited * 0.2f);
+            transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited);
         }
     }
 

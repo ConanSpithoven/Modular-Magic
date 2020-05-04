@@ -9,9 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1303441426678640048}
-  - component: {fileID: 7063043783786368205}
-  - component: {fileID: 8152721751990690372}
-  - component: {fileID: 5298318844830088563}
   - component: {fileID: 223394519749793522}
   - component: {fileID: -5240452477876547970}
   m_Layer: 11
@@ -31,25 +28,104 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1802701077943572493}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7063043783786368205
+--- !u!114 &223394519749793522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238391487416804670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9f5b2c55fabd374da7e80adb237db60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spellType: 5
+  cooldownTime: 0
+  onCooldown: 0
+  shape: 1
+  originShape: 1
+  power: 0
+  lifetime: 10
+  size: 1
+  instances: 1
+  speed: 1
+  unique: 0
+  spellSlot: 1
+  element: {fileID: 11400000, guid: 6519e511c6e7c7c4ea5b8f78926f60e7, type: 2}
+  originElement: {fileID: 11400000, guid: 6519e511c6e7c7c4ea5b8f78926f60e7, type: 2}
+  upgradeLimit: 5
+  model: {fileID: 8797641235515190840}
+--- !u!54 &-5240452477876547970
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238391487416804670}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!1 &8797641235515190840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1802701077943572493}
+  - component: {fileID: 962501772611278398}
+  - component: {fileID: 453691983862971520}
+  - component: {fileID: 5325471744816403314}
+  - component: {fileID: 8798535037138133355}
+  m_Layer: 11
+  m_Name: Model
+  m_TagString: Shield_Spell
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1802701077943572493
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797641235515190840}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1303441426678640048}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!33 &962501772611278398
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4238391487416804670}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8152721751990690372
+  m_GameObject: {fileID: 8797641235515190840}
+  m_Mesh: {fileID: -1272481795433867914, guid: b83f4a4cfe512b548b1f021d0964a693, type: 3}
+--- !u!23 &453691983862971520
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4238391487416804670}
+  m_GameObject: {fileID: 8797641235515190840}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,7 +137,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 648e679517695614d8a5dac510d2ea69, type: 2}
+  - {fileID: 2100000, guid: acba6e7cd926ced41b15776624502795, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -82,57 +158,30 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &5298318844830088563
+--- !u!65 &5325471744816403314
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4238391487416804670}
+  m_GameObject: {fileID: 8797641235515190840}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.33, y: 0.77, z: 0.15}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &223394519749793522
-MonoBehaviour:
+--- !u!136 &8798535037138133355
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4238391487416804670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9f5b2c55fabd374da7e80adb237db60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spellType: 5
-  cooldownTime: 0
-  onCooldown: 0
-  shape: 1
-  power: 0
-  lifetime: 10
-  size: 1
-  instances: 1
-  speed: 1
-  unique: 0
-  spellSlot: 2
-  element: {fileID: 11400000, guid: 6519e511c6e7c7c4ea5b8f78926f60e7, type: 2}
-  upgradeLimit: 5
---- !u!54 &-5240452477876547970
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4238391487416804670}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
+  m_GameObject: {fileID: 8797641235515190840}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  m_Radius: 0.66139376
+  m_Height: 0.76738733
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: -0.00657529}

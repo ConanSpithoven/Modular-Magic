@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6e3ae8152ea243d4d9af49e5cdb896bd, type: 2}
+  - {fileID: 2100000, guid: c012f5be6fce8484a81ae2e8d30dd9a2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -104,10 +104,11 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 3
+  spellSlot: 2
   element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
   originElement: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
   upgradeLimit: 5
+  model: {fileID: 6980719320466699317}
 --- !u!136 &8964444968500025839
 CapsuleCollider:
   m_ObjectHideFlags: 0

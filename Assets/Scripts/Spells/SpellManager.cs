@@ -85,8 +85,14 @@ public class SpellManager : MonoBehaviour
                     Vector3 targetPos;
                     if (casterType == 0)
                     {
-                        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                        mousePos.y = 0f;
+                        Vector3 mousePos = Input.mousePosition;
+                        Ray castPoint = Camera.main.ScreenPointToRay(mousePos);
+                        RaycastHit hit;
+                        if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, LayerMask.NameToLayer("Ground")))
+                        {
+                            mousePos = hit.point;
+                        }
+                        mousePos.y = Firepos.position.y;
                         targetPos = mousePos;
                     }
                     else 
@@ -118,6 +124,10 @@ public class SpellManager : MonoBehaviour
                 if (spell.shape == 0)
                 {
                     projectileObject.transform.SetParent(null, true);
+                }
+                if (spell.shape == 1)
+                {
+                    projectile.SetFirePos(Firepos);
                 }
                 ProjectileSpellHandler(spell, projectile);
                 projectile.Activate();
@@ -521,7 +531,7 @@ public class SpellManager : MonoBehaviour
                 swordObject.transform.Rotate(Vector3.up, 75f);
             else
                 swordObject.transform.Rotate(Vector3.up, -75f);
-            swordObject.transform.Rotate(Vector3.right, Random.Range(-30f, 30f));
+            swordObject.transform.Rotate(Vector3.right, Random.Range(-15f, 15f));
             swordObject.transform.SetParent(Firepos, true);
             MeleeSpell sword = swordObject.GetComponent<MeleeSpell>();
             MeleeSpellHandler(spell, sword);
@@ -538,11 +548,11 @@ public class SpellManager : MonoBehaviour
         {
             GameObject spearObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
             spearObject.transform.SetParent(Firepos, true);
-            spearObject.transform.Translate(new Vector3(Random.Range(0.75f + (spell.size / 4f), 1.25f + (spell.size / 4f)), Random.Range(0f, 0.5f + (spell.size / 4f)), -1f));
+            spearObject.transform.Translate(new Vector3(Random.Range(0.75f + (spell.size * 0.1f), 1.25f + (spell.size * 0.1f)), Random.Range(0f, 0.5f + (spell.size  * 0.1f)), -1f));
             MeleeSpell spear = spearObject.GetComponent<MeleeSpell>();
             MeleeSpellHandler(spell, spear);
             spear.Activate();
-            yield return new WaitForSeconds(1f / (spell.speed * 5f));
+            yield return new WaitForSeconds(1f / (spell.speed * 1.3f));
         }
     }
 

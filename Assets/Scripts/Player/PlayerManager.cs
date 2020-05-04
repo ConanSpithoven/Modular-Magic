@@ -10,11 +10,13 @@ public class PlayerManager : MonoBehaviour
     private bool allowMovement = true;
     private Rigidbody rb = default;
     private PlayerStats playerstats = default;
+    private CapsuleCollider playerCollider = default;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         playerstats = GetComponent<PlayerStats>();
+        playerCollider = GetComponent<CapsuleCollider>();
     }
 
     private void Start()
@@ -124,6 +126,7 @@ public class PlayerManager : MonoBehaviour
 
     public void AllowMovement(bool status) {
         allowMovement = status;
+        playerCollider.enabled = status;
     }
 
     public SpellInventory GetSpellInventory()

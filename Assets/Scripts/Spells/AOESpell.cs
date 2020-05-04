@@ -24,6 +24,11 @@ public class AOESpell : Spell
             }
             else if (transform.localScale.y != 0.3f)
             {
+                if (variant == SpellShape.orb)
+                {
+                    transform.SetParent(null, true);
+                }
+                Destroy(gameObject, lifetime);
                 transform.localScale = new Vector3(transform.localScale.x, 0.3f, transform.localScale.z);
                 transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
                 Destroy(gameObject, lifetime);
@@ -62,20 +67,24 @@ public class AOESpell : Spell
         switch (variant)
         {
             case SpellShape.orb:
+                size *= 1.4f;
                 size += 5f;
                 transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
-                transform.SetParent(null, true);
                 break;
             case SpellShape.orbit:
+                lifetime *= 1.3f;
+                lifetime += 5f;
                 break;
             case SpellShape.point:
-                size += 4f;
+                size *= 0.8f;
+                size += 3f;
                 transform.SetParent(null, true);
                 break;
         }
         if (!spellInventory.GetCooldownStatus(spellSlot))
             spellInventory.StartCooldown(spellSlot);
-        Destroy(gameObject, lifetime);
+        if(variant == SpellShape.orbit)
+            Destroy(gameObject, lifetime);
     }
 
     private void SetupSize()

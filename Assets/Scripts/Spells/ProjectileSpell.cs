@@ -4,12 +4,15 @@ using UnityEngine;
 public class ProjectileSpell : Spell
 {
     [SerializeField] private LayerMask obstacles = default;
+    [SerializeField] private LayerMask chainables = default;
+    private Vector3 targetPos = default;
     private enum SpellShape { ball, line, chain }
     private SpellShape variant = default;
     private bool hit = true;
     private float currentsize = 0f;
     private SpellInventory spellInventory = default;
     private Transform FirePos = default;
+    private float maxSize = default;
 
     private void Update()
     {
@@ -17,15 +20,17 @@ public class ProjectileSpell : Spell
         {
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
             {
-                currentsize = hit.distance / 2f;
+                maxSize = hit.distance / 2f;
             }
             else
             {
-                currentsize += 10f * Time.deltaTime;
+                maxSize = size;
             }
-            float sizelimited = Mathf.Clamp(currentsize, 0f, size);
+            currentsize += 10f * Time.deltaTime;
+            currentsize = Mathf.Clamp(currentsize, 0f, maxSize);
+            float sizelimited = currentsize;
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, sizelimited);
         }
     }
@@ -58,20 +63,25 @@ public class ProjectileSpell : Spell
                 break;
             case SpellShape.line:
                 transform.localScale = new Vector3(transform.localScale.x * size / 2f, transform.localScale.y * size / 2f, transform.localScale.z);
-                speed *= 5;
-                size *= 3f;
+                speed += 4;
+                size += 2f;
                 power *= 0.2f;
                 Destroy(gameObject, lifetime);
                 break;
             case SpellShape.chain:
                 transform.localScale = new Vector3(0.5f, 0.5f, 0f);
-                size *= 3f;
-                Vector3 targetPos;
+                size += 2f;
                 if (spellInventory.GetCasterType() == 0)
                 {
-                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mousePos.y = FirePos.position.y;
-                    targetPos = mousePos;
+                    RaycastHit hit;
+                    if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, chainables))
+                    {
+                        targetPos = hit.point;
+                    }
+                    else if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, Mathf.Infinity, chainables))
+                    {
+                        targetPos = hit.point;
+                    }
                 }
                 else
                 {
@@ -267,7 +277,7 @@ public class ProjectileSpell : Spell
         float distance = 0f;
         instances--;
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, target - transform.position, out hit, size*2f, obstacles, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position, target - transform.position, out hit, size*2f, chainables, QueryTriggerInteraction.Ignore))
         {
             distance = hit.distance/2f;
         }
@@ -294,7 +304,7 @@ public class ProjectileSpell : Spell
                     if (closestTarget == target.transform || Vector3.Distance(target.transform.position, hitColliders[i].transform.position) < Vector3.Distance(target.transform.position, closestTarget.position))
                     {
                         RaycastHit hit;
-                        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+                        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit, size * 2f, chainables, QueryTriggerInteraction.Ignore))
                         {
                             if ((hit.transform.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) || (hitColliders[i].CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")))
                             {

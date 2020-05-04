@@ -63,7 +63,10 @@ MonoBehaviour:
   model: {fileID: 2675785919613463042}
   obstacles:
     serializedVersion: 2
-    m_Bits: 32768
+    m_Bits: 49152
+  chainables:
+    serializedVersion: 2
+    m_Bits: 270848
 --- !u!54 &8423369965014548514
 Rigidbody:
   m_ObjectHideFlags: 0

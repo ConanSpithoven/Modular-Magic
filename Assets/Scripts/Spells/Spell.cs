@@ -163,12 +163,16 @@ public class Spell : MonoBehaviour
         {
             shape = originShape;
         }
-        SpellMeshModifier();
+        if (model != null)
+        {
+            SpellMeshModifier();
+        }
     }
 
     private void ElementMaterialModifier()
     {
         string type = "";
+        Renderer ren = model.GetComponent<Renderer>();
         switch (spellType)
         {
             case SpellType.Projectile:
@@ -193,10 +197,8 @@ public class Spell : MonoBehaviour
                 type = "Summon";
                 break;
         }
-        Debug.Log(element.ElementName);
-        GameObject newMaterial = Resources.Load<GameObject>("Materials/Elements/Spells/" + type + "/" + element.ElementName);
-        Debug.Log(newMaterial.GetComponent<Renderer>().sharedMaterials);
-        model.GetComponent<Renderer>().sharedMaterials = newMaterial.GetComponent<Renderer>().sharedMaterials;
+        Renderer newMaterial = Resources.Load<Renderer>("Materials/Elements/Spells/" + type + "/" + element.ElementName);
+        ren.sharedMaterials = newMaterial.sharedMaterials;
         SpellMeshModifier();
     }
 
@@ -208,18 +210,23 @@ public class Spell : MonoBehaviour
                 ProjectileSpellShapeModifier();
                 break;
             case SpellType.AOE:
+                MeshSetter();
                 break;
             case SpellType.Melee:
+                MeleeSpellShapeModifier();
                 break;
             case SpellType.Movement:
+                MovementSpellShapeModifier();
                 break;
             case SpellType.Heal:
                 break;
             case SpellType.Shield:
+                ShieldSpellShapeModifier();
                 break;
             case SpellType.Summon:
                 break;
         }
+        MeshSetter();
     }
 
     private void ProjectileSpellShapeModifier()
@@ -235,7 +242,6 @@ public class Spell : MonoBehaviour
                 col.size = new Vector3(1,1,1);
                 rb.constraints = RigidbodyConstraints.None;
                 rb.constraints = RigidbodyConstraints.FreezePositionY;
-                MeshSetter();
                 break;
             case 1:
             case 2:
@@ -243,7 +249,108 @@ public class Spell : MonoBehaviour
                 col.isTrigger = true;
                 col.size = new Vector3(1,2,1);
                 rb.constraints = RigidbodyConstraints.FreezeAll;
-                MeshSetter();
+                break;
+        }
+    }
+
+    private void MeleeSpellShapeModifier()
+    {
+        rb = GetComponent<Rigidbody>();
+        CapsuleCollider col = model.GetComponent<CapsuleCollider>();
+        Renderer ren = model.GetComponent<Renderer>();
+
+        switch (shape)
+        {
+            case 0:
+                model.transform.localPosition = new Vector3(0,0,1);
+                model.transform.rotation = Quaternion.Euler(90,0,180);
+                col.center = new Vector3(0,0,0);
+                col.radius = 0.1f;
+                col.height = 2;
+                col.direction = 1;
+                break;
+            case 1:
+                model.transform.localPosition = new Vector3(0, 0, -2);
+                model.transform.rotation = Quaternion.Euler(90, 0, 0);
+                col.center = new Vector3(0, 1.42f, 0);
+                col.radius = 0.1f;
+                col.height = 0.93f;
+                col.direction = 1;
+                break;
+            case 2:
+                model.transform.localPosition = new Vector3(0, 4, 0.5f);
+                model.transform.rotation = Quaternion.Euler(-90, 0, -90);
+                col.center = new Vector3(0.39f, 0, 0);
+                col.radius = 0.3f;
+                col.height = 0.91f;
+                col.direction = 2;
+                List<Material> newRen = new List<Material>
+                {
+                    ren.sharedMaterials[0],
+                    ren.sharedMaterials[0]
+                };
+                ren.sharedMaterials = newRen.ToArray();
+                break;
+        }
+    }
+
+    private void MovementSpellShapeModifier()
+    {
+        CapsuleCollider cCol = model.GetComponent<CapsuleCollider>();
+        BoxCollider bCol = model.GetComponent<BoxCollider>();
+        switch (shape)
+        {
+            case 0:
+                model.SetActive(true);
+                model.transform.localScale = new Vector3(1.2f,1.2f,1.2f);
+                rb = GetComponent<Rigidbody>();
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+                rb.mass = 0;
+                cCol.enabled = true;
+                bCol.enabled = false;
+                cCol.radius = 0.5f;
+                cCol.height = 2;
+                break;
+            case 1:
+                model.SetActive(false);
+                break;
+            case 2:
+                model.SetActive(true);
+                model.transform.localScale = new Vector3(2f, 1f, 0.5f);
+                rb = GetComponent<Rigidbody>();
+                rb.constraints = RigidbodyConstraints.None;
+                rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+                rb.mass = 100;
+                cCol.enabled = false;
+                bCol.enabled = true;
+                bCol.size = new Vector3(1,2,1);
+                break;
+        }
+    }
+
+    private void ShieldSpellShapeModifier()
+    {
+        rb = GetComponent<Rigidbody>();
+        CapsuleCollider cCol = model.GetComponent<CapsuleCollider>();
+        BoxCollider bCol = model.GetComponent<BoxCollider>();
+
+        switch (shape)
+        {
+            case 0:
+                model.transform.rotation = Quaternion.Euler(0, 0, 0);
+                model.transform.localScale = new Vector3(1.2f ,1.2f ,1.2f);
+                cCol.enabled = true;
+                bCol.enabled = false;
+                cCol.radius = 0.5f;
+                cCol.height = 2f;
+                break;
+            case 1:
+            case 2:
+                model.transform.rotation = Quaternion.Euler(0, 0, 90);
+                model.transform.localScale = new Vector3(1, 1 ,1);
+                cCol.enabled = false;
+                bCol.enabled = true;
+                bCol.size = new Vector3(1.33f, 0.77f, 0.15f);
                 break;
         }
     }
@@ -275,11 +382,7 @@ public class Spell : MonoBehaviour
                 type = "Summon";
                 break;
         }
-        
-        if (model.GetComponent<MeshFilter>() != null)
-        {
-            GameObject newMesh = Resources.Load<GameObject>("Models/Spells/" + type + "/" + element.ElementName + "/" + shape);
-            model.GetComponent<MeshFilter>().sharedMesh = newMesh.GetComponent<MeshFilter>().sharedMesh;
-        }
+        GameObject newMesh = Resources.Load<GameObject>("Models/Spells/" + type + "/" + element.ElementName + "/" + shape);
+        model.GetComponent<MeshFilter>().sharedMesh = newMesh.GetComponent<MeshFilter>().sharedMesh;
     }
 }
