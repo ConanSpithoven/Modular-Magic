@@ -103,8 +103,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5376322008537632175}
-  - component: {fileID: 5376322008537632174}
-  - component: {fileID: 5376322008537632173}
   - component: {fileID: 5376322008537632172}
   - component: {fileID: 7228845004719820340}
   - component: {fileID: 8576502613794189409}
@@ -131,36 +129,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5376322008537632174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 106cf09bcb9320846bcbd52dfb8af83d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  casterType: 2
-  slotOne: {fileID: 2675785919471812800, guid: c14e82aba1d296c41bba82b424580d04, type: 3}
-  slotTwo: {fileID: 0}
-  slotThree: {fileID: 0}
---- !u!114 &5376322008537632173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1da9bea21e474d439ebe8ba0b75bd32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Firepos: {fileID: 0}
-  Model: {fileID: 0}
 --- !u!114 &5376322008537632172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +152,7 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 1
+  spellSlot: 2
   element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
   originElement: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
   upgradeLimit: 5
@@ -193,7 +161,8 @@ MonoBehaviour:
   obstacles:
     serializedVersion: 2
     m_Bits: 33280
-  spellManager: {fileID: 0}
+  projectilespell: {fileID: 2675785919471812800, guid: 00f249fda0e0a8c46a6926b9948f0906,
+    type: 3}
 --- !u!95 &7228845004719820340
 Animator:
   serializedVersion: 3

@@ -90,8 +90,9 @@ public class ProjectileSpell : Spell
                 CastChain(FirePos, targetPos);
                 break;
         }
-        if (!spellInventory.GetCooldownStatus(spellSlot))
-            spellInventory.StartCooldown(spellSlot);
+        if (spellInventory != null)
+            if (!spellInventory.GetCooldownStatus(spellSlot))
+                spellInventory.StartCooldown(spellSlot);
     }
 
     private void OnCollisionEnter(Collision col){

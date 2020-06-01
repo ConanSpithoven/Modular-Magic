@@ -401,23 +401,15 @@ public class Spell : MonoBehaviour
             case 0:
                 animator.enabled = false;
                 spellAgent.enabled = false;
-                GetComponent<SpellManager>().enabled = false;
-                GetComponent<SpellInventory>().enabled = false;
                 break;
             case 1:
                 animator.enabled = false;
                 spellAgent.enabled = true;
-                GetComponent<SpellManager>().enabled = true;
-                GetComponent<SpellManager>().SetFirepos(model.transform.Find("Firepos").transform);
-                GetComponent<SpellManager>().SetModel(model.transform);
-                GetComponent<SpellInventory>().enabled = true;
                 break;
             case 2:
                 animator.enabled = true;
                 animator = Resources.Load<Animator>("Animation/Summon/2/SwordSummon");
                 spellAgent.enabled = true;
-                GetComponent<SpellManager>().enabled = false;
-                GetComponent<SpellInventory>().enabled = false;
                 break;
         }
     }

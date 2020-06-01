@@ -6,11 +6,10 @@ using UnityEngine.AI;
 public class SummoningSpell : Spell
 {
     [SerializeField] private LayerMask obstacles = default;
-    [SerializeField] private SpellManager spellManager = default;
+    [SerializeField] private ProjectileSpell projectilespell = default;
     private enum SpellShape { chaser, ranged, melee }
     private SpellShape variant = default;
     private SpellInventory spellInventory = default;
-    private SpellInventory summonSpellInventory = default;
     private Transform target = default;
     private Transform caster = default;
     private float currentSize = 0f;
@@ -74,9 +73,9 @@ public class SummoningSpell : Spell
                     Vector3 direction = target.position - transform.position;
                     float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.Euler(0, rotation, 0);
-                    if ((!summonSpellInventory.GetCooldownStatus(1) || !summonSpellInventory.GetCooldownStatus(2) || !summonSpellInventory.GetCooldownStatus(3)) && !attackCooldown)
+                    if (!attackCooldown)
                     {
-                        summonSpellInventory.Attack();
+                        RangedAttack();
                         StartCoroutine("AttackCooldown");
                     }
                 }
@@ -133,8 +132,6 @@ public class SummoningSpell : Spell
     public void SetFirePos(Transform FirePos)
     {
         this.FirePos = FirePos;
-        spellManager.SetFirepos(FirePos);
-        spellManager.SetModel(GetModel().transform);
     }
 
     public void SetCaster(Transform caster)
@@ -153,10 +150,10 @@ public class SummoningSpell : Spell
                 break;
             case SpellShape.ranged:
                 agent = GetComponent<NavMeshAgent>();
-                attackRate = (1f / (speed / 5f));
+                attackRate = (1f / (speed / 2.5f));
                 hp = power * 2f;
                 transform.SetParent(null, true);
-                summonSpellInventory = GetComponent<SpellInventory>();
+                FirePos = GetModel().transform.Find("Firepos").transform;
                 Destroy(gameObject, lifetime*5f);
                 break;
             case SpellShape.melee:
@@ -244,11 +241,6 @@ public class SummoningSpell : Spell
         {
             target = closestTarget;
             targetFound = true;
-            if(variant == SpellShape.ranged)
-            {
-                summonSpellInventory.SetTargetFound(true);
-                summonSpellInventory.SetTarget(target);
-            }
             if (variant == SpellShape.chaser)
             {
                 StopCoroutine("ChaserTimer");
@@ -260,11 +252,6 @@ public class SummoningSpell : Spell
         {
             target = null;
             targetFound = false;
-            if(variant == SpellShape.ranged)
-            {
-                summonSpellInventory.SetTargetFound(false);
-                summonSpellInventory.SetTarget(null);
-            }
         }
     }
 
@@ -281,6 +268,19 @@ public class SummoningSpell : Spell
             animator.SetTrigger("Attack");
             StartCoroutine("AttackCooldown");
         }
+    }
+
+    private void RangedAttack()
+    {
+        GameObject projectileObject = Instantiate(projectilespell.gameObject, FirePos.position, GetModel().transform.rotation);
+        ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
+        projectile.SetElement(element);
+        projectile.SetSpeed(speed);
+        projectile.SetShape(0);
+        projectile.SetDamage(power);
+        projectile.SetSize(size);
+        projectile.SetLifetime(lifetime);
+        projectile.Activate();
     }
 
     private IEnumerator AttackCooldown()

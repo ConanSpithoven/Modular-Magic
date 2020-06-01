@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8537072114484458334}
-  - component: {fileID: -4041267107921834597}
-  - component: {fileID: 827411519113433347}
   - component: {fileID: 8537072114484458321}
   - component: {fileID: 8537072114484458320}
   - component: {fileID: 8537072114484458323}
@@ -37,36 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-4041267107921834597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8537072114484458322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 106cf09bcb9320846bcbd52dfb8af83d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  casterType: 2
-  slotOne: {fileID: 2675785919471812800, guid: c14e82aba1d296c41bba82b424580d04, type: 3}
-  slotTwo: {fileID: 0}
-  slotThree: {fileID: 0}
---- !u!114 &827411519113433347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8537072114484458322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1da9bea21e474d439ebe8ba0b75bd32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Firepos: {fileID: 5376322009086442178, guid: 2c99bd0d8841f20498a350735d1e0ee3, type: 3}
-  Model: {fileID: 5376322007838446698, guid: 2c99bd0d8841f20498a350735d1e0ee3, type: 3}
 --- !u!114 &8537072114484458321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,7 +67,8 @@ MonoBehaviour:
   obstacles:
     serializedVersion: 2
     m_Bits: 33280
-  spellManager: {fileID: 0}
+  projectilespell: {fileID: 2675785919471812800, guid: 00f249fda0e0a8c46a6926b9948f0906,
+    type: 3}
 --- !u!95 &8537072114484458320
 Animator:
   serializedVersion: 3
