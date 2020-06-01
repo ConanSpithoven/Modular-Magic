@@ -57,7 +57,7 @@ MonoBehaviour:
   speed: 1
   unique: 0
   spellSlot: 1
-  element: {fileID: 11400000, guid: 93f62f583be8f004596b36a790cbe5b9, type: 2}
+  element: {fileID: 11400000, guid: 674630d1aabef614e88bfe8cec831218, type: 2}
   originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5
   model: {fileID: 2675785919613463042}
@@ -143,7 +143,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff489be4d6b569e4591a2210d9b2a764, type: 2}
+  - {fileID: 2100000, guid: 40b87b659dc9ab84f8d6a5da3f615efe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

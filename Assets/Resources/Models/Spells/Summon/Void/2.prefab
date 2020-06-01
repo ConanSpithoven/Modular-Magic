@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 3842052937281469014}
   - component: {fileID: 3842052937281469009}
   m_Layer: 17
-  m_Name: Model
+  m_Name: 2
   m_TagString: Summon_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,7 +154,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8fd237d416578e44693558d0dc57dfff, type: 2}
+  - {fileID: 2100000, guid: 40b87b659dc9ab84f8d6a5da3f615efe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

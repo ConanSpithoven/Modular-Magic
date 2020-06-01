@@ -170,12 +170,13 @@ public class Spell : MonoBehaviour
         }
         if (model != null)
         {
-            SpellMeshModifier();
+            ElementMaterialModifier();
         }
     }
 
     private void ElementMaterialModifier()
     {
+        SpellMeshModifier();
         string type = "";
         Renderer ren = model.GetComponent<Renderer>();
         switch (spellType)
@@ -204,7 +205,6 @@ public class Spell : MonoBehaviour
         }
         Renderer newMaterial = Resources.Load<Renderer>("Materials/Elements/Spells/" + type + "/" + element.ElementName);
         ren.sharedMaterials = newMaterial.sharedMaterials;
-        SpellMeshModifier();
     }
 
     private void SpellMeshModifier()
@@ -368,10 +368,6 @@ public class Spell : MonoBehaviour
         spellAgent = GetComponent<NavMeshAgent>();
         model = Resources.Load<GameObject>("Models/Spells/Summon/" + element.ElementName + "/" + shape);
         string path = AssetDatabase.GetAssetPath(gameObject);
-        
-        //works, but spells that parent dont work anymore
-        //Add line to change projectile to matching projectile-ball of the new element.
-        //Rewrite Summoning spell shape ranged to only fire projectile-ball with corresponding stats to the summoning spell, unique is multishot?
         GameObject newPrefab = Instantiate(this.gameObject, new Vector3(0, -100, 0), Quaternion.identity, null);
         GameObject oldModel = newPrefab.transform.Find("Model").gameObject;
         oldModel.transform.SetParent(null, true);
@@ -409,7 +405,7 @@ public class Spell : MonoBehaviour
                 break;
             case 2:
                 animator.enabled = true;
-                animator = Resources.Load<Animator>("Animation/Summon/2/SwordSummon");
+                animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Summon/2/SwordSummon");
                 spellAgent.enabled = true;
                 break;
         }
