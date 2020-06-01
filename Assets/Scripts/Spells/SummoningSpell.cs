@@ -272,7 +272,7 @@ public class SummoningSpell : Spell
 
     private void RangedAttack()
     {
-        GameObject projectileObject = Instantiate(projectilespell.gameObject, FirePos.position, GetModel().transform.rotation);
+        GameObject projectileObject = Instantiate(projectilespell.gameObject, (transform.position + transform.forward), transform.rotation);
         ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
         projectile.SetElement(element);
         projectile.SetSpeed(speed);
@@ -288,6 +288,11 @@ public class SummoningSpell : Spell
         attackCooldown = true;
         yield return new WaitForSeconds(attackRate);
         attackCooldown = false;
+    }
+
+    public ProjectileSpell GetProjectile()
+    {
+        return projectilespell;
     }
 
     private void OnCollisionEnter(Collision col)

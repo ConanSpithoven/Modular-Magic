@@ -405,6 +405,7 @@ public class Spell : MonoBehaviour
             case 1:
                 animator.enabled = false;
                 spellAgent.enabled = true;
+                GetComponent<SummoningSpell>().GetProjectile().ModifyElement(element, true);
                 break;
             case 2:
                 animator.enabled = true;

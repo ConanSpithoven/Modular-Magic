@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2675785919471812800}
   - component: {fileID: 8423369965014548514}
   m_Layer: 10
-  m_Name: Magic Missile
+  m_Name: Lich Missile
   m_TagString: Attack_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
   speed: 1
   unique: 0
   spellSlot: 1
-  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  element: {fileID: 11400000, guid: 93f62f583be8f004596b36a790cbe5b9, type: 2}
   originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5
   model: {fileID: 2675785919613463042}
@@ -143,7 +143,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b3b4ad64c25fdf1469aecee098e1d5c9, type: 2}
+  - {fileID: 2100000, guid: ff489be4d6b569e4591a2210d9b2a764, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
