@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class SummoningSpell : Spell
 {
     [SerializeField] private LayerMask obstacles = default;
+    [SerializeField] private SpellManager spellManager = default;
     private enum SpellShape { chaser, ranged, melee }
     private SpellShape variant = default;
     private SpellInventory spellInventory = default;
@@ -17,7 +19,6 @@ public class SummoningSpell : Spell
     private bool setup = false;
     private Transform FirePos = default;
     private NavMeshAgent agent = default;
-    private Animator animator = default;
     private float attackRate = default;
     private bool attackCooldown = default;
     private float hp = default;
@@ -132,6 +133,8 @@ public class SummoningSpell : Spell
     public void SetFirePos(Transform FirePos)
     {
         this.FirePos = FirePos;
+        spellManager.SetFirepos(FirePos);
+        spellManager.SetModel(GetModel().transform);
     }
 
     public void SetCaster(Transform caster)
@@ -171,28 +174,29 @@ public class SummoningSpell : Spell
 
     private void SetupSize()
     {
-        currentSize += speed * Time.deltaTime;
-        float sizelimited = Mathf.Clamp(currentSize, 0f, size / 5f);
+        currentSize += 1f + speed * Time.deltaTime;
+        float sizelimited = Mathf.Clamp(currentSize, 0f, 1 + (size * 0.1f));
         transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited);
+
     }
 
     private void SetupDistance()
     {
         currentDistance += speed * Time.deltaTime;
-        float distanceLimited = Mathf.Clamp(currentDistance, 0f, size);
-        transform.Translate(new Vector3(0f, distanceLimited * 0.1f, distanceLimited * 0.1f));
+        float distanceLimited = Mathf.Clamp(currentDistance, 0f, 1 + (size * 0.2f));
+        transform.Translate(new Vector3(0f, distanceLimited * 0.08f, distanceLimited));
     }
 
     private void Setup()
     {
-        if (currentSize >= size && Vector3.Distance(caster.position, transform.position) >= size)
+        if (currentSize >= (1 + (size * 0.1f)) && Vector3.Distance(caster.position, transform.position) >= (1 + (size * 0.2f)))
         {
             setup = true;
             return;
         }
-        if (currentSize < size)
+        if (currentSize < (1 + (size * 0.1f)))
             SetupSize();
-        if (Vector3.Distance(caster.position, transform.position) < size)
+        if (Vector3.Distance(caster.position, transform.position) < (1 + (size * 0.2f)))
             SetupDistance();
     }
 

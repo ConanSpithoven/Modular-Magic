@@ -232,6 +232,7 @@ GameObject:
   - component: {fileID: 5390303322027678982}
   - component: {fileID: 5390303322027678983}
   - component: {fileID: 5390303322027678984}
+  - component: {fileID: 2103607565}
   m_Layer: 8
   m_Name: PlayerTest
   m_TagString: Player
@@ -281,9 +282,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   casterType: 0
-  slotOne: {fileID: 0}
-  slotTwo: {fileID: 0}
-  slotThree: {fileID: 0}
+  slotOne: {fileID: 1823565709972484459, guid: aa871fee6a7bc2741ab3fa4880271e98, type: 3}
+  slotTwo: {fileID: 2675785919471812800, guid: c14e82aba1d296c41bba82b424580d04, type: 3}
+  slotThree: {fileID: 7476773926420336499, guid: aaa9a2f6e9d49d448bb892628e5b5091,
+    type: 3}
 --- !u!114 &5390303322027678982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,3 +328,39 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 1
+--- !u!114 &2103607565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5390303322027678976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511c0217432dc284eb87056e70c745d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth:
+    baseValue: 100
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  baseElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  power:
+    baseValue: 0
+  armor:
+    baseValue: 0
+  movementspeed:
+    baseValue: 5
+  lifetime:
+    baseValue: 0
+  size:
+    baseValue: 0
+  speed:
+    baseValue: 0
+  instances:
+    baseValue: 0
+  unique:
+    baseValue: 0
+  cooldownReduction:
+    baseValue: 0
+  upgradeLimit:
+    baseValue: 0

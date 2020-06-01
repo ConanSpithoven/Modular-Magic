@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -120,13 +121,9 @@ public class SpellManager : MonoBehaviour
             {
                 GameObject projectileObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
                 ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
-                projectileObject.transform.SetParent(Firepos);
-                if (spell.shape == 0)
-                {
-                    projectileObject.transform.SetParent(null, true);
-                }
                 if (spell.shape == 1)
                 {
+                    projectileObject.transform.SetParent(Firepos);
                     projectile.SetFirePos(Firepos);
                 }
                 ProjectileSpellHandler(spell, projectile);
@@ -582,5 +579,15 @@ public class SpellManager : MonoBehaviour
     public void SetTarget(Transform target)
     {
         this.target = target;
+    }
+
+    public void SetFirepos(Transform pos)
+    {
+        Firepos = pos;
+    }
+
+    public void SetModel(Transform model)
+    {
+        Model = model;
     }
 }

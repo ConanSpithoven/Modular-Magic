@@ -50,10 +50,10 @@ MonoBehaviour:
   onCooldown: 0
   shape: 0
   originShape: 0
-  power: 7
+  power: 1
   lifetime: 1
-  size: 7
-  instances: 5
+  size: 1
+  instances: 1
   speed: 1
   unique: 0
   spellSlot: 1
@@ -61,6 +61,7 @@ MonoBehaviour:
   originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5
   model: {fileID: 2675785919613463042}
+  animator: {fileID: 0}
   obstacles:
     serializedVersion: 2
     m_Bits: 49152

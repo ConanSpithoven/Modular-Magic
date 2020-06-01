@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class Spell : MonoBehaviour
@@ -23,6 +26,8 @@ public class Spell : MonoBehaviour
     public int upgradeLimit = 5;
     [SerializeField] private GameObject model;
     private Rigidbody rb;
+    public Animator animator;
+    private NavMeshAgent spellAgent;
 
     public void SetSlot(int spellSlot)
     {
@@ -224,7 +229,8 @@ public class Spell : MonoBehaviour
                 ShieldSpellShapeModifier();
                 break;
             case SpellType.Summon:
-                break;
+                SummonSpellShapeModifier();
+                return;
         }
         MeshSetter();
     }
@@ -355,6 +361,67 @@ public class Spell : MonoBehaviour
         }
     }
 
+    private void SummonSpellShapeModifier()
+    {
+        rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        spellAgent = GetComponent<NavMeshAgent>();
+        model = Resources.Load<GameObject>("Models/Spells/Summon/" + element.ElementName + "/" + shape);
+        string path = AssetDatabase.GetAssetPath(gameObject);
+        
+        //works, but spells that parent dont work anymore
+        //Add line to change projectile to matching projectile-ball of the new element.
+        //Rewrite Summoning spell shape ranged to only fire projectile-ball with corresponding stats to the summoning spell, unique is multishot?
+        GameObject newPrefab = Instantiate(this.gameObject, new Vector3(0, -100, 0), Quaternion.identity, null);
+        GameObject oldModel = newPrefab.transform.Find("Model").gameObject;
+        oldModel.transform.SetParent(null, true);
+        Destroy(oldModel);
+        Vector3 rot = Vector3.zero;
+
+        switch (shape)
+        {
+            case 0:
+                rot = new Vector3(0, 180, 180);
+                break;
+            case 1:
+                rot = new Vector3(0,0,0);
+                break;
+            case 2:
+                rot = new Vector3(0, 0, 0);
+                break;
+        }
+        GameObject newModel = Instantiate(model, new Vector3(0, -100, 0), Quaternion.Euler(rot), null);
+        newModel.transform.parent = newPrefab.transform;
+        newModel.name = "Model";
+        PrefabUtility.SaveAsPrefabAsset(newPrefab, path);
+        DestroyImmediate(newPrefab);
+
+        switch (shape)
+        {
+            case 0:
+                animator.enabled = false;
+                spellAgent.enabled = false;
+                GetComponent<SpellManager>().enabled = false;
+                GetComponent<SpellInventory>().enabled = false;
+                break;
+            case 1:
+                animator.enabled = false;
+                spellAgent.enabled = true;
+                GetComponent<SpellManager>().enabled = true;
+                GetComponent<SpellManager>().SetFirepos(model.transform.Find("Firepos").transform);
+                GetComponent<SpellManager>().SetModel(model.transform);
+                GetComponent<SpellInventory>().enabled = true;
+                break;
+            case 2:
+                animator.enabled = true;
+                animator = Resources.Load<Animator>("Animation/Summon/2/SwordSummon");
+                spellAgent.enabled = true;
+                GetComponent<SpellManager>().enabled = false;
+                GetComponent<SpellInventory>().enabled = false;
+                break;
+        }
+    }
+
     private void MeshSetter()
     {
         string type = "";
@@ -380,7 +447,7 @@ public class Spell : MonoBehaviour
                 break;
             case SpellType.Summon:
                 type = "Summon";
-                break;
+                return;
         }
         GameObject newMesh = Resources.Load<GameObject>("Models/Spells/" + type + "/" + element.ElementName + "/" + shape);
         model.GetComponent<MeshFilter>().sharedMesh = newMesh.GetComponent<MeshFilter>().sharedMesh;
