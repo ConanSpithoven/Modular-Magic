@@ -16,7 +16,6 @@ public class MovementSpell : Spell
     private Vector3 goal = default;
     private Transform FirePos = default;
     private bool Enabled = default;
-    private GameObject model = default;
 
     private void Update()
     {
@@ -41,8 +40,8 @@ public class MovementSpell : Spell
                 {
                     if (Enabled)
                     {
-                        model.GetComponent<MeshRenderer>().enabled = false;
-                        model.GetComponent<Collider>().enabled = false;
+                        GetModel().GetComponent<MeshRenderer>().enabled = false;
+                        GetModel().GetComponent<Collider>().enabled = false;
                         Enabled = false;
                     }
                     if (!spellInventory.GetCooldownStatus(spellSlot) && instances <= 0)
@@ -83,7 +82,6 @@ public class MovementSpell : Spell
 
     public void Activate()
     {
-        model = GetModel();
         variant = (SpellShape)shape;
         Setup();
         if (caster.TryGetComponent(out PlayerManager playerManager) && variant != SpellShape.push)
@@ -130,8 +128,8 @@ public class MovementSpell : Spell
         currentDistance = 0f;
         if (!Enabled)
         {
-            model.GetComponent<MeshRenderer>().enabled = true;
-            model.GetComponent<Collider>().enabled = true;
+            GetModel().GetComponent<MeshRenderer>().enabled = true;
+            GetModel().GetComponent<Collider>().enabled = true;
             Enabled = true;
         }
         CalcDestination();

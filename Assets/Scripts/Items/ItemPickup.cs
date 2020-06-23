@@ -7,6 +7,11 @@ public class ItemPickup : MonoBehaviour
     [SerializeField] private Transform player = default;
     private float distance = default;
 
+    private void Start()
+    {
+        player = FindObjectOfType<PlayerManager>().transform;
+    }
+
     private void Update()
     {
         distance = Vector3.Distance(player.position, transform.position);
@@ -26,8 +31,6 @@ public class ItemPickup : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (player == null)
-            player = FindObjectOfType<PlayerManager>().transform;
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(transform.position, radius);
     }

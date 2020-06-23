@@ -441,4 +441,24 @@ public class Spell : MonoBehaviour
         GameObject newMesh = Resources.Load<GameObject>("Models/Spells/" + type + "/" + element.ElementName + "/" + shape);
         model.GetComponent<MeshFilter>().sharedMesh = newMesh.GetComponent<MeshFilter>().sharedMesh;
     }
+
+    public void SetOriginShape(int newShape)
+    {
+        originShape = newShape;
+    }
+
+    public void SetOriginElement(Element newElement)
+    {
+        originElement = newElement;
+    }
+
+    public int GetOriginShape()
+    {
+        return originShape;
+    }
+
+    public Element GetOriginElement()
+    {
+        return originElement;
+    }
 }

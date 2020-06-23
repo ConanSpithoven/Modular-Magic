@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f0a9e0364c85d84bbf830b325564923, type: 3}
   m_Name: Cloak of Wizardy
   m_EditorClassIdentifier: 
-  name: Cloak of Wizardy
+  name: Cloak of Wizardry
   type: 2
   icon: {fileID: 21300000, guid: 2d6ff99e12bfe1b4f910b86b0bab693d, type: 3}
   equipType: 1
@@ -26,4 +26,5 @@ MonoBehaviour:
   movementspeedModifier: 2
   uniqueModifier: 0
   cooldownReductionModifier: 0
+  upgradeLimitModifier: 0
   elementModifier: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
