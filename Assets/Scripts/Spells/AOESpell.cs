@@ -28,7 +28,6 @@ public class AOESpell : Spell
                 {
                     transform.SetParent(null, true);
                 }
-                Destroy(gameObject, lifetime);
                 transform.localScale = new Vector3(transform.localScale.x, 0.3f, transform.localScale.z);
                 transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
                 Destroy(gameObject, lifetime);

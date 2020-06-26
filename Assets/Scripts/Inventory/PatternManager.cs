@@ -29,10 +29,11 @@ public class PatternManager : MonoBehaviour
     public OnFormulaChanged onFormulaChanged;
 
     Inventory inventory;
-    [SerializeField] private SpellInventory spellInventory;
+    private SpellInventory spellInventory;
 
     void Start()
     {
+        spellInventory = FindObjectOfType<PlayerManager>().transform.GetComponent<SpellInventory>();
         inventory = Inventory.instance;
         slotOne = spellInventory.GetSpell(1);
         slotTwo = spellInventory.GetSpell(2);
@@ -41,12 +42,6 @@ public class PatternManager : MonoBehaviour
         currentPattern1 = new List<Pattern>(slotOne.GetUpgradeLimit());
         currentPattern2 = new List<Pattern>(slotTwo.GetUpgradeLimit());
         currentPattern3 = new List<Pattern>(slotThree.GetUpgradeLimit());
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (spellInventory == null)
-            spellInventory = FindObjectOfType<PlayerManager>().transform.GetComponent<SpellInventory>();
     }
 
     public void Equip(Pattern newItem)
@@ -275,6 +270,8 @@ public class PatternManager : MonoBehaviour
             onPatternChanged.Invoke(null, oldItem, activeFormula);
         }
     }
+
+    //on change upgradelimit, re-check empowerment count vs upgradelimit, unequip all over limit
 
     public void SetActiveFormula(int formulaNumber)
     {

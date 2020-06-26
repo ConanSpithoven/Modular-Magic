@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         newSpell.upgradeLimit = oldSpell.upgradeLimit;
         newSpell.SetOriginShape(oldSpell.GetOriginShape());
         newSpell.SetOriginElement(oldSpell.GetOriginElement());
-        newSpell.ModifyElement(oldSpell.element, false);
-        newSpell.ModifyShape(oldSpell.shape, false);
+        newSpell.ModifyElement(oldSpell.element, true);
+        newSpell.ModifyShape(oldSpell.shape, true);
     }
 }

@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   casterType: 0
-  slotOne: {fileID: 2675785919471812800, guid: c14e82aba1d296c41bba82b424580d04, type: 3}
+  slotOne: {fileID: 7476773926420336499, guid: d17260cf82fd8be48a5487c65ab4a49e, type: 3}
   slotTwo: {fileID: 7476773926420336499, guid: aaa9a2f6e9d49d448bb892628e5b5091, type: 3}
   slotThree: {fileID: 128461788573279179, guid: 4e399b5a6f013004398eb61ffdcb32c2,
     type: 3}
@@ -300,6 +300,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Firepos: {fileID: 5390303320247277538}
   Model: {fileID: 5390303321087474448}
+  Ground:
+    serializedVersion: 2
+    m_Bits: 16384
+  Obstacles:
+    serializedVersion: 2
+    m_Bits: 57344
 --- !u!114 &5390303322027678983
 MonoBehaviour:
   m_ObjectHideFlags: 0

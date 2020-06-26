@@ -27,7 +27,7 @@ public class Inventory : MonoBehaviour
         instance = this;
     }
 
-    private void OnDrawGizmosSelected()
+    private void Start()
     {
         if (playerManager == null)
             playerManager = FindObjectOfType<PlayerManager>().transform.GetComponent<PlayerManager>();

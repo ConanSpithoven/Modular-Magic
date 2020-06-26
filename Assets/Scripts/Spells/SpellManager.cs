@@ -8,6 +8,8 @@ public class SpellManager : MonoBehaviour
 {
     [SerializeField] private Transform Firepos = default;
     [SerializeField] private Transform Model = default;
+    [SerializeField] private LayerMask Ground = default;
+    [SerializeField] private LayerMask Obstacles = default;
 
     private SpellInventory spellInventory = default;
     private int casterType = default;
@@ -83,22 +85,47 @@ public class SpellManager : MonoBehaviour
             case 2:
                 if (spell.instances <= 1)
                 {
-                    Vector3 targetPos;
+                    Vector3 targetPos = transform.position;
                     if (casterType == 0)
                     {
                         Vector3 mousePos = Input.mousePosition;
                         Ray castPoint = Camera.main.ScreenPointToRay(mousePos);
                         RaycastHit hit;
-                        if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, LayerMask.NameToLayer("Ground")))
+                        if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, Ground))
                         {
-                            mousePos = hit.point;
+                            RaycastHit hit2;
+                            if (Physics.Raycast(Firepos.position, Firepos.forward, out hit2, Vector3.Distance(transform.position, hit.point), Obstacles))
+                            {
+                                mousePos = hit2.point;
+                            }
+                            else
+                            {
+                                mousePos = hit.point;
+                            }
+                        }
+                        else
+                        {
+                            RaycastHit hit2;
+                            if (Physics.Raycast(Firepos.position, Firepos.forward, out hit2, Mathf.Infinity, Obstacles))
+                            {
+                                mousePos = hit2.point;
+                            }
                         }
                         mousePos.y = Firepos.position.y;
                         targetPos = mousePos;
                     }
                     else 
                     {
-                        targetPos = target.position;
+                        RaycastHit hit;
+                        if (Physics.Raycast(Firepos.position, Firepos.forward, out hit, Vector3.Distance(transform.position, target.position), Obstacles))
+                        {
+                            targetPos = hit.point;
+                        }
+                        else
+                        {
+                            targetPos = target.position;
+                        }
+                        targetPos.y = Firepos.position.y;
                     }
                     GameObject aoeObject = Instantiate(spell.gameObject, targetPos, Model.transform.rotation);
                     AOESpell aoe = aoeObject.GetComponent<AOESpell>();
