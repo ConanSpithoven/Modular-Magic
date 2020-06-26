@@ -23,7 +23,7 @@ public class MovementSpell : Spell
         {
             StartCooldown();
         }
-        if(instances > 0)
+        if(instances > 0 && shape != (int)SpellShape.push)
         {
             Recaster();
         }
