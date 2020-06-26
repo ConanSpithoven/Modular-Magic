@@ -31,6 +31,7 @@ public class MeleeSpell : Spell
                 }
                 else 
                 {
+                    Debug.Log("reached end, destroy");
                     Destroy(gameObject);
                 }
                 break;

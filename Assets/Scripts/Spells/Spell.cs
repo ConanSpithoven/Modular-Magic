@@ -273,7 +273,6 @@ public class Spell : MonoBehaviour
                 col.center = new Vector3(0,0,0);
                 col.radius = 0.1f;
                 col.height = 2;
-                col.direction = 1;
                 break;
             case 1:
                 model.transform.localPosition = new Vector3(0, 0, -2);
@@ -281,21 +280,13 @@ public class Spell : MonoBehaviour
                 col.center = new Vector3(0, 1.42f, 0);
                 col.radius = 0.1f;
                 col.height = 0.93f;
-                col.direction = 1;
                 break;
             case 2:
-                model.transform.localPosition = new Vector3(0, 4, 0.5f);
-                model.transform.rotation = Quaternion.Euler(-90, 0, -90);
-                col.center = new Vector3(0.39f, 0, 0);
+                model.transform.localPosition = new Vector3(0, 1.75f, 0.5f);
+                model.transform.rotation = Quaternion.Euler(0, 0, 0);
+                col.center = new Vector3(0f, 1.9f, 0.63f);
                 col.radius = 0.3f;
                 col.height = 0.91f;
-                col.direction = 2;
-                List<Material> newRen = new List<Material>
-                {
-                    ren.sharedMaterials[0],
-                    ren.sharedMaterials[0]
-                };
-                ren.sharedMaterials = newRen.ToArray();
                 break;
         }
     }

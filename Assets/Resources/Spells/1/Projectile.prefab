@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2675785919471812800}
   - component: {fileID: 8423369965014548514}
   m_Layer: 10
-  m_Name: Magic Missile
+  m_Name: Projectile
   m_TagString: Attack_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
