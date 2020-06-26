@@ -285,6 +285,12 @@ public class SpellInventory : MonoBehaviour
                     slot.ModifyElement(oldItem.elementModifier, false);
                     break;
             }
+            if (oldItem.upgradeLimitModifier != 0)
+            {
+                slot.upgradeLimit -= oldItem.upgradeLimitModifier;
+                PatternManager.instance.UpgradeLimitChange((slot.upgradeLimit + oldItem.upgradeLimitModifier), slot.upgradeLimit, formulaNumber);
+                
+            }
         }
         if (newItem != null)
         {
@@ -305,6 +311,12 @@ public class SpellInventory : MonoBehaviour
                 case PatternType.Elemental:
                     slot.ModifyElement(newItem.elementModifier, true);
                     break;
+            }
+            if (newItem.upgradeLimitModifier != 0)
+            {
+                slot.upgradeLimit += newItem.upgradeLimitModifier;
+                PatternManager.instance.UpgradeLimitChange((slot.upgradeLimit - newItem.upgradeLimitModifier), slot.upgradeLimit, formulaNumber);
+                
             }
         }
     }

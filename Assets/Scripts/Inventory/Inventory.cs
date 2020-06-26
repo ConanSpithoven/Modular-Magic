@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour
     public PlayerManager playerManager;
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
+    public bool full = false;
 
     public static Inventory instance;
 
@@ -47,6 +48,11 @@ public class Inventory : MonoBehaviour
             onItemChangedCallback.Invoke();
         }
 
+        if (items.Count == space)
+        {
+            full = true;
+        }
+
         return true;
     }
 
@@ -56,6 +62,10 @@ public class Inventory : MonoBehaviour
         if (onItemChangedCallback != null)
         {
             onItemChangedCallback.Invoke();
+        }
+        if (items.Count < space)
+        {
+            full = false;
         }
     }
 }

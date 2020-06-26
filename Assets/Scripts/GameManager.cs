@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Transform startPos;
+    private GameObject player;
     private SpellInventory spellInventory;
     private float projectile0Cooldown = 1f;
     private float projectile1Cooldown = 3f;
@@ -159,5 +160,10 @@ public class GameManager : MonoBehaviour
                         return summonCooldown2;
                 }
         }
+    }
+
+    public GameObject GetPlayer()
+    {
+        return player;
     }
 }

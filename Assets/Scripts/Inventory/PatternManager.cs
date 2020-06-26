@@ -28,6 +28,9 @@ public class PatternManager : MonoBehaviour
     public delegate void OnFormulaChanged(int formulaNumber);
     public OnFormulaChanged onFormulaChanged;
 
+    public delegate void OnUpgradeLimitChanged(int newLimit, int formulaNumber);
+    public OnUpgradeLimitChanged onUpgradeLimitChanged;
+
     Inventory inventory;
     private SpellInventory spellInventory;
 
@@ -35,6 +38,7 @@ public class PatternManager : MonoBehaviour
     {
         spellInventory = FindObjectOfType<PlayerManager>().transform.GetComponent<SpellInventory>();
         inventory = Inventory.instance;
+
         slotOne = spellInventory.GetSpell(1);
         slotTwo = spellInventory.GetSpell(2);
         slotThree = spellInventory.GetSpell(3);
@@ -254,7 +258,15 @@ public class PatternManager : MonoBehaviour
         {
             case 1:
                 currentPattern1.Remove(oldItem);
-                inventory.Add(oldItem);
+                if (!inventory.full)
+                {
+                    inventory.Add(oldItem);
+                }
+                else
+                {
+                    //oldItem does not hold a gameobject, it is just a component
+                    //Instantiate(oldItem, GameManager.instance.GetPlayer().transform.position, Quaternion.Euler(90,0,0));
+                }
                 break;
             case 2:
                 currentPattern2.Remove(oldItem);
@@ -272,6 +284,32 @@ public class PatternManager : MonoBehaviour
     }
 
     //on change upgradelimit, re-check empowerment count vs upgradelimit, unequip all over limit
+    public void UpgradeLimitChange(int oldLimit, int newLimit, int spellSlot)
+    {
+        switch (spellSlot)
+        {
+            case 1:
+                if (newLimit < oldLimit)
+                {
+                    //unequip all patterns in slots above newlimit
+                    for (int i = (currentPattern1.Count-1); i >= newLimit; i--)
+                    {
+                        if (currentPattern1[i].patternType == PatternType.Empowerment)
+                        {
+                            UnEquip(currentPattern1[i]);
+                        }
+                    }
+                }
+                onUpgradeLimitChanged.Invoke(newLimit, 1);
+                break;
+            case 2:
+                oldLimit = slotTwo.upgradeLimit;
+                break;
+            case 3:
+                oldLimit = slotThree.upgradeLimit;
+                break;
+        }
+    }
 
     public void SetActiveFormula(int formulaNumber)
     {

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1717822801723309456}
   - component: {fileID: 5335614241904192475}
   m_Layer: 11
-  m_Name: Magic_Barrier
+  m_Name: Shield
   m_TagString: Shield_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,12 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 5
-  cooldownTime: 0
+  cooldownTime: 10
   onCooldown: 0
   shape: 0
   originShape: 0
   power: 1
-  lifetime: 10
+  lifetime: 1
   size: 1
   instances: 1
   speed: 1

@@ -142,15 +142,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 6
-  cooldownTime: 0
+  cooldownTime: 5
   onCooldown: 0
   shape: 0
   originShape: 0
-  power: 1
+  power: 5
   lifetime: 1
   size: 1
-  instances: 1
-  speed: 1
+  instances: 2
+  speed: 3
   unique: 0
   spellSlot: 1
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
@@ -171,7 +171,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 58477e3bca4f99b40b959efaaf2fe4c3, type: 2}
   m_CullingMode: 0

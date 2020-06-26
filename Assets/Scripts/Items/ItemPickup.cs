@@ -14,12 +14,15 @@ public class ItemPickup : MonoBehaviour
 
     private void Update()
     {
-        distance = Vector3.Distance(player.position, transform.position);
-        if (distance <= radius)
+        if (!Inventory.instance.full)
         {
-            float step = 2f * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, player.position, step);
-            transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
+            distance = Vector3.Distance(player.position, transform.position);
+            if (distance <= radius)
+            {
+                float step = ((1f+ radius) - distance) * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, player.position, step);
+                transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
+            }
         }
     }
 
@@ -35,9 +38,16 @@ public class ItemPickup : MonoBehaviour
         Gizmos.DrawSphere(transform.position, radius);
     }
 
+    private void OnCollisionStay(Collision col)
+    {
+        if (col.gameObject.CompareTag("Player") && !Inventory.instance.full)
+        {
+            OnPickUp();
+        }
+    }
     private void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player") && !Inventory.instance.full)
         {
             OnPickUp();
         }
