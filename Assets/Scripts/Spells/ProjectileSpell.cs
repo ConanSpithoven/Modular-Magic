@@ -78,7 +78,7 @@ public class ProjectileSpell : Spell
                     {
                         targetPos = hit.point;
                     }
-                    else if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, Mathf.Infinity, chainables))
+                    else if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, Mathf.Infinity, obstacles))
                     {
                         targetPos = hit.point;
                     }
@@ -278,13 +278,30 @@ public class ProjectileSpell : Spell
         float distance = 0f;
         instances--;
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, target - transform.position, out hit, size*2f, chainables, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position, target - transform.position, out hit, size * 2f, chainables, QueryTriggerInteraction.Ignore))
         {
-            distance = hit.distance/2f;
+            distance = hit.distance / 2f;
+            RaycastHit hit2;
+            if (Physics.Raycast(transform.position, target - transform.position, out hit2, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+            {
+                float distance2 = hit2.distance / 2f;
+                if (distance2 < distance)
+                {
+                    distance = distance2;
+                }
+            }
         }
         else
         {
-            distance = size;
+            RaycastHit hit3;
+            if (Physics.Raycast(transform.position, target - transform.position, out hit3, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+            {
+                distance = hit3.distance / 2f;
+            }
+            else
+            {
+                distance = size;
+            }
             Destroy(gameObject, 0.1f);
         }
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, distance);
