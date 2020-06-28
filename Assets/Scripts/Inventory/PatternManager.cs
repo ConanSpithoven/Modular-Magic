@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PatternManager : MonoBehaviour
 {
@@ -264,17 +265,30 @@ public class PatternManager : MonoBehaviour
                 }
                 else
                 {
-                    //oldItem does not hold a gameobject, it is just a component
-                    //Instantiate(oldItem, GameManager.instance.GetPlayer().transform.position, Quaternion.Euler(90,0,0));
+                    DropItem(oldItem);
                 }
                 break;
             case 2:
                 currentPattern2.Remove(oldItem);
-                inventory.Add(oldItem);
+                if (!inventory.full)
+                {
+                    inventory.Add(oldItem);
+                }
+                else
+                {
+                    DropItem(oldItem);
+                }
                 break;
             case 3:
                 currentPattern3.Remove(oldItem);
-                inventory.Add(oldItem);
+                if (!inventory.full)
+                {
+                    inventory.Add(oldItem);
+                }
+                else
+                {
+                    DropItem(oldItem);
+                }
                 break;
         }
         if (onPatternChanged != null)
@@ -303,10 +317,32 @@ public class PatternManager : MonoBehaviour
                 onUpgradeLimitChanged.Invoke(newLimit, 1);
                 break;
             case 2:
-                oldLimit = slotTwo.upgradeLimit;
+                if (newLimit < oldLimit)
+                {
+                    //unequip all patterns in slots above newlimit
+                    for (int i = (currentPattern2.Count - 1); i >= newLimit; i--)
+                    {
+                        if (currentPattern2[i].patternType == PatternType.Empowerment)
+                        {
+                            UnEquip(currentPattern2[i]);
+                        }
+                    }
+                }
+                onUpgradeLimitChanged.Invoke(newLimit, 1);
                 break;
             case 3:
-                oldLimit = slotThree.upgradeLimit;
+                if (newLimit < oldLimit)
+                {
+                    //unequip all patterns in slots above newlimit
+                    for (int i = (currentPattern3.Count - 1); i >= newLimit; i--)
+                    {
+                        if (currentPattern3[i].patternType == PatternType.Empowerment)
+                        {
+                            UnEquip(currentPattern3[i]);
+                        }
+                    }
+                }
+                onUpgradeLimitChanged.Invoke(newLimit, 1);
                 break;
         }
     }
@@ -381,5 +417,19 @@ public class PatternManager : MonoBehaviour
                 break;
         }
         return patterns;
+    }
+
+    private void DropItem(Item oldItem)
+    {
+        GameObject droppedItem = new GameObject(oldItem.name);
+        droppedItem.AddComponent<SpriteRenderer>();
+        droppedItem.GetComponent<SpriteRenderer>().sprite = oldItem.worldIcon;
+        droppedItem.AddComponent<BoxCollider>();
+        droppedItem.AddComponent<ItemPickup>();
+        droppedItem.GetComponent<ItemPickup>().item = oldItem;
+        Vector3 playerPos = GameManager.instance.GetPlayer().transform.position;
+        droppedItem.transform.position = new Vector3(playerPos.x, 0.5f, playerPos.z);
+        droppedItem.transform.rotation = Quaternion.Euler(90, 0, 0);
+        droppedItem.transform.localScale *= 0.5f;
     }
 }

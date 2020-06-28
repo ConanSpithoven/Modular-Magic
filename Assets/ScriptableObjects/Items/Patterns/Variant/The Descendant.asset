@@ -15,6 +15,7 @@ MonoBehaviour:
   name: The Ancestor
   type: 0
   icon: {fileID: 21300000, guid: 41dd71475420c3f42b48a371a6c170af, type: 3}
+  worldIcon: {fileID: 21300000, guid: 28fe4118de0030f4491d8f02567b55ba, type: 3}
   patternType: 3
   powerModifier: 0
   lifetimeModifier: 0

@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         GameObject playerPrefab = Resources.Load<GameObject>("PlayerTest");
-        GameObject player = Instantiate(playerPrefab, startPos.position, startPos.rotation, null);
+        player = Instantiate(playerPrefab, startPos.position, startPos.rotation, null);
         spellInventory = player.GetComponent<SpellInventory>();
 
         if (instance != null)

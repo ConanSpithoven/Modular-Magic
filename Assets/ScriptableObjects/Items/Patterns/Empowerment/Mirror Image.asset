@@ -15,6 +15,7 @@ MonoBehaviour:
   name: Mirror Image
   type: 0
   icon: {fileID: 21300000, guid: 8e84383b8059efc47809c5c3a88efe55, type: 3}
+  worldIcon: {fileID: 21300000, guid: 88210cfce3411fe43b65d195f20f70ff, type: 3}
   patternType: 0
   powerModifier: 0
   lifetimeModifier: 0

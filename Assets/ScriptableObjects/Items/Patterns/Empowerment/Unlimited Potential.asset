@@ -15,6 +15,7 @@ MonoBehaviour:
   name: Unlimited Potential
   type: 0
   icon: {fileID: 21300000, guid: df83aff73cddf4c469c9105431379eb3, type: 3}
+  worldIcon: {fileID: 21300000, guid: 88210cfce3411fe43b65d195f20f70ff, type: 3}
   patternType: 0
   powerModifier: 0
   lifetimeModifier: 0

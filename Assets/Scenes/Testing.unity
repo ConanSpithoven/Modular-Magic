@@ -8859,7 +8859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerManager: {fileID: 0}
   full: 0
-  space: 20
+  space: 5
   items: []
 --- !u!114 &1916557929
 MonoBehaviour:

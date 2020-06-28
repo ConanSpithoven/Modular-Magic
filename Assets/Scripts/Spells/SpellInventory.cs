@@ -251,6 +251,7 @@ public class SpellInventory : MonoBehaviour
         slot.instances += item.instancesModifier;
         slot.speed += item.speedModifier;
         slot.unique += item.uniqueModifier;
+        slot.upgradeLimit += item.upgradeLimitModifier;
     }
 
     private void RemoveEquipEffect(Spell slot, Equipment item)
@@ -261,6 +262,7 @@ public class SpellInventory : MonoBehaviour
         slot.instances -= item.instancesModifier;
         slot.speed -= item.speedModifier;
         slot.unique -= item.uniqueModifier;
+        slot.upgradeLimit -= item.upgradeLimitModifier;
     }
 
     public void OnPatternChange(Pattern newItem, Pattern oldItem, int formulaNumber)

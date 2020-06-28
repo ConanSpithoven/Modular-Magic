@@ -15,6 +15,7 @@ MonoBehaviour:
   name: Piercing Void
   type: 0
   icon: {fileID: 21300000, guid: c848806e648b5d345a2808d9f7abeec7, type: 3}
+  worldIcon: {fileID: 21300000, guid: f003e55ace0c08044bab1a25b21ef908, type: 3}
   patternType: 1
   powerModifier: 0
   lifetimeModifier: 0

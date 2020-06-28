@@ -232,7 +232,7 @@ public class PatternUI : MonoBehaviour
                 break;
         }
     }
-
+    
     void UpdateFormulaUI(int formulaNumber)
     {
         switch (formulaNumber)
@@ -283,8 +283,50 @@ public class PatternUI : MonoBehaviour
                 }
                 break;
             case 2:
+                if (empowermentSlots2.Count < newLimit)
+                {
+                    //add slots
+                    for (int i = (empowermentSlots2.Count + 1); i <= (newLimit); i++)
+                    {
+                        GameObject newSlot = Instantiate(patternSlot, formulaSlotParent2);
+                        empowermentSlots2.Add(newSlot.GetComponent<PatternSlot>());
+                        slots2.Add(newSlot.GetComponent<PatternSlot>());
+                    }
+                }
+                else if (empowermentSlots2.Count > newLimit)
+                {
+                    //remove slots
+                    for (int i = (empowermentSlots2.Count - 1); i >= newLimit; i--)
+                    {
+                        GameObject oldSlot = empowermentSlots2[i].gameObject;
+                        slots2.Remove(empowermentSlots2[i]);
+                        empowermentSlots2.RemoveAt(i);
+                        Destroy(oldSlot);
+                    }
+                }
                 break;
             case 3:
+                if (empowermentSlots3.Count < newLimit)
+                {
+                    //add slots
+                    for (int i = (empowermentSlots3.Count + 1); i <= (newLimit); i++)
+                    {
+                        GameObject newSlot = Instantiate(patternSlot, formulaSlotParent3);
+                        empowermentSlots3.Add(newSlot.GetComponent<PatternSlot>());
+                        slots3.Add(newSlot.GetComponent<PatternSlot>());
+                    }
+                }
+                else if (empowermentSlots1.Count > newLimit)
+                {
+                    //remove slots
+                    for (int i = (empowermentSlots3.Count - 1); i >= newLimit; i--)
+                    {
+                        GameObject oldSlot = empowermentSlots3[i].gameObject;
+                        slots3.Remove(empowermentSlots3[i]);
+                        empowermentSlots3.RemoveAt(i);
+                        Destroy(oldSlot);
+                    }
+                }
                 break;
         }
     }

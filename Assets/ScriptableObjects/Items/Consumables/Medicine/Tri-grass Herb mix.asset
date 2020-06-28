@@ -15,5 +15,6 @@ MonoBehaviour:
   name: Tri-grass Herb mix
   type: 1
   icon: {fileID: 21300000, guid: 7c415041ddf0a0a4fbd462e4c83d4404, type: 3}
+  worldIcon: {fileID: 21300000, guid: f39d990769f23ea4c8bfb3a47e67d844, type: 3}
   consumableType: 1
   potency: 5

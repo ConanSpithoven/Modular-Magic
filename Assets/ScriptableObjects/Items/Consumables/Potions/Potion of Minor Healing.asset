@@ -15,5 +15,6 @@ MonoBehaviour:
   name: Potion of Minor Healing
   type: 1
   icon: {fileID: 21300000, guid: 1a9cfa16c3c1c944cb6fb60695c29a0a, type: 3}
+  worldIcon: {fileID: 21300000, guid: f39d990769f23ea4c8bfb3a47e67d844, type: 3}
   consumableType: 0
   potency: 10

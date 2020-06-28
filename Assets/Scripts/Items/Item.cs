@@ -5,7 +5,7 @@ public class Item : ScriptableObject
     new public string name = "New Item";
     public ItemType type = ItemType.Consumable;
     public Sprite icon = null;
-    [SerializeField] private GameObject worldItem;
+    public Sprite worldIcon = null;
 
     public virtual void Use()
     {
@@ -15,10 +15,5 @@ public class Item : ScriptableObject
     public void RemoveFromInventory()
     {
         Inventory.instance.Remove(this);
-    }
-
-    public GameObject GetWorldItem()
-    {
-        return worldItem;
     }
 }
