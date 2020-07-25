@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 public class Spell : MonoBehaviour
 {
@@ -46,17 +42,20 @@ public class Spell : MonoBehaviour
 
     public void SetUnique(int unique)
     {
-        this.unique = unique;
+        float uniqueLimited = Mathf.Clamp(unique, 0f, Mathf.Infinity);
+        this.unique = Mathf.RoundToInt(uniqueLimited);
     }
 
     public void SetSpeed(float speed)
     {
-        this.speed = speed;
+        float speedLimited = Mathf.Clamp(speed, 0.1f, Mathf.Infinity);
+        this.speed = speedLimited;
     }
 
     public void SetSize(float size)
     {
-        this.size = size;
+        float sizeLimited = Mathf.Clamp(size, 0.1f, Mathf.Infinity);
+        this.size = sizeLimited;
     }
 
     public void SetShape(int shape)
@@ -66,17 +65,20 @@ public class Spell : MonoBehaviour
 
     public void SetLifetime(float lifetime)
     {
-        this.lifetime = lifetime;
+        float lifetimeLimited = Mathf.Clamp(lifetime, 0.1f, Mathf.Infinity);
+        this.lifetime = lifetimeLimited;
     }
 
     public void SetInstances(int instances)
     {
-        this.instances = instances;
+        float instancesLimited = Mathf.Clamp(instances, 1f, Mathf.Infinity);
+        this.instances = Mathf.RoundToInt(instancesLimited);
     }
 
     public void SetDamage(float damage)
     {
-        this.power = damage;
+        float damageLimited = Mathf.Clamp(damage, 0.1f, Mathf.Infinity);
+        this.power = damageLimited;
     }
 
     public float GetDamage()
@@ -451,5 +453,95 @@ public class Spell : MonoBehaviour
     public Element GetOriginElement()
     {
         return originElement;
+    }
+
+    public float GetBaseCooldownTime()
+    {
+        switch (spellType)
+        {
+            default:
+            case SpellType.Projectile:
+                switch (shape)
+                {
+                    default:
+                    case 0:
+                        return 1;
+                    case 1:
+                        return 3+lifetime;
+                    case 2:
+                        return 2;
+                }
+            case SpellType.AOE:
+                switch (shape)
+                {
+                    default:
+                    case 0:
+                        return 5;
+                    case 1:
+                        return 5+lifetime;
+                    case 2:
+                        return 3;
+                }
+            case SpellType.Shield:
+                switch (shape)
+                {
+                    default:
+                    case 0:
+                        return 10+lifetime;
+                    case 1:
+                        return 8 + lifetime;
+                    case 2:
+                        return 5 + lifetime;
+                }
+            case SpellType.Movement:
+                switch (shape)
+                {
+                    default:
+                    case 0:
+                        return 3;
+                    case 1:
+                        return 5;
+                    case 2:
+                        return 6;
+                }
+            case SpellType.Melee:
+                switch (shape)
+                {
+                    default:
+                    case 0:
+                        return 1;
+                    case 1:
+                        return 3;
+                    case 2:
+                        return 6;
+                }
+            case SpellType.Heal:
+                switch (shape)
+                {
+                    default:
+                    case 0:
+                        return 12;
+                    case 1:
+                        return 10 + lifetime;
+                    case 2:
+                        return 14;
+                }
+            case SpellType.Summon:
+                switch (shape)
+                {
+                    default:
+                    case 0:
+                        return 5 + lifetime;
+                    case 1:
+                        return 15 + lifetime;
+                    case 2:
+                        return 10 + lifetime;
+                }
+        }
+    }
+
+    public void SetCooldown(float cdTime)
+    {
+        cooldownTime = cdTime;
     }
 }

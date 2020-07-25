@@ -126,9 +126,7 @@ public class SpellInventory : MonoBehaviour
     private IEnumerator Cooldown(Spell spell)
     {
         spell.onCooldown = true;
-        float totalCooldownTime = ((((spell.power * 0.2f - 0.2f) * spell.cooldownTime) + spell.lifetime + ((spell.size * 0.1f - 0.1f) * spell.cooldownTime) - ((spell.speed * 0.1f - 0.1f) * spell.cooldownTime)) * (spell.instances * 0.3f + 0.7f))/* * spell.cdr*/;
-        totalCooldownTime = Mathf.Clamp(totalCooldownTime, 0.1f, 120f);
-        yield return new WaitForSeconds(totalCooldownTime);
+        yield return new WaitForSeconds(spell.cooldownTime);
         spell.onCooldown = false;
     }
 
@@ -241,6 +239,9 @@ public class SpellInventory : MonoBehaviour
             if (slotThree != null)
                 RemoveEquipEffect(slotThree, oldItem);
         }
+        CalcCooldownTime(1);
+        CalcCooldownTime(2);
+        CalcCooldownTime(3);
     }
 
     private void AddEquipEffect(Spell slot, Equipment item)
@@ -321,5 +322,13 @@ public class SpellInventory : MonoBehaviour
                 
             }
         }
+        CalcCooldownTime(formulaNumber);
+    }
+
+    public void CalcCooldownTime(int formulaNumber)
+    {
+        Spell spell = GetSpell(formulaNumber);
+        float totalCooldownTime = spell.GetBaseCooldownTime() + ((((spell.power * 0.2f - 0.2f) * spell.GetBaseCooldownTime()) + ((spell.size * 0.1f - 0.1f) * spell.GetBaseCooldownTime()) - ((spell.speed * 0.1f - 0.1f) * spell.GetBaseCooldownTime())) * (spell.instances * 0.3f + 0.7f))/* * 1 - spell.cdr*/;
+        spell.SetCooldown(totalCooldownTime);
     }
 }

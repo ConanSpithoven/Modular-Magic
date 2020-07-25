@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2348060840039661164}
   - component: {fileID: 3301004219230413416}
   m_Layer: 10
-  m_Name: Dash
+  m_Name: Movement
   m_TagString: Attack_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,11 +68,11 @@ MonoBehaviour:
   originShape: 0
   power: 1
   lifetime: 1
-  size: 2
+  size: 1
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 1
+  spellSlot: 2
   element: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
   originElement: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
   upgradeLimit: 5

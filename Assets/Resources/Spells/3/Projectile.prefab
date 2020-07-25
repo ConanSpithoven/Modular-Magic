@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2675785919471812800}
   - component: {fileID: 8423369965014548514}
   m_Layer: 10
-  m_Name: Magic Missile
+  m_Name: Projectile
   m_TagString: Attack_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 1
+  spellSlot: 3
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5

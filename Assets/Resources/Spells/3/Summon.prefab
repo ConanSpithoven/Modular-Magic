@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6e3ae8152ea243d4d9af49e5cdb896bd, type: 2}
+  - {fileID: 2100000, guid: b3b4ad64c25fdf1469aecee098e1d5c9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 8576502613794189409}
   - component: {fileID: -5826228433425542214}
   m_Layer: 10
-  m_Name: Erupting Firehawk
+  m_Name: Summon
   m_TagString: Attack_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -142,21 +142,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 6
-  cooldownTime: 0
+  cooldownTime: 5
   onCooldown: 0
   shape: 0
   originShape: 0
-  power: 2
-  lifetime: 5
-  size: 4
-  instances: 3
+  power: 1
+  lifetime: 1
+  size: 1
+  instances: 1
   speed: 1
   unique: 0
-  spellSlot: 1
-  element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
-  originElement: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
+  spellSlot: 3
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5
-  model: {fileID: 4591801059385059935, guid: 1368451070d9c194bb7dd9acffc933c5, type: 3}
+  model: {fileID: 4591801059385059935, guid: cbc1f2c2dde1a1b469b80f69cc482c2a, type: 3}
   animator: {fileID: 7228845004719820340}
   obstacles:
     serializedVersion: 2
@@ -189,7 +189,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5

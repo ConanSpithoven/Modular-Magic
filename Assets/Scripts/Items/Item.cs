@@ -6,6 +6,7 @@ public class Item : ScriptableObject
     public ItemType type = ItemType.Consumable;
     public Sprite icon = null;
     public Sprite worldIcon = null;
+    public string flavor = "";
 
     public virtual void Use()
     {

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
@@ -31,8 +32,11 @@ public class ItemPickup : MonoBehaviour
 
     public virtual void OnPickUp()
     {
-        if(Inventory.instance.Add(item))
+        if (Inventory.instance.Add(item))
+        {
+            LootTextPopup();
             Destroy(gameObject);
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -60,5 +64,13 @@ public class ItemPickup : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(2);
         ready = true;
+    }
+
+    private void LootTextPopup()
+    {
+        GameObject textPopup = Instantiate(Resources.Load<GameObject>("Popups/DmgText"), new Vector3(transform.position.x + Random.Range(-0.5f, 0.5f), transform.position.y + 3, transform.position.z + Random.Range(-0.5f, 0.5f)), Quaternion.Euler(90, 0, 0));
+        TextMeshPro text = textPopup.GetComponent<TextMeshPro>();
+        text.text = item.name;
+        //rarity color
     }
 }

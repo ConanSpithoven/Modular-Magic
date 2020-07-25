@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7476773926420336499}
   - component: {fileID: 8964444968500025839}
   m_Layer: 10
-  m_Name: Wave_of_Force
+  m_Name: AOE
   m_TagString: Attack_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 1
-  cooldownTime: 0
+  cooldownTime: 5
   onCooldown: 0
   shape: 0
   originShape: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 1
+  spellSlot: 3
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5

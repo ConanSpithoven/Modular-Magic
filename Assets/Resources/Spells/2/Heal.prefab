@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 8208285705419248601}
   - component: {fileID: -247989070664722199}
   m_Layer: 16
-  m_Name: Light Heal
+  m_Name: Heal
   m_TagString: Heal_Spell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -142,19 +142,20 @@ MonoBehaviour:
   spellType: 4
   cooldownTime: 0
   onCooldown: 0
-  shape: 2
+  shape: 0
   originShape: 0
-  power: 0
+  power: 1
   lifetime: 1
   size: 1
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 1
+  spellSlot: 2
   element: {fileID: 11400000, guid: 890402117d2ea0640947821637a447d0, type: 2}
   originElement: {fileID: 11400000, guid: 890402117d2ea0640947821637a447d0, type: 2}
   upgradeLimit: 5
   model: {fileID: 8196574339898317291}
+  animator: {fileID: 0}
 --- !u!54 &-247989070664722199
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -283,8 +283,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   casterType: 0
   slotOne: {fileID: 2675785919471812800, guid: 0918dc8e2cfbcd4419f3ee3b121e735f, type: 3}
-  slotTwo: {fileID: 7476773926420336499, guid: dfc70436e7b3aaa429b8364e7456e949, type: 3}
-  slotThree: {fileID: 128461788573279179, guid: a9dbbf2ba393a2c4ead918b8f0aaab59,
+  slotTwo: {fileID: 7476773926420336499, guid: 8ac3e516c2db59c458a4e13c51be8cfd, type: 3}
+  slotThree: {fileID: 128461788573279179, guid: 1a772b2f3bc6bb744b643a204be35c2c,
     type: 3}
 --- !u!114 &5390303322027678982
 MonoBehaviour:

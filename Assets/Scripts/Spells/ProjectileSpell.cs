@@ -115,11 +115,11 @@ public class ProjectileSpell : Spell
                 projectile.ReducePower(power, element);
             }
         }
-        if (unique > 0 && variant == SpellShape.ball)
+        if (unique > 0 && variant == SpellShape.ball && !col.gameObject.CompareTag("Ground"))
         {
             unique -= 1;
         }
-        else if (unique <= 0 && variant == SpellShape.ball)
+        else if (unique <= 0 && variant == SpellShape.ball && !col.gameObject.CompareTag("Ground"))
         {
             Destroy(gameObject);
         }

@@ -20,7 +20,6 @@ public class PlayerStats : CharacterStats
             movementspeed.AddModifier(newItem.movementspeedModifier);
             cooldownReduction.AddModifier(newItem.cooldownReductionModifier);
             upgradeLimit.AddModifier(newItem.upgradeLimitModifier);
-
         }
 
         if (oldItem != null)
