@@ -19,7 +19,7 @@ public class SpellDetails : MonoBehaviour
     [SerializeField] private TextMeshProUGUI UpgradeLimitStat;
     [SerializeField] private TextMeshProUGUI UniqueStat;
     
-    private SpellInventory spellInventory;
+    [SerializeField] private SpellInventory spellInventory;
     private PatternManager patternManager;
 
     private void Awake()
@@ -37,6 +37,7 @@ public class SpellDetails : MonoBehaviour
 
     private void Start()
     {
+        
         patternManager = PatternManager.instance;
         patternManager.onPatternChanged += PatternChanged;
         patternManager.onFormulaChanged += UpdateSpell;
@@ -227,6 +228,7 @@ public class SpellDetails : MonoBehaviour
 
     public void UpdateSpell(int slot)
     {
-        SetStats(spellInventory.GetSpell(slot));
+        if(spellInventory != null)
+            SetStats(spellInventory.GetSpell(slot));
     }
 }

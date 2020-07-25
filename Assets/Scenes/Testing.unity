@@ -4085,6 +4085,7 @@ GameObject:
   - component: {fileID: 688081745}
   - component: {fileID: 688081744}
   - component: {fileID: 688081743}
+  - component: {fileID: 688081749}
   m_Layer: 9
   m_Name: Zombie
   m_TagString: Enemy
@@ -4120,8 +4121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eff8541c57c6a2140b9f0a591127de7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 1000
-  element: {fileID: 11400000, guid: d9b3ef2089c937c42a6604bbc2e347bc, type: 2}
+  characterStats: {fileID: 688081749}
 --- !u!136 &688081745
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4197,6 +4197,28 @@ Transform:
   m_Father: {fileID: 727360459}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &688081749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 688081742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126727deb26d9fa4f9fbbb30e5adadf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth:
+    baseValue: 10
+  element: {fileID: 11400000, guid: d9b3ef2089c937c42a6604bbc2e347bc, type: 2}
+  baseElement: {fileID: 11400000, guid: d9b3ef2089c937c42a6604bbc2e347bc, type: 2}
+  power:
+    baseValue: 0
+  armor:
+    baseValue: 0
+  movementspeed:
+    baseValue: 0
 --- !u!114 &695502629 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3855739564483246610, guid: 4a89357e78fd219479f78e8b52a9ac64,
@@ -7121,6 +7143,7 @@ GameObject:
   - component: {fileID: 1328639714}
   - component: {fileID: 1328639713}
   - component: {fileID: 1328639712}
+  - component: {fileID: 1328639718}
   m_Layer: 9
   m_Name: Metal Puppet
   m_TagString: Enemy
@@ -7156,8 +7179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eff8541c57c6a2140b9f0a591127de7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 1000
-  element: {fileID: 11400000, guid: 43cff347b9adec743b3ff92bc5666147, type: 2}
+  characterStats: {fileID: 1328639718}
 --- !u!136 &1328639714
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7233,6 +7255,28 @@ Transform:
   m_Father: {fileID: 727360459}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1328639718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1328639711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126727deb26d9fa4f9fbbb30e5adadf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth:
+    baseValue: 100
+  element: {fileID: 11400000, guid: 6519e511c6e7c7c4ea5b8f78926f60e7, type: 2}
+  baseElement: {fileID: 11400000, guid: 6519e511c6e7c7c4ea5b8f78926f60e7, type: 2}
+  power:
+    baseValue: 0
+  armor:
+    baseValue: 5
+  movementspeed:
+    baseValue: 0
 --- !u!1 &1336467438
 GameObject:
   m_ObjectHideFlags: 0
@@ -10293,6 +10337,7 @@ GameObject:
   - component: {fileID: 1914093172}
   - component: {fileID: 1914093176}
   - component: {fileID: 1914093177}
+  - component: {fileID: 1914093178}
   m_Layer: 9
   m_Name: Warrior
   m_TagString: Enemy
@@ -10387,8 +10432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eff8541c57c6a2140b9f0a591127de7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 1000
-  element: {fileID: 11400000, guid: 49c6323bc6d0b0744b15c511a22cbbc1, type: 2}
+  characterStats: {fileID: 1914093178}
 --- !u!54 &1914093177
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10405,6 +10449,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &1914093178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914093171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126727deb26d9fa4f9fbbb30e5adadf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth:
+    baseValue: 20
+  element: {fileID: 11400000, guid: 49c6323bc6d0b0744b15c511a22cbbc1, type: 2}
+  baseElement: {fileID: 11400000, guid: 49c6323bc6d0b0744b15c511a22cbbc1, type: 2}
+  power:
+    baseValue: 0
+  armor:
+    baseValue: 0
+  movementspeed:
+    baseValue: 0
 --- !u!1 &1916557925
 GameObject:
   m_ObjectHideFlags: 0
@@ -11127,6 +11193,7 @@ GameObject:
   - component: {fileID: 2000098936}
   - component: {fileID: 2000098935}
   - component: {fileID: 2000098934}
+  - component: {fileID: 2000098940}
   m_Layer: 9
   m_Name: Fire Elemental
   m_TagString: Enemy
@@ -11162,8 +11229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eff8541c57c6a2140b9f0a591127de7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 1000
-  element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
+  characterStats: {fileID: 2000098940}
 --- !u!136 &2000098936
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11239,6 +11305,28 @@ Transform:
   m_Father: {fileID: 727360459}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2000098940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000098933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126727deb26d9fa4f9fbbb30e5adadf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth:
+    baseValue: 20
+  element: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
+  baseElement: {fileID: 11400000, guid: 41e1d15f6a1083d4dad757ff8d19f273, type: 2}
+  power:
+    baseValue: 0
+  armor:
+    baseValue: 0
+  movementspeed:
+    baseValue: 0
 --- !u!1 &2038928846
 GameObject:
   m_ObjectHideFlags: 0
@@ -13059,6 +13147,7 @@ MonoBehaviour:
   SpeedStat: {fileID: 117469768}
   UpgradeLimitStat: {fileID: 271892901}
   UniqueStat: {fileID: 1753721133}
+  spellInventory: {fileID: 0}
 --- !u!114 &6510973699869586101
 MonoBehaviour:
   m_ObjectHideFlags: 0

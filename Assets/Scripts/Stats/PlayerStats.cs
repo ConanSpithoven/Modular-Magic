@@ -5,6 +5,12 @@ using UnityEngine;
 public class PlayerStats : CharacterStats
 {
     public Stat upgradeLimit;
+    public Stat lifetime;
+    public Stat size;
+    public Stat speed;
+    public Stat instances;
+    public Stat unique;
+    public Stat cooldownReduction;
 
     void Start()
     {
@@ -30,5 +36,10 @@ public class PlayerStats : CharacterStats
             cooldownReduction.RemoveModifier(oldItem.cooldownReductionModifier);
             upgradeLimit.RemoveModifier(oldItem.upgradeLimitModifier);
         }
+    }
+
+    public override void Die()
+    { 
+        //oof
     }
 }
