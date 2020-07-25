@@ -51,49 +51,7 @@ public class PlayerManager : MonoBehaviour
 
     public void Hit(float damageTaken, Element element)
     {
-        float totalDamage = damageTaken * CheckElement(element);
-        playerstats.TakeDamage(totalDamage);
-    }
-
-    private float CheckElement(Element element)
-    {
-        float modifier = 1f;
-        if (element.ElementName == playerstats.element.ElementName)
-        {
-            modifier = 0.5f;
-        }
-        else
-        {
-            foreach (string strength in element.ElementStrengths)
-            {
-                if (strength == playerstats.element.ElementName || strength == "All")
-                {
-                    modifier = 1.25f;
-                }
-            }
-            foreach (string weakness in element.ElementWeaknesses)
-            {
-                if (weakness == playerstats.element.ElementName || weakness == "All")
-                {
-                    modifier = 0.75f;
-                }
-            }
-            foreach (string strength in playerstats.element.ElementStrengths)
-            {
-                if (strength == element.ElementName || strength == "All")
-                {
-                    modifier = 0.75f;
-                }
-            }
-            foreach (string weakness in playerstats.element.ElementWeaknesses)
-            {
-                if (weakness == element.ElementName || weakness == "All")
-                {
-                    modifier = 1.25f;
-                }
-            }
-        }
-        return modifier;
+        playerstats.TakeDamage(damageTaken, element);
     }
 
     public void Heal(float healingReceived) {
