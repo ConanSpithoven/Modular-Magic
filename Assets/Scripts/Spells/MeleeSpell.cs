@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MeleeSpell : Spell
 {
@@ -13,6 +11,7 @@ public class MeleeSpell : Spell
     private float currentDistance = default;
     private float travelDistance = default;
     private Transform FirePos = default;
+    [SerializeField] private LayerMask layerMask = default;
 
     private void Update()
     {
@@ -86,22 +85,30 @@ public class MeleeSpell : Spell
     public void Activate()
     {
         variant = (SpellShape)shape;
-        transform.localScale *= size;
         switch (variant)
         {
             case SpellShape.sword:
-                speed *= 250f;
+                transform.localScale *= (1 + (size * 0.1f));
+                speed *= 5;
+                speed += 250f;
                 break;
             case SpellShape.spear:
-                speed *= 7.5f;
-                size *= 4f;
+                speed *= 1.2f;
+                speed += 7.5f;
+                transform.localScale *= (1 + (size * 0.15f));
                 oldPos = transform.position;
                 transform.SetParent(null, true);
-                if (spellInventory.GetCasterType() == 1)
+                if (spellInventory.GetCasterType() == 0)
                 {
-                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mousePos.y = FirePos.position.y;
-                    targetPos = mousePos;
+                    RaycastHit hit;
+                    if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, layerMask))
+                    {
+                        targetPos = hit.point;
+                    }
+                    else if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, Mathf.Infinity, layerMask))
+                    {
+                        targetPos = hit.point;
+                    }
                 }
                 else
                 {
@@ -111,10 +118,12 @@ public class MeleeSpell : Spell
                 Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, 360f, 360f);
                 transform.rotation = Quaternion.LookRotation(newDirection);
                 transform.Rotate(Vector3.forward, Random.Range(0f, 360f));
-                travelDistance = size;
+                travelDistance = size + 3f;
                 break;
             case SpellShape.axe:
-                speed *= 100f;
+                transform.localScale *= (1 + (size * 0.2f));
+                speed *= 5f;
+                speed += 100f;
                 transform.SetParent(null, true);
                 break;
         }
@@ -124,40 +133,42 @@ public class MeleeSpell : Spell
 
     private void OnCollisionEnter(Collision col)
     {
+        if (col.gameObject.CompareTag("Wall"))
+            Destroy(gameObject);
+        if (variant == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
+            Destroy(gameObject);
         if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
         {
             if (col.gameObject.TryGetComponent(out EnemyManager enemy))
             {
-                enemy.Hit(damage, element);
+                enemy.Hit(power, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage, element);
+                summon.ReducePower(power, element);
             }
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
             if (col.gameObject.TryGetComponent(out PlayerManager player))
             {
-                player.Hit(damage, element);
+                player.Hit(power, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage, element);
+                summon.ReducePower(power, element);
             }
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage, element);
+                projectile.ReducePower(power, element);
             }
         }
-        if (variant == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
-            Destroy(gameObject);
     }
 }

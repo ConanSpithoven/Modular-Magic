@@ -3,26 +3,30 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private float HP = 100f;
-    [SerializeField] private float hpMax = 100f;
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private Element element;
-
     private float horizontal = default;
     private float vertical = default;
     private int tickAmount = default;
     private float tickSpeed = default;
     private bool allowMovement = true;
     private Rigidbody rb = default;
+    private PlayerStats playerstats = default;
+    private CapsuleCollider playerCollider = default;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        playerstats = GetComponent<PlayerStats>();
+        playerCollider = GetComponent<CapsuleCollider>();
+    }
+
+    private void Start()
+    {
+        EquipmentManager.instance.onEquipmentChanged += onEquipmentChange;
     }
 
     private void Update()
     {
-        if(allowMovement)
+        if (allowMovement)
             HandleMovement();
     }
 
@@ -31,37 +35,30 @@ public class PlayerManager : MonoBehaviour
         vertical = Input.GetAxis("Vertical");
 
         if(Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
-        transform.Translate(horizontal * speed * Time.deltaTime, 0f, vertical *speed * Time.deltaTime);
+        transform.Translate(horizontal * playerstats.movementspeed.GetValue() * Time.deltaTime, 0f, vertical * playerstats.movementspeed.GetValue() * Time.deltaTime);
     }
 
     public float GetSpeed() {
-        return speed;
+        return playerstats.movementspeed.GetValue();
     }
 
     public float GetHP()
     {
-        return HP;
+        return playerstats.currentHealth;
     }
+
+    #region HPHandlers
 
     public void Hit(float damageTaken, Element element)
     {
         float totalDamage = damageTaken * CheckElement(element);
-        TakeDamage(totalDamage);
-    }
-
-    public void TakeDamage(float damageTaken)
-    {
-        HP -= damageTaken;
-        if (HP <= 0f)
-        {
-            Destroy(gameObject);
-        }
+        playerstats.TakeDamage(totalDamage);
     }
 
     private float CheckElement(Element element)
     {
         float modifier = 1f;
-        if (element.ElementName == this.element.ElementName)
+        if (element.ElementName == playerstats.element.ElementName)
         {
             modifier = 0.5f;
         }
@@ -69,26 +66,26 @@ public class PlayerManager : MonoBehaviour
         {
             foreach (string strength in element.ElementStrengths)
             {
-                if (strength == this.element.ElementName || strength == "All")
+                if (strength == playerstats.element.ElementName || strength == "All")
                 {
                     modifier = 1.25f;
                 }
             }
             foreach (string weakness in element.ElementWeaknesses)
             {
-                if (weakness == this.element.ElementName || weakness == "All")
+                if (weakness == playerstats.element.ElementName || weakness == "All")
                 {
                     modifier = 0.75f;
                 }
             }
-            foreach (string strength in this.element.ElementStrengths)
+            foreach (string strength in playerstats.element.ElementStrengths)
             {
                 if (strength == element.ElementName || strength == "All")
                 {
                     modifier = 0.75f;
                 }
             }
-            foreach (string weakness in this.element.ElementWeaknesses)
+            foreach (string weakness in playerstats.element.ElementWeaknesses)
             {
                 if (weakness == element.ElementName || weakness == "All")
                 {
@@ -100,8 +97,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void Heal(float healingReceived) {
-        HP += healingReceived;
-        HP = Mathf.Clamp(HP, 0, hpMax);
+        playerstats.Heal(healingReceived);
     }
 
     public void DOTHeal(float healingReceived, int tickAmount, float tickSpeed)
@@ -123,10 +119,33 @@ public class PlayerManager : MonoBehaviour
 
     public void PercentileHeal(float healingReceived)
     {
-        Heal((hpMax / 100f) * healingReceived);
+        Heal((playerstats.maxHealth.GetValue() / 100f) * healingReceived);
     }
+
+    #endregion
 
     public void AllowMovement(bool status) {
         allowMovement = status;
+        playerCollider.enabled = status;
+    }
+
+    public SpellInventory GetSpellInventory()
+    {
+        return gameObject.GetComponent<SpellInventory>();
+    }
+
+    public void onEquipmentChange(Equipment newItem, Equipment oldItem)
+    {
+        if (newItem != null)
+        {
+            if (newItem.equipType == EquipmentType.Cloak)
+            {
+                playerstats.SetElement(newItem.elementModifier);
+            }
+        }
+        else 
+        {
+            playerstats.SetElement(playerstats.GetBaseElement());
+        }
     }
 }

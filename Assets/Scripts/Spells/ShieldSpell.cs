@@ -51,11 +51,11 @@ public class ShieldSpell : Spell
         switch (variant)
         {
             case SpellShape.barrier:
-                damage += (speed + size) * 0.2f;
-                damage *= instances;
+                power += (speed + size) * 0.2f;
+                power *= instances;
                 break;
             case SpellShape.shield:
-                damage *= 1.5f;
+                power *= 1.5f;
                 transform.localScale *= 0;
                 break;
             case SpellShape.deploy:
@@ -105,7 +105,7 @@ public class ShieldSpell : Spell
         float sizelimited = Mathf.Clamp(currentSize, 0f, size);
         if (variant == SpellShape.shield || variant == SpellShape.deploy)
         {
-            transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited * 0.2f);
+            transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited);
         }
     }
 
@@ -120,7 +120,7 @@ public class ShieldSpell : Spell
     {
         if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Shield_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Shield_Spell")))
         {
-            col.gameObject.GetComponent<ProjectileSpell>().ReducePower(damage, element);
+            col.gameObject.GetComponent<ProjectileSpell>().ReducePower(power, element);
         }
     }
 }

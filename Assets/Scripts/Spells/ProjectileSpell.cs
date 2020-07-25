@@ -4,12 +4,15 @@ using UnityEngine;
 public class ProjectileSpell : Spell
 {
     [SerializeField] private LayerMask obstacles = default;
+    [SerializeField] private LayerMask chainables = default;
+    private Vector3 targetPos = default;
     private enum SpellShape { ball, line, chain }
     private SpellShape variant = default;
     private bool hit = true;
     private float currentsize = 0f;
     private SpellInventory spellInventory = default;
     private Transform FirePos = default;
+    private float maxSize = default;
 
     private void Update()
     {
@@ -17,15 +20,17 @@ public class ProjectileSpell : Spell
         {
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.forward, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
             {
-                currentsize = hit.distance / 2f;
+                maxSize = hit.distance / 2f;
             }
             else
             {
-                currentsize += 10f * Time.deltaTime;
+                maxSize = size;
             }
-            float sizelimited = Mathf.Clamp(currentsize, 0f, size);
+            currentsize += 10f * Time.deltaTime;
+            currentsize = Mathf.Clamp(currentsize, 0f, maxSize);
+            float sizelimited = currentsize;
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, sizelimited);
         }
     }
@@ -48,30 +53,35 @@ public class ProjectileSpell : Spell
             case SpellShape.ball:
                 if (unique >= 1)
                 {
-                    Collider col = GetComponent<Collider>();
+                    Collider col = GetModel().GetComponent<Collider>();
                     col.material.bounciness = 1;
                 }
                 Rigidbody rb = GetComponent<Rigidbody>();
                 transform.localScale *= (size / 5f);
-                rb.velocity = transform.forward * (speed + 9) * Time.deltaTime * 100f;
+                rb.velocity = transform.forward * (speed + 20) * Time.deltaTime * 100f;
                 Destroy(gameObject, lifetime);
                 break;
             case SpellShape.line:
                 transform.localScale = new Vector3(transform.localScale.x * size / 2f, transform.localScale.y * size / 2f, transform.localScale.z);
-                speed *= 5;
-                size *= 3f;
-                damage *= 0.2f;
+                speed += 4;
+                size += 2f;
+                power *= 0.2f;
                 Destroy(gameObject, lifetime);
                 break;
             case SpellShape.chain:
                 transform.localScale = new Vector3(0.5f, 0.5f, 0f);
-                size *= 3f;
-                Vector3 targetPos;
-                if (spellInventory.GetCasterType() == 1)
+                size += 2f;
+                if (spellInventory.GetCasterType() == 0)
                 {
-                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mousePos.y = FirePos.position.y;
-                    targetPos = mousePos;
+                    RaycastHit hit;
+                    if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, chainables))
+                    {
+                        targetPos = hit.point;
+                    }
+                    else if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, Mathf.Infinity, obstacles))
+                    {
+                        targetPos = hit.point;
+                    }
                 }
                 else
                 {
@@ -80,35 +90,36 @@ public class ProjectileSpell : Spell
                 CastChain(FirePos, targetPos);
                 break;
         }
-        if (!spellInventory.GetCooldownStatus(spellSlot))
-            spellInventory.StartCooldown(spellSlot);
+        if (spellInventory != null)
+            if (!spellInventory.GetCooldownStatus(spellSlot))
+                spellInventory.StartCooldown(spellSlot);
     }
 
     private void OnCollisionEnter(Collision col){
         if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(damage, element);
+            col.gameObject.GetComponent<EnemyManager>().Hit(power, element);
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(damage, element);
+            col.gameObject.GetComponent<PlayerManager>().Hit(power, element);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage, element);
+                projectile.ReducePower(power, element);
             }
         }
-        if (unique > 0 && variant != SpellShape.line)
+        if (unique > 0 && variant == SpellShape.ball && !col.gameObject.CompareTag("Ground"))
         {
             unique -= 1;
         }
-        else if (unique <= 0 && variant != SpellShape.line)
+        else if (unique <= 0 && variant == SpellShape.ball && !col.gameObject.CompareTag("Ground"))
         {
             Destroy(gameObject);
         }
@@ -125,11 +136,11 @@ public class ProjectileSpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
                 {
-                    enemy.Hit(damage, element);
+                    enemy.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (variant == SpellShape.chain && instances > 0)
@@ -148,11 +159,11 @@ public class ProjectileSpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))
                 {
-                    player.Hit(damage, element);
+                    player.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (variant == SpellShape.chain && instances > 0)
@@ -169,7 +180,7 @@ public class ProjectileSpell : Spell
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -179,7 +190,7 @@ public class ProjectileSpell : Spell
             {
                 if (TryGetComponent(out ProjectileSpell projectile))
                 {
-                    projectile.ReducePower(damage, element);
+                    projectile.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -194,11 +205,11 @@ public class ProjectileSpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
                 {
-                    enemy.Hit(damage, element);
+                    enemy.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (variant == SpellShape.chain && instances > 0)
@@ -218,11 +229,11 @@ public class ProjectileSpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))
                 {
-                    player.Hit(damage, element);
+                    player.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (variant == SpellShape.chain && instances > 0)
@@ -239,7 +250,7 @@ public class ProjectileSpell : Spell
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -249,7 +260,7 @@ public class ProjectileSpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
                 {
-                    projectile.ReducePower(damage, element);
+                    projectile.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -267,13 +278,30 @@ public class ProjectileSpell : Spell
         float distance = 0f;
         instances--;
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, target - transform.position, out hit, size*2f, obstacles, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position, target - transform.position, out hit, size * 2f, chainables, QueryTriggerInteraction.Ignore))
         {
-            distance = hit.distance/2f;
+            distance = hit.distance / 2f;
+            RaycastHit hit2;
+            if (Physics.Raycast(transform.position, target - transform.position, out hit2, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+            {
+                float distance2 = hit2.distance / 2f;
+                if (distance2 < distance)
+                {
+                    distance = distance2;
+                }
+            }
         }
         else
         {
-            distance = size;
+            RaycastHit hit3;
+            if (Physics.Raycast(transform.position, target - transform.position, out hit3, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+            {
+                distance = hit3.distance / 2f;
+            }
+            else
+            {
+                distance = size;
+            }
             Destroy(gameObject, 0.1f);
         }
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, distance);
@@ -294,7 +322,7 @@ public class ProjectileSpell : Spell
                     if (closestTarget == target.transform || Vector3.Distance(target.transform.position, hitColliders[i].transform.position) < Vector3.Distance(target.transform.position, closestTarget.position))
                     {
                         RaycastHit hit;
-                        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+                        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit, size * 2f, chainables, QueryTriggerInteraction.Ignore))
                         {
                             if ((hit.transform.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) || (hitColliders[i].CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")))
                             {

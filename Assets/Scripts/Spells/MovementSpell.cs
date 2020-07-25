@@ -23,7 +23,7 @@ public class MovementSpell : Spell
         {
             StartCooldown();
         }
-        if(instances > 0)
+        if(instances > 0 && shape != (int)SpellShape.push)
         {
             Recaster();
         }
@@ -40,8 +40,8 @@ public class MovementSpell : Spell
                 {
                     if (Enabled)
                     {
-                        GetComponent<MeshRenderer>().enabled = false;
-                        GetComponent<Collider>().enabled = false;
+                        GetModel().GetComponent<MeshRenderer>().enabled = false;
+                        GetModel().GetComponent<Collider>().enabled = false;
                         Enabled = false;
                     }
                     if (!spellInventory.GetCooldownStatus(spellSlot) && instances <= 0)
@@ -108,12 +108,12 @@ public class MovementSpell : Spell
         switch (variant)
         {
             case SpellShape.dash:
-                size += damage;
+                size += power;
                 speed *= 10f;
                 RecastCheck();
                 break;
             case SpellShape.teleport:
-                size += damage + speed;
+                size += power + speed;
                 RecastCheck();
                 break;
             case SpellShape.push:
@@ -128,8 +128,8 @@ public class MovementSpell : Spell
         currentDistance = 0f;
         if (!Enabled)
         {
-            GetComponent<MeshRenderer>().enabled = true;
-            GetComponent<Collider>().enabled = true;
+            GetModel().GetComponent<MeshRenderer>().enabled = true;
+            GetModel().GetComponent<Collider>().enabled = true;
             Enabled = true;
         }
         CalcDestination();
@@ -145,7 +145,7 @@ public class MovementSpell : Spell
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.velocity = transform.forward * speed * Time.deltaTime * 100f;
-        if (!spellInventory.GetCooldownStatus(spellSlot) && instances <= 0)
+        if (!spellInventory.GetCooldownStatus(spellSlot))
         {
             spellInventory.StartCooldown(spellSlot);
         }
@@ -154,25 +154,32 @@ public class MovementSpell : Spell
     private void CalcDestination()
     {
         instances--;
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.y = 1f;
         RaycastHit hit;
-        if (Physics.Raycast(caster.transform.position, FirePos.forward, out hit, size, obstacles, QueryTriggerInteraction.Ignore) && hit.distance < Vector3.Distance(caster.transform.position, mousePos))
+        Vector3 targetPos = Vector3.zero;
+        if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, obstacles))
+        {
+            targetPos = hit.point;
+        }
+        else if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, Mathf.Infinity, obstacles))
+        {
+            targetPos = hit.point;
+        }
+        if (Physics.Raycast(caster.transform.position, FirePos.forward, out hit, size, obstacles, QueryTriggerInteraction.Ignore) && hit.distance < Vector3.Distance(caster.transform.position, targetPos))
         {
             travelDistance = hit.distance - 0.5f;
             goal = hit.point;
         }
         else
         {
-            if (size <= Vector3.Distance(caster.transform.position, mousePos))
+            if (size <= Vector3.Distance(caster.transform.position, targetPos))
             {
                 travelDistance = size;
-                goal = mousePos;
+                goal = targetPos;
             }
             else
             {
-                travelDistance = Vector3.Distance(caster.transform.position, mousePos);
-                goal = mousePos;
+                travelDistance = Vector3.Distance(caster.transform.position, targetPos);
+                goal = targetPos;
             }
             
         }
@@ -229,27 +236,28 @@ public class MovementSpell : Spell
     {
         if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(damage, element);
+            col.gameObject.GetComponent<EnemyManager>().Hit(power, element);
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(damage, element);
+            col.gameObject.GetComponent<PlayerManager>().Hit(power, element);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage, element);
+                projectile.ReducePower(power, element);
             }
         }
     }
 
     private void OnCollisionEnter(Collision col)
     {
-        Destroy(gameObject);
+        if(!col.gameObject.CompareTag("Ground"))
+            Destroy(gameObject);
     }
 }

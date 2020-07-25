@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78c9d23441db6a418e2af9dc1710c5e, type: 3}
+  m_Name: Mirror Image
+  m_EditorClassIdentifier: 
+  name: Mirror Image
+  type: 0
+  icon: {fileID: 21300000, guid: 8e84383b8059efc47809c5c3a88efe55, type: 3}
+  worldIcon: {fileID: 21300000, guid: 88210cfce3411fe43b65d195f20f70ff, type: 3}
+  patternType: 0
+  powerModifier: 0
+  lifetimeModifier: 0
+  sizeModifier: 0
+  instancesModifier: 1
+  speedModifier: 0
+  uniqueModifier: 0
+  cooldownReductionModifier: 0
+  upgradeLimitModifier: 0
+  elementModifier: {fileID: 0}
+  shapeModifier: 1

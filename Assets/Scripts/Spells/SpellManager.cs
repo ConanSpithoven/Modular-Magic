@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,8 @@ public class SpellManager : MonoBehaviour
 {
     [SerializeField] private Transform Firepos = default;
     [SerializeField] private Transform Model = default;
+    [SerializeField] private LayerMask Ground = default;
+    [SerializeField] private LayerMask Obstacles = default;
 
     private SpellInventory spellInventory = default;
     private int casterType = default;
@@ -47,6 +50,8 @@ public class SpellManager : MonoBehaviour
         }
     }
 
+    #region Activators
+
     private void ActivateAOESpell(Spell spell)
     {
         switch (spell.shape)
@@ -80,16 +85,47 @@ public class SpellManager : MonoBehaviour
             case 2:
                 if (spell.instances <= 1)
                 {
-                    Vector3 targetPos;
-                    if (casterType == 1)
+                    Vector3 targetPos = transform.position;
+                    if (casterType == 0)
                     {
-                        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                        mousePos.y = 0f;
+                        Vector3 mousePos = Input.mousePosition;
+                        Ray castPoint = Camera.main.ScreenPointToRay(mousePos);
+                        RaycastHit hit;
+                        if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, Ground))
+                        {
+                            RaycastHit hit2;
+                            if (Physics.Raycast(Firepos.position, Firepos.forward, out hit2, Vector3.Distance(transform.position, hit.point), Obstacles))
+                            {
+                                mousePos = hit2.point;
+                            }
+                            else
+                            {
+                                mousePos = hit.point;
+                            }
+                        }
+                        else
+                        {
+                            RaycastHit hit2;
+                            if (Physics.Raycast(Firepos.position, Firepos.forward, out hit2, Mathf.Infinity, Obstacles))
+                            {
+                                mousePos = hit2.point;
+                            }
+                        }
+                        mousePos.y = Firepos.position.y;
                         targetPos = mousePos;
                     }
                     else 
                     {
-                        targetPos = target.position;
+                        RaycastHit hit;
+                        if (Physics.Raycast(Firepos.position, Firepos.forward, out hit, Vector3.Distance(transform.position, target.position), Obstacles))
+                        {
+                            targetPos = hit.point;
+                        }
+                        else
+                        {
+                            targetPos = target.position;
+                        }
+                        targetPos.y = Firepos.position.y;
                     }
                     GameObject aoeObject = Instantiate(spell.gameObject, targetPos, Model.transform.rotation);
                     AOESpell aoe = aoeObject.GetComponent<AOESpell>();
@@ -112,10 +148,10 @@ public class SpellManager : MonoBehaviour
             {
                 GameObject projectileObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
                 ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
-                projectileObject.transform.SetParent(Firepos);
-                if (spell.shape == 0)
+                if (spell.shape == 1)
                 {
-                    projectileObject.transform.SetParent(null, true);
+                    projectileObject.transform.SetParent(Firepos);
+                    projectile.SetFirePos(Firepos);
                 }
                 ProjectileSpellHandler(spell, projectile);
                 projectile.Activate();
@@ -253,32 +289,6 @@ public class SpellManager : MonoBehaviour
         }
     }
 
-    private void ProjectileSpellHandler(Spell spell, ProjectileSpell projectile) 
-    {
-        projectile.SetElement(spell.element);
-        projectile.SetUnique(spell.unique);
-        projectile.SetSpeed(spell.speed);
-        projectile.SetShape(spell.shape);
-        projectile.SetDamage(spell.damage);
-        projectile.SetSize(spell.size);
-        projectile.SetLifetime(spell.lifetime);
-        projectile.SetSlot(spell.GetSpellSlot());
-        projectile.SetSpellInventory(spellInventory);
-    }
-
-    private void AoESpellHandler(Spell spell, AOESpell aoe)
-    {
-        aoe.SetElement(spell.element);
-        aoe.SetCaster(transform);
-        aoe.SetSpeed(spell.speed);
-        aoe.SetDamage(spell.damage);
-        aoe.SetSize(spell.size);
-        aoe.SetLifetime(spell.lifetime);
-        aoe.SetShape(spell.shape);
-        aoe.SetSlot(spell.GetSpellSlot());
-        aoe.SetSpellInventory(spellInventory);
-    }
-
     private void UtilityBarrierHandler(Spell spell)
     {
         GameObject barrierObject = Instantiate(spell.gameObject, Vector3.zero, Model.rotation);
@@ -315,12 +325,41 @@ public class SpellManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Handlers
+    private void ProjectileSpellHandler(Spell spell, ProjectileSpell projectile)
+    {
+        projectile.SetElement(spell.element);
+        projectile.SetUnique(spell.unique);
+        projectile.SetSpeed(spell.speed);
+        projectile.SetShape(spell.shape);
+        projectile.SetDamage(spell.power);
+        projectile.SetSize(spell.size);
+        projectile.SetLifetime(spell.lifetime);
+        projectile.SetSlot(spell.GetSpellSlot());
+        projectile.SetSpellInventory(spellInventory);
+    }
+
+    private void AoESpellHandler(Spell spell, AOESpell aoe)
+    {
+        aoe.SetElement(spell.element);
+        aoe.SetCaster(transform);
+        aoe.SetSpeed(spell.speed);
+        aoe.SetDamage(spell.power);
+        aoe.SetSize(spell.size);
+        aoe.SetLifetime(spell.lifetime);
+        aoe.SetShape(spell.shape);
+        aoe.SetSlot(spell.GetSpellSlot());
+        aoe.SetSpellInventory(spellInventory);
+    }
+
     private void MeleeSpellHandler(Spell spell, MeleeSpell weapon)
     {
         weapon.SetElement(spell.element);
         weapon.SetLifetime(spell.lifetime);
         weapon.SetSpeed(spell.speed);
-        weapon.SetDamage(spell.damage);
+        weapon.SetDamage(spell.power);
         weapon.SetShape(spell.shape);
         weapon.SetSize(spell.size);
         weapon.SetSlot(spell.GetSpellSlot());
@@ -334,7 +373,7 @@ public class SpellManager : MonoBehaviour
         shield.SetCaster(transform);
         shield.SetLifetime(spell.lifetime);
         shield.SetSpeed(spell.speed);
-        shield.SetDamage(spell.damage);
+        shield.SetDamage(spell.power);
         shield.SetShape(spell.shape);
         shield.SetSize(spell.size);
         shield.SetSlot(spell.GetSpellSlot());
@@ -346,7 +385,7 @@ public class SpellManager : MonoBehaviour
         heal.SetElement(spell.element);
         heal.SetShape(spell.shape);
         heal.SetLifetime(spell.lifetime);
-        heal.SetDamage(spell.damage);
+        heal.SetDamage(spell.power);
         heal.SetSpeed(spell.speed);
         heal.SetInstances(spell.instances);
         heal.SetSize(spell.size);
@@ -360,7 +399,7 @@ public class SpellManager : MonoBehaviour
         movement.SetElement(spell.element);
         movement.SetShape(spell.shape);
         movement.SetLifetime(spell.lifetime);
-        movement.SetDamage(spell.damage);
+        movement.SetDamage(spell.power);
         movement.SetSpeed(spell.speed);
         movement.SetInstances(spell.instances);
         movement.SetSize(spell.size);
@@ -375,13 +414,17 @@ public class SpellManager : MonoBehaviour
         summon.SetElement(spell.element);
         summon.SetSpeed(spell.speed);
         summon.SetShape(spell.shape);
-        summon.SetDamage(spell.damage);
+        summon.SetDamage(spell.power);
         summon.SetSize(spell.size);
         summon.SetLifetime(spell.lifetime);
         summon.SetSlot(spell.GetSpellSlot());
         summon.SetSpellInventory(spellInventory);
         summon.SetCaster(transform);
     }
+
+    #endregion
+
+    #region InstanceHandlers
 
     private void ProjectileInstanceHandler(Spell spell)
     {
@@ -476,25 +519,26 @@ public class SpellManager : MonoBehaviour
     private IEnumerator AoEInstanceHandler(Spell spell)
     {
         Vector3 pos = Vector3.zero;
-        if (spell.shape == 2)
-        {
-            if (casterType == 1)
-            {
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                mousePos.y = 0f;
-                pos = mousePos;
-            }
-            else
-            {
-                pos = target.position;
-            }
-        }
+        
         int instances = spell.instances;
         for (int i = 0; i < instances; i++)
         {
+            if (spell.shape == 2)
+            {
+                if (casterType == 0)
+                {
+                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    mousePos.y = 0f;
+                    pos = mousePos;
+                }
+                else
+                {
+                    pos = target.position;
+                }
+            }
             GameObject aoeObject = Instantiate(spell.gameObject, pos, Model.rotation);
             AOESpell aoe = aoeObject.GetComponent<AOESpell>();
-            aoe.transform.SetParent(transform, false);
+            aoe.transform.SetParent(transform, true);
             AoESpellHandler(spell, aoe);
             aoe.Activate();
             yield return new WaitForSeconds(1f / (spell.speed * 2f));
@@ -511,7 +555,7 @@ public class SpellManager : MonoBehaviour
                 swordObject.transform.Rotate(Vector3.up, 75f);
             else
                 swordObject.transform.Rotate(Vector3.up, -75f);
-            swordObject.transform.Rotate(Vector3.right, Random.Range(-30f,30f));
+            swordObject.transform.Rotate(Vector3.right, Random.Range(-15f, 15f));
             swordObject.transform.SetParent(Firepos, true);
             MeleeSpell sword = swordObject.GetComponent<MeleeSpell>();
             MeleeSpellHandler(spell, sword);
@@ -522,17 +566,17 @@ public class SpellManager : MonoBehaviour
         }
     }
 
-    private IEnumerator MeleeSpearHandler(Spell spell) 
+    private IEnumerator MeleeSpearHandler(Spell spell)
     {
         for (int i = 0; i < spell.instances; i++)
         {
             GameObject spearObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
             spearObject.transform.SetParent(Firepos, true);
-            spearObject.transform.Translate(new Vector3(Random.Range(0.75f + (spell.size/4f), 1.25f + (spell.size / 4f)), Random.Range(0f, 0.5f + (spell.size / 4f)), -1f));
+            spearObject.transform.Translate(new Vector3(Random.Range(0.75f + (spell.size * 0.1f), 1.25f + (spell.size * 0.1f)), Random.Range(0f, 0.5f + (spell.size  * 0.1f)), -1f));
             MeleeSpell spear = spearObject.GetComponent<MeleeSpell>();
             MeleeSpellHandler(spell, spear);
             spear.Activate();
-            yield return new WaitForSeconds(1f / (spell.speed * 5f));
+            yield return new WaitForSeconds(1f / (spell.speed * 1.3f));
         }
     }
 
@@ -547,9 +591,11 @@ public class SpellManager : MonoBehaviour
             MeleeSpell axe = axeObject.GetComponent<MeleeSpell>();
             MeleeSpellHandler(spell, axe);
             axe.Activate();
-            yield return new WaitForSeconds(1f / (spell.speed *2f));
+            yield return new WaitForSeconds(1f / (spell.speed * 2f));
         }
     }
+
+    #endregion
 
     private Quaternion CalcRotation(int instances, int index, float rotationMax)
     {
@@ -560,5 +606,15 @@ public class SpellManager : MonoBehaviour
     public void SetTarget(Transform target)
     {
         this.target = target;
+    }
+
+    public void SetFirepos(Transform pos)
+    {
+        Firepos = pos;
+    }
+
+    public void SetModel(Transform model)
+    {
+        Model = model;
     }
 }

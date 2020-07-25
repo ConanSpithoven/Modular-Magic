@@ -57,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -104,10 +105,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5376322008537632175}
-  - component: {fileID: 5376322008537632174}
-  - component: {fileID: 5376322008537632173}
   - component: {fileID: 5376322008537632172}
+  - component: {fileID: 7228845004719820340}
   - component: {fileID: 8576502613794189409}
+  - component: {fileID: -5826228433425542214}
   m_Layer: 17
   m_Name: Lich Mumud
   m_TagString: Summon_Spell
@@ -123,43 +124,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5376322008537632179}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: -100, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5376322007838446698}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5376322008537632174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 106cf09bcb9320846bcbd52dfb8af83d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  casterType: 2
-  slotOne: {fileID: 3012771352340038946, guid: 7eb5bb91981c14b43ae5ae07555c6549, type: 3}
-  slotTwo: {fileID: 0}
-  slotThree: {fileID: 0}
---- !u!114 &5376322008537632173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1da9bea21e474d439ebe8ba0b75bd32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Firepos: {fileID: 5376322009086442178}
-  Model: {fileID: 5376322007838446698}
 --- !u!114 &5376322008537632172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,17 +147,43 @@ MonoBehaviour:
   cooldownTime: 0
   onCooldown: 0
   shape: 1
-  damage: 1
+  originShape: 0
+  power: 0
   lifetime: 5
   size: 1
   instances: 1
   speed: 1
   unique: 0
-  spellSlot: 0
+  spellSlot: 3
   element: {fileID: 11400000, guid: 93f62f583be8f004596b36a790cbe5b9, type: 2}
+  originElement: {fileID: 11400000, guid: 93f62f583be8f004596b36a790cbe5b9, type: 2}
+  upgradeLimit: 5
+  model: {fileID: 1870049835351467521, guid: 1ff5bc27c48c29b4fbfa19c362a0ea1f, type: 3}
+  animator: {fileID: 7228845004719820340}
   obstacles:
     serializedVersion: 2
     m_Bits: 33280
+  projectilespell: {fileID: 2675785919471812800, guid: 00f249fda0e0a8c46a6926b9948f0906,
+    type: 3}
+--- !u!95 &7228845004719820340
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5376322008537632179}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!195 &8576502613794189409
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -209,6 +206,22 @@ NavMeshAgent:
   m_BaseOffset: 1.2
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!54 &-5826228433425542214
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5376322008537632179}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 94
+  m_CollisionDetection: 0
 --- !u!1 &5376322008693001603
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,6 +277,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

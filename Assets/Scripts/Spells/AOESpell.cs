@@ -24,6 +24,10 @@ public class AOESpell : Spell
             }
             else if (transform.localScale.y != 0.3f)
             {
+                if (variant == SpellShape.orb)
+                {
+                    transform.SetParent(null, true);
+                }
                 transform.localScale = new Vector3(transform.localScale.x, 0.3f, transform.localScale.z);
                 transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
                 Destroy(gameObject, lifetime);
@@ -62,18 +66,24 @@ public class AOESpell : Spell
         switch (variant)
         {
             case SpellShape.orb:
-                size *= 2f;
-                transform.SetParent(null, true);
+                size *= 1.4f;
+                size += 5f;
+                transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
                 break;
             case SpellShape.orbit:
+                lifetime *= 1.3f;
+                lifetime += 5f;
                 break;
             case SpellShape.point:
-                size *= 1.5f;
+                size *= 0.8f;
+                size += 3f;
+                transform.SetParent(null, true);
                 break;
         }
         if (!spellInventory.GetCooldownStatus(spellSlot))
             spellInventory.StartCooldown(spellSlot);
-        Destroy(gameObject, lifetime);
+        if(variant == SpellShape.orbit)
+            Destroy(gameObject, lifetime);
     }
 
     private void SetupSize()
@@ -98,11 +108,11 @@ public class AOESpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
                 {
-                    enemy.Hit(damage, element);
+                    enemy.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -113,11 +123,11 @@ public class AOESpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))
                 {
-                    player.Hit(damage, element);
+                    player.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -126,7 +136,7 @@ public class AOESpell : Spell
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -134,7 +144,7 @@ public class AOESpell : Spell
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ProjectileSpell>().ReducePower(damage, element);
+                col.gameObject.GetComponent<ProjectileSpell>().ReducePower(power, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -148,11 +158,11 @@ public class AOESpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
                 {
-                    enemy.Hit(damage, element);
+                    enemy.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -164,11 +174,11 @@ public class AOESpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))
                 {
-                    player.Hit(damage, element);
+                    player.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -177,7 +187,7 @@ public class AOESpell : Spell
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
                 StartCoroutine("BeamDamageCooldown");
             }
         }

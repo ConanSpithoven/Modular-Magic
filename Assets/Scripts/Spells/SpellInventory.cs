@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SpellInventory : MonoBehaviour
 {
@@ -38,11 +37,22 @@ public class SpellInventory : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (casterType == Caster.Player)
+        {
+            EquipmentManager.instance.onEquipmentChanged += onEquipmentChange;
+            PatternManager.instance.onPatternChanged += OnPatternChange;
+        }
+    }
+
     private void Update()
     {
         switch (casterType)
         {
             case Caster.Player:
+                if (EventSystem.current.IsPointerOverGameObject()) return;
+
                 if ((Input.GetKey(KeyCode.Alpha1) || Input.GetMouseButton(0)) && slotOne != null && !slotOne.onCooldown)
                 {
                     spellManager.ActivateSpell(slotOne, 1);
@@ -116,9 +126,7 @@ public class SpellInventory : MonoBehaviour
     private IEnumerator Cooldown(Spell spell)
     {
         spell.onCooldown = true;
-        float totalCooldownTime = ((((spell.damage * 0.2f - 0.2f) * spell.cooldownTime) + spell.lifetime + ((spell.size * 0.1f - 0.1f) * spell.cooldownTime) - ((spell.speed * 0.1f - 0.1f) * spell.cooldownTime)) * (spell.instances * 0.3f + 0.7f))/* * spell.cdr*/;
-        totalCooldownTime = Mathf.Clamp(totalCooldownTime, 0.1f, 120f);
-        yield return new WaitForSeconds(totalCooldownTime);
+        yield return new WaitForSeconds(spell.cooldownTime);
         spell.onCooldown = false;
     }
 
@@ -168,11 +176,11 @@ public class SpellInventory : MonoBehaviour
         {
             default:
             case Caster.Player:
-                return 1;
+                return 0;
             case Caster.Enemy:
-                return 2;
+                return 1;
             case Caster.Summon:
-                return 3;
+                return 2;
         }
     }
 
@@ -183,5 +191,144 @@ public class SpellInventory : MonoBehaviour
         {
             Attack();
         }
+    }
+
+    public Spell GetSpell(int slot)
+    {
+        switch (slot)
+        {
+            default:
+            case 1:
+                return slotOne;
+            case 2:
+                return slotTwo;
+            case 3:
+                return slotThree;
+        }
+    }
+
+    public void onEquipmentChange(Equipment newItem, Equipment oldItem)
+    {
+        if (newItem != null)
+        {
+            //remove old equipment bonusses
+            if (oldItem != null)
+            {
+                if (slotOne != null)
+                    RemoveEquipEffect(slotOne, oldItem);
+                if (slotTwo != null)
+                    RemoveEquipEffect(slotTwo, oldItem);
+                if (slotThree != null)
+                    RemoveEquipEffect(slotThree, oldItem);
+            }
+            //add equipment bonusses
+            if (slotOne != null)
+                AddEquipEffect(slotOne, newItem);
+            if (slotTwo != null)
+                AddEquipEffect(slotTwo, newItem);
+            if (slotThree != null)
+                AddEquipEffect(slotThree, newItem);
+        }
+        else if(oldItem != null)
+        {
+            //remove old equipment bonusses
+            if (slotOne != null)
+                RemoveEquipEffect(slotOne, oldItem);
+            if (slotTwo != null)
+                RemoveEquipEffect(slotTwo, oldItem);
+            if (slotThree != null)
+                RemoveEquipEffect(slotThree, oldItem);
+        }
+        CalcCooldownTime(1);
+        CalcCooldownTime(2);
+        CalcCooldownTime(3);
+    }
+
+    private void AddEquipEffect(Spell slot, Equipment item)
+    {
+        slot.power += item.powerModifier;
+        slot.lifetime += item.lifetimeModifier;
+        slot.size += item.sizeModifier;
+        slot.instances += item.instancesModifier;
+        slot.speed += item.speedModifier;
+        slot.unique += item.uniqueModifier;
+        slot.upgradeLimit += item.upgradeLimitModifier;
+    }
+
+    private void RemoveEquipEffect(Spell slot, Equipment item)
+    {
+        slot.power -= item.powerModifier;
+        slot.lifetime -= item.lifetimeModifier;
+        slot.size -= item.sizeModifier;
+        slot.instances -= item.instancesModifier;
+        slot.speed -= item.speedModifier;
+        slot.unique -= item.uniqueModifier;
+        slot.upgradeLimit -= item.upgradeLimitModifier;
+    }
+
+    public void OnPatternChange(Pattern newItem, Pattern oldItem, int formulaNumber)
+    {
+        if (oldItem != null)
+        {
+            Spell slot = GetSpell(formulaNumber);
+            slot.power -= oldItem.powerModifier;
+            slot.lifetime -= oldItem.lifetimeModifier;
+            slot.size -= oldItem.sizeModifier;
+            slot.instances -= oldItem.instancesModifier;
+            slot.speed -= oldItem.speedModifier;
+            slot.unique -= oldItem.uniqueModifier;
+            switch (oldItem.patternType)
+            {
+                default:
+                    break;
+                case PatternType.Variant:
+                    slot.ModifyShape(oldItem.shapeModifier, false);
+                    break;
+                case PatternType.Elemental:
+                    slot.ModifyElement(oldItem.elementModifier, false);
+                    break;
+            }
+            if (oldItem.upgradeLimitModifier != 0)
+            {
+                slot.upgradeLimit -= oldItem.upgradeLimitModifier;
+                PatternManager.instance.UpgradeLimitChange((slot.upgradeLimit + oldItem.upgradeLimitModifier), slot.upgradeLimit, formulaNumber);
+                
+            }
+        }
+        if (newItem != null)
+        {
+            Spell slot = GetSpell(formulaNumber);
+            slot.power += newItem.powerModifier;
+            slot.lifetime += newItem.lifetimeModifier;
+            slot.size += newItem.sizeModifier;
+            slot.instances += newItem.instancesModifier;
+            slot.speed += newItem.speedModifier;
+            slot.unique += newItem.uniqueModifier;
+            switch (newItem.patternType)
+            {
+                default:
+                    break;
+                case PatternType.Variant:
+                    slot.ModifyShape(newItem.shapeModifier, true);
+                    break;
+                case PatternType.Elemental:
+                    slot.ModifyElement(newItem.elementModifier, true);
+                    break;
+            }
+            if (newItem.upgradeLimitModifier != 0)
+            {
+                slot.upgradeLimit += newItem.upgradeLimitModifier;
+                PatternManager.instance.UpgradeLimitChange((slot.upgradeLimit - newItem.upgradeLimitModifier), slot.upgradeLimit, formulaNumber);
+                
+            }
+        }
+        CalcCooldownTime(formulaNumber);
+    }
+
+    public void CalcCooldownTime(int formulaNumber)
+    {
+        Spell spell = GetSpell(formulaNumber);
+        float totalCooldownTime = spell.GetBaseCooldownTime() + ((((spell.power * 0.2f - 0.2f) * spell.GetBaseCooldownTime()) + ((spell.size * 0.1f - 0.1f) * spell.GetBaseCooldownTime()) - ((spell.speed * 0.1f - 0.1f) * spell.GetBaseCooldownTime())) * (spell.instances * 0.3f + 0.7f))/* * 1 - spell.cdr*/;
+        spell.SetCooldown(totalCooldownTime);
     }
 }

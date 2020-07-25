@@ -1,15 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class SummoningSpell : Spell
 {
     [SerializeField] private LayerMask obstacles = default;
+    [SerializeField] private ProjectileSpell projectilespell = default;
     private enum SpellShape { chaser, ranged, melee }
     private SpellShape variant = default;
     private SpellInventory spellInventory = default;
-    private SpellInventory summonSpellInventory = default;
     private Transform target = default;
     private Transform caster = default;
     private float currentSize = 0f;
@@ -18,7 +18,6 @@ public class SummoningSpell : Spell
     private bool setup = false;
     private Transform FirePos = default;
     private NavMeshAgent agent = default;
-    private Animator animator = default;
     private float attackRate = default;
     private bool attackCooldown = default;
     private float hp = default;
@@ -74,9 +73,9 @@ public class SummoningSpell : Spell
                     Vector3 direction = target.position - transform.position;
                     float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.Euler(0, rotation, 0);
-                    if ((!summonSpellInventory.GetCooldownStatus(1) || !summonSpellInventory.GetCooldownStatus(2) || !summonSpellInventory.GetCooldownStatus(3)) && !attackCooldown)
+                    if (!attackCooldown)
                     {
-                        summonSpellInventory.Attack();
+                        RangedAttack();
                         StartCoroutine("AttackCooldown");
                     }
                 }
@@ -151,16 +150,17 @@ public class SummoningSpell : Spell
                 break;
             case SpellShape.ranged:
                 agent = GetComponent<NavMeshAgent>();
-                attackRate = (1f / (speed / 5f));
-                hp = damage * 2f;
+                attackRate = (1f / (speed / 2.5f));
+                hp = power * 2f;
                 transform.SetParent(null, true);
-                summonSpellInventory = GetComponent<SpellInventory>();
+                FirePos = GetModel().transform.Find("Firepos").transform;
                 Destroy(gameObject, lifetime*5f);
                 break;
             case SpellShape.melee:
                 agent = GetComponent<NavMeshAgent>();
+                transform.localScale *= size;
                 attackRate = (1f / (speed / 3f));
-                hp = damage * 5f;
+                hp = power * 5f;
                 transform.SetParent(null, true);
                 Destroy(gameObject, lifetime * 5f);
                 break;
@@ -171,28 +171,29 @@ public class SummoningSpell : Spell
 
     private void SetupSize()
     {
-        currentSize += speed * Time.deltaTime;
-        float sizelimited = Mathf.Clamp(currentSize, 0f, size / 5f);
+        currentSize += 1f + speed * Time.deltaTime;
+        float sizelimited = Mathf.Clamp(currentSize, 0f, 1 + (size * 0.1f));
         transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited);
+
     }
 
     private void SetupDistance()
     {
         currentDistance += speed * Time.deltaTime;
-        float distanceLimited = Mathf.Clamp(currentDistance, 0f, size);
-        transform.Translate(new Vector3(0f, distanceLimited * 0.1f, distanceLimited * 0.1f));
+        float distanceLimited = Mathf.Clamp(currentDistance, 0f, 1 + (size * 0.2f));
+        transform.Translate(new Vector3(0f, distanceLimited * 0.08f, distanceLimited));
     }
 
     private void Setup()
     {
-        if (currentSize >= size && Vector3.Distance(caster.position, transform.position) >= size)
+        if (currentSize >= (1 + (size * 0.1f)) && Vector3.Distance(caster.position, transform.position) >= (1 + (size * 0.2f)))
         {
             setup = true;
             return;
         }
-        if (currentSize < size)
+        if (currentSize < (1 + (size * 0.1f)))
             SetupSize();
-        if (Vector3.Distance(caster.position, transform.position) < size)
+        if (Vector3.Distance(caster.position, transform.position) < (1 + (size * 0.2f)))
             SetupDistance();
     }
 
@@ -240,14 +241,8 @@ public class SummoningSpell : Spell
         {
             target = closestTarget;
             targetFound = true;
-            if(variant == SpellShape.ranged)
-            {
-                summonSpellInventory.SetTargetFound(true);
-                summonSpellInventory.SetTarget(target);
-            }
             if (variant == SpellShape.chaser)
             {
-                Debug.Log(closestTarget.gameObject.name);
                 StopCoroutine("ChaserTimer");
                 transform.SetParent(null, true);
                 Destroy(gameObject, lifetime);
@@ -257,11 +252,6 @@ public class SummoningSpell : Spell
         {
             target = null;
             targetFound = false;
-            if(variant == SpellShape.ranged)
-            {
-                summonSpellInventory.SetTargetFound(false);
-                summonSpellInventory.SetTarget(null);
-            }
         }
     }
 
@@ -280,11 +270,29 @@ public class SummoningSpell : Spell
         }
     }
 
+    private void RangedAttack()
+    {
+        GameObject projectileObject = Instantiate(projectilespell.gameObject, (transform.position + transform.forward), transform.rotation);
+        ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
+        projectile.SetElement(element);
+        projectile.SetSpeed(speed);
+        projectile.SetShape(0);
+        projectile.SetDamage(power);
+        projectile.SetSize(size);
+        projectile.SetLifetime(lifetime);
+        projectile.Activate();
+    }
+
     private IEnumerator AttackCooldown()
     {
         attackCooldown = true;
         yield return new WaitForSeconds(attackRate);
         attackCooldown = false;
+    }
+
+    public ProjectileSpell GetProjectile()
+    {
+        return projectilespell;
     }
 
     private void OnCollisionEnter(Collision col)
@@ -293,11 +301,11 @@ public class SummoningSpell : Spell
         {
             if (col.gameObject.TryGetComponent(out EnemyManager enemy))
             {
-                enemy.Hit(damage, element);
+                enemy.Hit(power, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage, element);
+                summon.ReducePower(power, element);
             }
             if(variant == SpellShape.chaser)
                 Destroy(gameObject);
@@ -306,18 +314,18 @@ public class SummoningSpell : Spell
         {
             if (col.gameObject.TryGetComponent(out PlayerManager player))
             {
-                player.Hit(damage, element);
+                player.Hit(power, element);
             }
             if (col.gameObject.TryGetComponent(out SummoningSpell summon))
             {
-                summon.ReducePower(damage, element);
+                summon.ReducePower(power, element);
             }
             if(variant == SpellShape.chaser)
                 Destroy(gameObject);
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
             if(variant == SpellShape.chaser)
                 Destroy(gameObject);
         }
@@ -325,7 +333,7 @@ public class SummoningSpell : Spell
         {
             if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
             {
-                projectile.ReducePower(damage, element);
+                projectile.ReducePower(power, element);
             }
             if(variant == SpellShape.chaser)
                 Destroy(gameObject);
@@ -346,33 +354,33 @@ public class SummoningSpell : Spell
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
                 {
-                    enemy.Hit(damage, element);
+                    enemy.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
             }
             else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Summon_Spell")))
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))
                 {
-                    player.Hit(damage, element);
+                    player.Hit(power, element);
                 }
                 if (col.gameObject.TryGetComponent(out SummoningSpell summon))
                 {
-                    summon.ReducePower(damage, element);
+                    summon.ReducePower(power, element);
                 }
             }
             else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Summon_Spell")))
             {
-                col.gameObject.GetComponent<ShieldSpell>().ReducePower(damage, element);
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
             }
             else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Summon_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Summon_Spell")))
             {
                 if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
                 {
-                    projectile.ReducePower(damage, element);
+                    projectile.ReducePower(power, element);
                 }
             }
         }
