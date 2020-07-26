@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileSpell : Spell
@@ -14,13 +15,15 @@ public class ProjectileSpell : Spell
     private Transform FirePos = default;
     private float maxSize = default;
 
+    private List<Collider> targets = new List<Collider>();
+
     private void Update()
     {
         if (variant == SpellShape.line)
         {
 
             RaycastHit hit;
-            if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, transform.forward, out hit, size * 2f, obstacles, QueryTriggerInteraction.Ignore))
             {
                 maxSize = hit.distance / 2f;
             }
@@ -131,16 +134,23 @@ public class ProjectileSpell : Spell
         {
             Destroy(gameObject, 0.1f);
         }
+        if (!targets.Contains(col))
+        {
+            targets.Add(col);
+        }
         if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell")) {
             if (hit)
             {
-                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                foreach (Collider collider in targets)
                 {
-                    enemy.Hit(power, element);
-                }
-                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
-                {
-                    summon.ReducePower(power, element);
+                    if (collider.gameObject.TryGetComponent(out EnemyManager enemy))
+                    {
+                        enemy.Hit(power, element);
+                    }
+                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
+                    {
+                        summon.ReducePower(power, element);
+                    }
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (variant == SpellShape.chain && instances > 0)
@@ -157,13 +167,16 @@ public class ProjectileSpell : Spell
         {
             if (hit)
             {
-                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                foreach (Collider collider in targets)
                 {
-                    player.Hit(power, element);
-                }
-                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
-                {
-                    summon.ReducePower(power, element);
+                    if (collider.gameObject.TryGetComponent(out PlayerManager player))
+                    {
+                        player.Hit(power, element);
+                    }
+                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
+                    {
+                        summon.ReducePower(power, element);
+                    }
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (variant == SpellShape.chain && instances > 0)
@@ -180,17 +193,26 @@ public class ProjectileSpell : Spell
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
-                StartCoroutine("BeamDamageCooldown");
+                foreach (Collider collider in targets)
+                {
+                    if (collider.gameObject.TryGetComponent(out ShieldSpell shield))
+                    {
+                        collider.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
+                    }
+                    StartCoroutine("BeamDamageCooldown");
+                }
             }
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
             if (hit)
             {
-                if (TryGetComponent(out ProjectileSpell projectile))
+                foreach (Collider collider in targets)
                 {
-                    projectile.ReducePower(power, element);
+                    if (collider.gameObject.TryGetComponent(out ProjectileSpell projectile))
+                    {
+                        projectile.ReducePower(power, element);
+                    }
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -203,13 +225,16 @@ public class ProjectileSpell : Spell
         {
             if (hit)
             {
-                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                foreach (Collider collider in targets)
                 {
-                    enemy.Hit(power, element);
-                }
-                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
-                {
-                    summon.ReducePower(power, element);
+                    if (collider.gameObject.TryGetComponent(out EnemyManager enemy))
+                    {
+                        enemy.Hit(power, element);
+                    }
+                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
+                    {
+                        summon.ReducePower(power, element);
+                    }
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (variant == SpellShape.chain && instances > 0)
@@ -227,13 +252,16 @@ public class ProjectileSpell : Spell
         {
             if (hit)
             {
-                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                foreach (Collider collider in targets)
                 {
-                    player.Hit(power, element);
-                }
-                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
-                {
-                    summon.ReducePower(power, element);
+                    if (collider.gameObject.TryGetComponent(out PlayerManager player))
+                    {
+                        player.Hit(power, element);
+                    }
+                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
+                    {
+                        summon.ReducePower(power, element);
+                    }
                 }
                 StartCoroutine("BeamDamageCooldown");
                 if (variant == SpellShape.chain && instances > 0)
@@ -250,7 +278,10 @@ public class ProjectileSpell : Spell
         {
             if (hit)
             {
-                col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
+                foreach (Collider collider in targets)
+                {
+                    collider.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
+                }
                 StartCoroutine("BeamDamageCooldown");
             }
         }
@@ -258,12 +289,23 @@ public class ProjectileSpell : Spell
         {
             if (hit)
             {
-                if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
+                foreach (Collider collider in targets)
                 {
-                    projectile.ReducePower(power, element);
+                    if (collider.gameObject.TryGetComponent(out ProjectileSpell projectile))
+                    {
+                        projectile.ReducePower(power, element);
+                    }
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (targets.Contains(col))
+        {
+            targets.Remove(col);
         }
     }
 

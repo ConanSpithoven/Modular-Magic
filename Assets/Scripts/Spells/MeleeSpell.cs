@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class MeleeSpell : Spell
 {
@@ -12,6 +13,8 @@ public class MeleeSpell : Spell
     private float travelDistance = default;
     private Transform FirePos = default;
     [SerializeField] private LayerMask layerMask = default;
+
+    List<GameObject> targets = new List<GameObject>();
 
     private void Update()
     {
@@ -137,38 +140,45 @@ public class MeleeSpell : Spell
             Destroy(gameObject);
         if (variant == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
             Destroy(gameObject);
-        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
+        if (!targets.Contains(col.gameObject))
         {
-            if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+            if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
             {
-                enemy.Hit(power, element);
+                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                {
+                    enemy.Hit(power, element);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(power, element);
+                }
             }
-            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
             {
-                summon.ReducePower(power, element);
+                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                {
+                    player.Hit(power, element);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(power, element);
+                }
+            }
+            else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
+            {
+                col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
+            }
+            else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
+            {
+                if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
+                {
+                    projectile.ReducePower(power, element);
+                }
             }
         }
-        else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
+        if (!targets.Contains(col.gameObject))
         {
-            if (col.gameObject.TryGetComponent(out PlayerManager player))
-            {
-                player.Hit(power, element);
-            }
-            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
-            {
-                summon.ReducePower(power, element);
-            }
-        }
-        else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
-        {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
-        }
-        else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
-        {
-            if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
-            {
-                projectile.ReducePower(power, element);
-            }
+            targets.Add(col.gameObject);
         }
     }
 }

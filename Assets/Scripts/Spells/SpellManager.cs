@@ -444,13 +444,13 @@ public class SpellManager : MonoBehaviour
             if (spell.shape == 0 || spell.shape == 1)
             {
                 projectileObject = Instantiate(spell.gameObject, Firepos.position, Model.rotation);
-                projectileObject.transform.SetParent(Firepos);
                 projectileObject.transform.Rotate(Vector3.up, startAngle + i * perBulletAngle);
-                if (spell.shape == 0)
-                {
-                    projectileObject.transform.SetParent(null, true);
-                }
                 ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
+                if (spell.shape == 1)
+                {
+                    projectileObject.transform.SetParent(Firepos);
+                    projectile.SetFirePos(Firepos);
+                }
                 ProjectileSpellHandler(spell, projectile);
                 projectile.Activate();
             }
