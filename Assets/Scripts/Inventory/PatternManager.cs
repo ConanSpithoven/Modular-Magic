@@ -159,7 +159,7 @@ public class PatternManager : MonoBehaviour
                         inventory.Remove(newItem);
                         break;
                     case PatternType.Variant:
-                        foreach (Pattern pattern in currentPattern1)
+                        foreach (Pattern pattern in currentPattern2)
                         {
                             if (pattern.patternType == PatternType.Variant)
                             {
@@ -223,7 +223,7 @@ public class PatternManager : MonoBehaviour
                         inventory.Remove(newItem);
                         break;
                     case PatternType.Variant:
-                        foreach (Pattern pattern in currentPattern1)
+                        foreach (Pattern pattern in currentPattern3)
                         {
                             if (pattern.patternType == PatternType.Variant)
                             {

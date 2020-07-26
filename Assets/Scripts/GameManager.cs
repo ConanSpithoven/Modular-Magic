@@ -1,10 +1,19 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public int score = 0;
+    public int timer = 0;
+    private int timerS = 0;
+    private int timerM = 0;
+    private int timerH = 0;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI timerSText;
+    [SerializeField] private TextMeshProUGUI timerMText;
+    [SerializeField] private TextMeshProUGUI timerHText;
     [SerializeField] private Transform startPos;
     [SerializeField] private SpellDetails spellDetails;
     private GameObject player;
@@ -26,8 +35,24 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("More than one instance of GameManager found!");
             return;
         }
-
+        StartCoroutine("Timer");
         instance = this;
+    }
+
+    private void Update()
+    {
+        scoreText.text = score + " points";
+        if (timerS >= 60)
+        {
+            timerS -= 60;
+            timerM++;
+        }
+        if (timerM >= 60)
+        {
+            timerM -= 60;
+            timerH++;
+        }
+        UpdateTimer();
     }
 
     #endregion
@@ -61,5 +86,42 @@ public class GameManager : MonoBehaviour
     public GameObject GetPlayer()
     {
         return player;
+    }
+
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSecondsRealtime(1);
+        timer++;
+        timerS++;
+        score++;
+        StartCoroutine("Timer");
+    }
+
+    private void UpdateTimer()
+    {
+        if (timerS > 9)
+        {
+            timerSText.text = "" + timerS;
+        }
+        else 
+        {
+            timerSText.text = "0" + timerS;
+        }
+        if (timerM > 9)
+        {
+            timerMText.text = "" + timerM;
+        }
+        else
+        {
+            timerMText.text = "0" + timerM;
+        }
+        if (timerH > 9)
+        {
+            timerHText.text = "" + timerH;
+        }
+        else
+        {
+            timerHText.text = "0" + timerH;
+        }
     }
 }

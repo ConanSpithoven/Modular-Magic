@@ -356,6 +356,8 @@ MonoBehaviour:
     baseValue: 0
   movementspeed:
     baseValue: 5
+  upgradeLimit:
+    baseValue: 0
   lifetime:
     baseValue: 0
   size:
@@ -367,6 +369,4 @@ MonoBehaviour:
   unique:
     baseValue: 0
   cooldownReduction:
-    baseValue: 0
-  upgradeLimit:
     baseValue: 0
