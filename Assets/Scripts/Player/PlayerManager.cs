@@ -34,8 +34,12 @@ public class PlayerManager : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
-        if(Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
-        transform.Translate(horizontal * playerstats.movementspeed.GetValue() * Time.deltaTime, 0f, vertical * playerstats.movementspeed.GetValue() * Time.deltaTime);
+        if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
+        {
+            Vector3 movement = new Vector3(horizontal, 0f, vertical);
+            movement = movement.normalized * playerstats.movementspeed.GetValue() * Time.deltaTime;
+            rb.MovePosition(transform.position + movement);
+        }
     }
 
     public float GetSpeed() {
@@ -44,7 +48,7 @@ public class PlayerManager : MonoBehaviour
 
     public float GetHP()
     {
-        return playerstats.currentHealth;
+        return playerstats.GetCurrentHP();
     }
 
     #region HPHandlers

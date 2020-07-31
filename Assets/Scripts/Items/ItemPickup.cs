@@ -7,6 +7,7 @@ public class ItemPickup : MonoBehaviour
     public Item item;
     public float radius = 3f;
     [SerializeField] private Transform player = default;
+    [SerializeField] private bool Despawnable = false;
     private float distance = default;
     private bool ready = false;
 
@@ -14,6 +15,10 @@ public class ItemPickup : MonoBehaviour
     {
         player = FindObjectOfType<PlayerManager>().transform;
         StartCoroutine("Setup");
+        if (Despawnable)
+        {
+            StartCoroutine("Despawn");
+        }
     }
 
     private void Update()
@@ -23,7 +28,7 @@ public class ItemPickup : MonoBehaviour
             distance = Vector3.Distance(player.position, transform.position);
             if (distance <= radius)
             {
-                float step = (1f + radius - distance) * Time.deltaTime;
+                float step = 2f * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, player.position, step);
                 transform.position = new Vector3(transform.position.x, 0.3f, transform.position.z);
             }
@@ -64,6 +69,12 @@ public class ItemPickup : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(2);
         ready = true;
+    }
+
+    private IEnumerator Despawn()
+    {
+        yield return new WaitForSecondsRealtime(20);
+        Destroy(gameObject);
     }
 
     private void LootTextPopup()

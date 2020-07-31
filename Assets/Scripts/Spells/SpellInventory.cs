@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class SpellInventory : MonoBehaviour
 {
@@ -15,6 +16,15 @@ public class SpellInventory : MonoBehaviour
     private int attack = 0;
     private SpellManager spellManager;
     private Transform target = default;
+    private Barhandler cooldown1;
+    private Barhandler cooldown2;
+    private Barhandler cooldown3;
+    private Image cooldownIcon1;
+    private Image cooldownIcon2;
+    private Image cooldownIcon3;
+    private float cooldowntime1;
+    private float cooldowntime2;
+    private float cooldowntime3;
 
     private void Awake()
     {
@@ -43,6 +53,16 @@ public class SpellInventory : MonoBehaviour
         {
             EquipmentManager.instance.onEquipmentChanged += onEquipmentChange;
             PatternManager.instance.onPatternChanged += OnPatternChange;
+            GameManager gameManager = GameManager.instance;
+            cooldown1 = gameManager.GetCooldownObj(1).GetComponent<Barhandler>();
+            cooldown2 = gameManager.GetCooldownObj(2).GetComponent<Barhandler>();
+            cooldown3 = gameManager.GetCooldownObj(3).GetComponent<Barhandler>();
+            cooldownIcon1 = gameManager.GetCooldownObj(1).GetComponent<Image>();
+            cooldownIcon2 = gameManager.GetCooldownObj(2).GetComponent<Image>();
+            cooldownIcon3 = gameManager.GetCooldownObj(3).GetComponent<Image>();
+            cooldown1.SetValue(0,1);
+            cooldown2.SetValue(0,1);
+            cooldown3.SetValue(0,1);
         }
     }
 
@@ -51,6 +71,43 @@ public class SpellInventory : MonoBehaviour
         switch (casterType)
         {
             case Caster.Player:
+                if (slotOne.onCooldown)
+                {
+                    if (cooldowntime1 <= 0)
+                    {
+                        slotOne.onCooldown = false;
+                    }
+                    else
+                    {
+                        cooldowntime1 -= Time.deltaTime;
+                        cooldown1.SetValue(cooldowntime1, slotOne.cooldownTime);
+                    }
+                }
+                if (slotTwo.onCooldown)
+                {
+                    if (cooldowntime2 <= 0)
+                    {
+                        slotTwo.onCooldown = false;
+                    }
+                    else
+                    {
+                        cooldowntime2 -= Time.deltaTime;
+                        cooldown2.SetValue(cooldowntime2, slotTwo.cooldownTime);
+                    }
+                }
+                if (slotThree.onCooldown)
+                {
+                    if (cooldowntime3 <= 0)
+                    {
+                        slotThree.onCooldown = false;
+                    }
+                    else
+                    {
+                        cooldowntime3 -= Time.deltaTime;
+                        cooldown3.SetValue(cooldowntime3, slotThree.cooldownTime);
+                    }
+                }
+
                 if (EventSystem.current.IsPointerOverGameObject()) return;
 
                 if ((Input.GetKey(KeyCode.Alpha1) || Input.GetMouseButton(0)) && slotOne != null && !slotOne.onCooldown)
@@ -110,24 +167,23 @@ public class SpellInventory : MonoBehaviour
         switch (spellSlot)
         {
             case 1:
-                StartCoroutine("Cooldown", slotOne);
+                slotOne.onCooldown = true;
+                cooldowntime1 = slotOne.cooldownTime;
+                cooldown1.SetFull();
                 break;
             case 2:
-                StartCoroutine("Cooldown", slotTwo);
+                slotTwo.onCooldown = true;
+                cooldowntime2 = slotTwo.cooldownTime;
+                cooldown2.SetFull();
                 break;
             case 3:
-                StartCoroutine("Cooldown", slotThree);
+                slotThree.onCooldown = true;
+                cooldowntime3 = slotThree.cooldownTime;
+                cooldown3.SetFull();
                 break;
             default:
                 break;
         }
-    }
-
-    private IEnumerator Cooldown(Spell spell)
-    {
-        spell.onCooldown = true;
-        yield return new WaitForSeconds(spell.cooldownTime);
-        spell.onCooldown = false;
     }
 
     public bool GetCooldownStatus(int spellSlot)
@@ -330,5 +386,24 @@ public class SpellInventory : MonoBehaviour
         Spell spell = GetSpell(formulaNumber);
         float totalCooldownTime = spell.GetBaseCooldownTime() + ((((spell.power * 0.2f - 0.2f) * spell.GetBaseCooldownTime()) + ((spell.size * 0.1f - 0.1f) * spell.GetBaseCooldownTime()) - ((spell.speed * 0.1f - 0.1f) * spell.GetBaseCooldownTime())) * (spell.instances * 0.3f + 0.7f))/* * 1 - spell.cdr*/;
         spell.SetCooldown(totalCooldownTime);
+    }
+
+    public void SetIcon(int slot, Sprite sprite)
+    {
+        switch (slot)
+        {
+            case 1:
+                if (cooldownIcon1 != null)
+                    cooldownIcon1.sprite = sprite;
+                break;
+            case 2:
+                if (cooldownIcon2 != null)
+                    cooldownIcon2.sprite = sprite;
+                break;
+            case 3:
+                if (cooldownIcon3 != null)
+                    cooldownIcon3.sprite = sprite;
+                break;
+        }
     }
 }

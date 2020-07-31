@@ -24,6 +24,7 @@ public class Spell : MonoBehaviour
     private Rigidbody rb;
     public Animator animator;
     private NavMeshAgent spellAgent;
+    public Sprite icon;
 
     public void SetSlot(int spellSlot)
     {
