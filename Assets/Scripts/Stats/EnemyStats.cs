@@ -5,6 +5,7 @@ using UnityEngine.SocialPlatforms.Impl;
 public class EnemyStats : CharacterStats
 {
     [SerializeField] private int scoreValue = 100;
+    [SerializeField] private Stat attackSpeed;
 
     public override void TakeDamage(float damageTaken, Element element)
     {
@@ -52,5 +53,10 @@ public class EnemyStats : CharacterStats
         GameManager.instance.ChangeScore(scoreValue, true);
         //TODO death animation, run from EnemyManager
         Destroy(gameObject);
+    }
+
+    public float GetAttackSpeed()
+    {
+        return attackSpeed.GetValue();
     }
 }

@@ -236,15 +236,25 @@ public class MovementSpell : Spell
     {
         if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(power, element);
+            if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+            {
+                enemy.Hit(power, element);
+            }
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(power, element);
+            if (col.gameObject.TryGetComponent(out PlayerManager player))
+            {
+                player.Hit(power, element);
+            }
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
+
+            if (col.gameObject.TryGetComponent(out ShieldSpell shield))
+            {
+                shield.ReducePower(power, element);
+            }
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {

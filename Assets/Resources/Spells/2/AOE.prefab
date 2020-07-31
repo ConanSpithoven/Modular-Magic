@@ -94,8 +94,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 1
-  cooldownTime: 5
-  onCooldown: 0
+  cooldownTime: 10.6
+  onCooldown: 1
   shape: 0
   originShape: 0
   power: 1
@@ -110,6 +110,7 @@ MonoBehaviour:
   upgradeLimit: 5
   model: {fileID: 6980719320466699317}
   animator: {fileID: 0}
+  icon: {fileID: 0}
 --- !u!136 &8964444968500025839
 CapsuleCollider:
   m_ObjectHideFlags: 0
