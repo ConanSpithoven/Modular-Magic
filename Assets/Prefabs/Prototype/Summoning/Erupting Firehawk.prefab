@@ -158,6 +158,7 @@ MonoBehaviour:
   upgradeLimit: 5
   model: {fileID: 4591801059385059935, guid: 1368451070d9c194bb7dd9acffc933c5, type: 3}
   animator: {fileID: 7228845004719820340}
+  icon: {fileID: 0}
   obstacles:
     serializedVersion: 2
     m_Bits: 33280

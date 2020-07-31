@@ -1,23 +1,33 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public int score = 0;
-    public int timer = 0;
+    private int score = 0;
+    private int timer = 0;
     private int timerS = 0;
     private int timerM = 0;
     private int timerH = 0;
+    private int lives = 3;
+    [SerializeField] private Transform LifeList;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI timerSText;
     [SerializeField] private TextMeshProUGUI timerMText;
     [SerializeField] private TextMeshProUGUI timerHText;
     [SerializeField] private Transform startPos;
     [SerializeField] private SpellDetails spellDetails;
+    [SerializeField] private Barhandler playerHealthBar;
+    [SerializeField] private GameObject cooldown1;
+    [SerializeField] private GameObject cooldown2;
+    [SerializeField] private GameObject cooldown3;
     private GameObject player;
     private SpellInventory spellInventory;
+    private List<GameObject> livesList = new List<GameObject>();
+    private GameObject livesText;
 
 
     #region Singleton
@@ -26,16 +36,18 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        GameObject playerPrefab = Resources.Load<GameObject>("PlayerTest");
-        player = Instantiate(playerPrefab, startPos.position, startPos.rotation, null);
-        spellInventory = player.GetComponent<SpellInventory>();
-
         if (instance != null)
         {
             Debug.LogWarning("More than one instance of GameManager found!");
             return;
         }
+        Spawn();
         StartCoroutine("Timer");
+        for (int i = 1; i <= lives; i++)
+        {
+            GameObject life = Instantiate(Resources.Load<GameObject>("UI/Life"), LifeList.transform);
+            livesList.Add(life);
+        }
         instance = this;
     }
 
@@ -103,25 +115,157 @@ public class GameManager : MonoBehaviour
         {
             timerSText.text = "" + timerS;
         }
-        else 
+        else if (timerM > 0 || timerH > 0)
         {
             timerSText.text = "0" + timerS;
         }
+        else
+        {
+            timerSText.text = "" + timerS;
+        }
         if (timerM > 9)
         {
-            timerMText.text = "" + timerM;
+            timerMText.text = "" + timerM + ":";
+        }
+        else if (timerM > 0)
+        {
+            timerMText.text = "0" + timerM + ":";
         }
         else
         {
-            timerMText.text = "0" + timerM;
+            timerMText.text = "";
         }
         if (timerH > 9)
         {
-            timerHText.text = "" + timerH;
+            timerHText.text = "" + timerH + ":";
+        }
+        else if (timerH > 0)
+        {
+            timerHText.text = "0" + timerH + ":";
         }
         else
         {
-            timerHText.text = "0" + timerH;
+            timerHText.text = "";
+        }
+    }
+
+    public int GetScore()
+    {
+        return score;
+    }
+
+    public int GetTime()
+    {
+        return timer;
+    }
+
+    public void ChangeScore(int value, bool adding)
+    {
+        if (adding)
+        {
+            //addition popup
+            score += value;
+        }
+        else 
+        {
+            //deduction popup
+            score -= value;
+        }
+    }
+
+    public void ChangeLives(int value, bool adding)
+    {
+        if (adding)
+        {
+            lives += value;
+            if (lives <= 3)
+            {
+                GameObject life = Instantiate(Resources.Load<GameObject>("UI/Life"), LifeList);
+                livesList.Add(life);
+            }
+            else if (lives == 4)
+            {
+                livesText = Instantiate(Resources.Load<GameObject>("UI/ExtraLives"), LifeList);
+                livesList.Add(livesText);
+            }
+            else
+            {
+                livesText.GetComponent<TextMeshProUGUI>().text = "+" + (lives - 3);
+            }
+        }
+        else
+        {
+            lives -= value;
+            if (lives >= 4)
+            {
+                livesText.GetComponent<TextMeshProUGUI>().text = "+" + (lives - 3);
+            }
+            else if (lives == 3)
+            {
+                livesList.Remove(livesText);
+                Destroy(livesText);
+            }
+            else
+            {
+                Destroy(livesList[lives-1]);
+                livesList.RemoveAt(lives-1);
+            }
+            if (lives > 0)
+            {
+                Respawn();
+            }
+            else 
+            {
+                GameOver();
+            }
+        }
+    }
+
+    private void Spawn()
+    {
+        GameObject playerPrefab = Resources.Load<GameObject>("PlayerTest");
+        player = Instantiate(playerPrefab, startPos.position, startPos.rotation, null);
+        spellInventory = player.GetComponent<SpellInventory>();
+    }
+
+    public void Respawn()
+    {
+        StartCoroutine("RespawnRoutine");
+    }
+
+    private IEnumerator RespawnRoutine()
+    {
+        Destroy(player.gameObject);
+        //display you died window
+        yield return new WaitForSecondsRealtime(3);
+        Spawn();
+    }
+
+    private void GameOver()
+    {
+        if(PlayerPrefs.GetInt("Highscore") < score)
+        {
+            PlayerPrefs.SetInt("Highscore", score);
+        }
+        SceneManager.LoadScene("GameOver");
+    }
+
+    public Barhandler GetBarhandler()
+    {
+        return playerHealthBar;
+    }
+
+    public GameObject GetCooldownObj(int slot)
+    {
+        switch (slot)
+        {
+            default:
+            case 1:
+                return cooldown1;
+            case 2:
+                return cooldown2;
+            case 3:
+                return cooldown3;
         }
     }
 }

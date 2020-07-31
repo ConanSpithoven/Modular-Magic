@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 6
-  cooldownTime: 16
+  cooldownTime: 11
   onCooldown: 0
   shape: 0
   originShape: 0
@@ -158,6 +158,7 @@ MonoBehaviour:
   upgradeLimit: 5
   model: {fileID: 4591801059385059935, guid: cbc1f2c2dde1a1b469b80f69cc482c2a, type: 3}
   animator: {fileID: 7228845004719820340}
+  icon: {fileID: 0}
   obstacles:
     serializedVersion: 2
     m_Bits: 33280
@@ -171,7 +172,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 58477e3bca4f99b40b959efaaf2fe4c3, type: 2}
   m_CullingMode: 0
@@ -189,7 +190,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5

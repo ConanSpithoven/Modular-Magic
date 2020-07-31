@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ef03aa4c2d9e3b745a29bdce3397ae8b, type: 2}
+  - {fileID: 2100000, guid: fc2b4905c220a8a468fbbc7134bfaea3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 4
-  cooldownTime: 0
+  cooldownTime: 1
   onCooldown: 0
   shape: 0
   originShape: 0
@@ -151,8 +151,8 @@ MonoBehaviour:
   speed: 1
   unique: 0
   spellSlot: 1
-  element: {fileID: 11400000, guid: 890402117d2ea0640947821637a447d0, type: 2}
-  originElement: {fileID: 11400000, guid: 890402117d2ea0640947821637a447d0, type: 2}
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5
   model: {fileID: 8196574339898317291}
   animator: {fileID: 0}

@@ -11,9 +11,13 @@ public class PlayerStats : CharacterStats
     public Stat instances;
     public Stat unique;
     public Stat cooldownReduction;
+    private Barhandler Healthbar;
+    private GameManager gameManager;
 
     void Start()
     {
+        gameManager = GameManager.instance;
+        Healthbar = gameManager.GetBarhandler();
         EquipmentManager.instance.onEquipmentChanged += OnEquipmentChanged;
     }
 
@@ -38,8 +42,21 @@ public class PlayerStats : CharacterStats
         }
     }
 
+    public override void TakeDamage(float damageTaken, Element element)
+    {
+        base.TakeDamage(damageTaken, element);
+        Healthbar.SetValue(GetCurrentHP(), maxHealth.GetValue());
+    }
+
+    public override void Heal(float healing)
+    {
+        base.Heal(healing);
+        Healthbar.SetValue(GetCurrentHP(), maxHealth.GetValue());
+    }
+
     public override void Die()
-    { 
-        //oof
+    {
+        //respawn and reduce lives
+        gameManager.ChangeLives(1, false);
     }
 }

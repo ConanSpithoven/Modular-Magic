@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 2
-  cooldownTime: 1
+  cooldownTime: 2.1200001
   onCooldown: 0
   shape: 0
   originShape: 0
@@ -62,6 +62,7 @@ MonoBehaviour:
   upgradeLimit: 5
   model: {fileID: 4983697977340773618}
   animator: {fileID: 0}
+  icon: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 40960

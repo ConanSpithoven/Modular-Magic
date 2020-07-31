@@ -361,6 +361,17 @@ public class SummoningSpell : Spell
                     summon.ReducePower(power, element);
                 }
             }
+            else if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
+            {
+                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                {
+                    enemy.Hit(power, element);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(power, element);
+                }
+            }
             else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Summon_Spell")))
             {
                 if (col.gameObject.TryGetComponent(out PlayerManager player))

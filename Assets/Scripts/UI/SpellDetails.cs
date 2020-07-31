@@ -37,7 +37,6 @@ public class SpellDetails : MonoBehaviour
 
     private void Start()
     {
-        
         patternManager = PatternManager.instance;
         patternManager.onPatternChanged += PatternChanged;
         patternManager.onFormulaChanged += UpdateSpell;
@@ -214,6 +213,7 @@ public class SpellDetails : MonoBehaviour
                 }
                 break;
         }
+        spellInventory.SetIcon(spell.GetSpellSlot(), icon.sprite);
     }
 
     private void PatternChanged(Pattern newPattern, Pattern oldPattern, int formulaNumber)
