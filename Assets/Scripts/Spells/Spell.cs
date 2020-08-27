@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -361,7 +362,7 @@ public class Spell : MonoBehaviour
         animator = GetComponent<Animator>();
         spellAgent = GetComponent<NavMeshAgent>();
         model = Resources.Load<GameObject>("Models/Spells/Summon/" + element.ElementName + "/" + shape);
-        string path = AssetDatabase.GetAssetPath(gameObject);
+        //string path = AssetDatabase.GetAssetPath(gameObject);
         GameObject newPrefab = Instantiate(this.gameObject, new Vector3(0, -100, 0), Quaternion.identity, null);
         GameObject oldModel = newPrefab.transform.Find("Model").gameObject;
         oldModel.transform.SetParent(null, true);
@@ -383,7 +384,7 @@ public class Spell : MonoBehaviour
         GameObject newModel = Instantiate(model, new Vector3(0, -100, 0), Quaternion.Euler(rot), null);
         newModel.transform.parent = newPrefab.transform;
         newModel.name = "Model";
-        PrefabUtility.SaveAsPrefabAsset(newPrefab, path);
+        //PrefabUtility.SaveAsPrefabAsset(newPrefab, path);
         DestroyImmediate(newPrefab);
 
         switch (shape)
@@ -543,6 +544,6 @@ public class Spell : MonoBehaviour
 
     public void SetCooldown(float cdTime)
     {
-        cooldownTime = cdTime;
+        cooldownTime = Mathf.Clamp(cdTime, 0.01f, Mathf.Infinity);
     }
 }

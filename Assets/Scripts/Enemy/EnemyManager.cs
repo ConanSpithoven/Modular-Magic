@@ -10,6 +10,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private EnemyStats stats;
     [SerializeField] private LayerMask obstacles;
     [SerializeField] private EnemyType type;
+    [SerializeField] private ProjectileSpell projectilespell = default;
     private NavMeshAgent agent;
     private Transform target;
     private bool targetFound = false;
@@ -17,12 +18,17 @@ public class EnemyManager : MonoBehaviour
     private float attackRate;
     private Animator animator;
     private List<Collider> targets = new List<Collider>();
+    private Spawner spawner;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        attackRate = (1f / stats.GetAttackSpeed());
+        agent.speed = stats.movementspeed.GetValue();
+        attackRate = (1f / stats.attackSpeed.GetValue());
         animator = GetComponent<Animator>();
+        //test version only
+        target = GameManager.instance.GetPlayer().transform;
+        targetFound = true;
     }
 
     private void Update()
@@ -36,6 +42,10 @@ public class EnemyManager : MonoBehaviour
                 }
                 else
                 {
+                    if (target == null)
+                    {
+                        targetFound = false;
+                    }
                     if (Vector3.Distance(transform.position, target.position) > 1.2f)
                     {
                         agent.destination = target.position;
@@ -62,6 +72,12 @@ public class EnemyManager : MonoBehaviour
                 }
                 else
                 {
+                    if (target == null)
+                    {
+                        targetFound = false;
+                    }
+                    agent.destination = target.position;
+
                     Vector3 direction = target.position - transform.position;
                     float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                     transform.rotation = Quaternion.Euler(0, rotation, 0);
@@ -120,6 +136,10 @@ public class EnemyManager : MonoBehaviour
 
     private void RangedAttack()
     {
+        GameObject projectileObject = Instantiate(projectilespell.gameObject, (transform.position + transform.forward), transform.rotation);
+        ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
+        projectile.SetDamage(stats.power.GetValue());
+        projectile.Activate();
         StartCoroutine("AttackCooldown");
     }
 
@@ -137,19 +157,56 @@ public class EnemyManager : MonoBehaviour
         {
             targets.Add(col);
         }
-        if (col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell"))
+        int i = 0;
+        foreach (Collider collider in targets)
         {
-            foreach (Collider collider in targets)
+            if (collider != null)
             {
-                if (collider.gameObject.TryGetComponent(out PlayerManager player))
+                if (collider.gameObject.CompareTag("Player") || collider.gameObject.CompareTag("Summon_Spell"))
                 {
-                    player.Hit(stats.power.GetValue(), stats.element);
-                }
-                if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
-                {
-                    summon.ReducePower(stats.power.GetValue(), stats.element);
+                    if (targets[i] == null)
+                    {
+                        targets.RemoveAt(i);
+                    }
+                    i++;
+                    if (collider.gameObject.TryGetComponent(out PlayerManager player))
+                    {
+                        player.Hit(stats.power.GetValue(), stats.element);
+                    }
+                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
+                    {
+                        summon.ReducePower(stats.power.GetValue(), stats.element);
+                    }
                 }
             }
         }
+    }
+
+    public void SetSpawner(Spawner spawner)
+    {
+        this.spawner = spawner;
+    }
+
+    public void SetScaling(int scaling)
+    {
+        stats.maxHealth.AddModifier((stats.maxHealth.GetValue() * (scaling * 0.1f)));
+        stats.power.AddModifier(stats.power.GetValue() * (scaling * 0.05f));
+        if (scaling > 15)
+        {
+            stats.armor.AddModifier(1 + (stats.armor.GetValue() * ((scaling - 5) * 0.1f)));
+        }
+        if (scaling > 10)
+        {
+            stats.attackSpeed.AddModifier(stats.attackSpeed.GetValue() * ((scaling -10) * 0.05f));
+        }
+        stats.SetScoreValue(Mathf.RoundToInt(10 * (1 + scaling)));
+        stats.Setup();
+    }
+
+    public void OnDeath()
+    {
+        if(spawner != null)
+            spawner.ReduceCount();
+        Destroy(gameObject);
     }
 }

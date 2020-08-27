@@ -518,8 +518,8 @@ public class SpellManager : MonoBehaviour
 
     private IEnumerator AoEInstanceHandler(Spell spell)
     {
-        Vector3 pos = Vector3.zero;
-        
+        Vector3 targetPos = transform.position;
+
         int instances = spell.instances;
         for (int i = 0; i < instances; i++)
         {
@@ -527,16 +527,47 @@ public class SpellManager : MonoBehaviour
             {
                 if (casterType == 0)
                 {
-                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mousePos.y = 0f;
-                    pos = mousePos;
+                    Vector3 mousePos = Input.mousePosition;
+                    Ray castPoint = Camera.main.ScreenPointToRay(mousePos);
+                    RaycastHit hit;
+                    if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, Ground))
+                    {
+                        RaycastHit hit2;
+                        if (Physics.Raycast(Firepos.position, Firepos.forward, out hit2, Vector3.Distance(transform.position, hit.point), Obstacles))
+                        {
+                            mousePos = hit2.point;
+                        }
+                        else
+                        {
+                            mousePos = hit.point;
+                        }
+                    }
+                    else
+                    {
+                        RaycastHit hit2;
+                        if (Physics.Raycast(Firepos.position, Firepos.forward, out hit2, Mathf.Infinity, Obstacles))
+                        {
+                            mousePos = hit2.point;
+                        }
+                    }
+                    mousePos.y = Firepos.position.y;
+                    targetPos = mousePos;
                 }
                 else
                 {
-                    pos = target.position;
+                    RaycastHit hit;
+                    if (Physics.Raycast(Firepos.position, Firepos.forward, out hit, Vector3.Distance(transform.position, target.position), Obstacles))
+                    {
+                        targetPos = hit.point;
+                    }
+                    else
+                    {
+                        targetPos = target.position;
+                    }
+                    targetPos.y = Firepos.position.y;
                 }
             }
-            GameObject aoeObject = Instantiate(spell.gameObject, pos, Model.rotation);
+            GameObject aoeObject = Instantiate(spell.gameObject, targetPos, Model.rotation);
             AOESpell aoe = aoeObject.GetComponent<AOESpell>();
             aoe.transform.SetParent(transform, true);
             AoESpellHandler(spell, aoe);

@@ -341,7 +341,7 @@ MonoBehaviour:
   armor:
     baseValue: 0
   movementspeed:
-    baseValue: 15
+    baseValue: 4
   upgradeLimit:
     baseValue: 0
   lifetime:

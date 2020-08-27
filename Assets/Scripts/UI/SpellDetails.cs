@@ -67,7 +67,7 @@ public class SpellDetails : MonoBehaviour
         UniqueStat.text = "Evolution: " + spell.unique;
     }
 
-    //TODO add element later on, possibly instances/evolution up to a certain point. depends on art limitations
+    //TODO add element-flavor later on, possibly instances/evolution up to a certain point. depends on art limitations
     private void SetTypes(Spell spell)
     {
         switch (spell.spellType)

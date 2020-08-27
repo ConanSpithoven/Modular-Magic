@@ -33,5 +33,6 @@ public class Barhandler : MonoBehaviour
     public void SetFull()
     {
         mask.fillAmount = 1;
+        fillAmount = 1;
     }
 }

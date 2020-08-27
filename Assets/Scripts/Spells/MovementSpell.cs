@@ -16,6 +16,7 @@ public class MovementSpell : Spell
     private Vector3 goal = default;
     private Transform FirePos = default;
     private bool Enabled = default;
+    private List<Collider> targets = new List<Collider>();
 
     private void Update()
     {
@@ -32,7 +33,7 @@ public class MovementSpell : Spell
             case SpellShape.dash:
                 if (currentDistance < travelDistance)
                 {
-                    float step = speed * Time.deltaTime;
+                    float step = (power + speed) * Time.deltaTime;
                     caster.transform.position = Vector3.MoveTowards(caster.transform.position, goal, step);
                     currentDistance = Vector3.Distance(oldPos, caster.transform.position);
                 }

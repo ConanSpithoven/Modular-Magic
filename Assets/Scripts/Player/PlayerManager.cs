@@ -24,7 +24,7 @@ public class PlayerManager : MonoBehaviour
         EquipmentManager.instance.onEquipmentChanged += onEquipmentChange;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (allowMovement)
             HandleMovement();
@@ -33,7 +33,6 @@ public class PlayerManager : MonoBehaviour
     private void HandleMovement() {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
-
         if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
         {
             Vector3 movement = new Vector3(horizontal, 0f, vertical);

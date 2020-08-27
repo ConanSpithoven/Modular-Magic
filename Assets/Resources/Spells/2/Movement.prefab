@@ -62,9 +62,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 3
-  cooldownTime: 1
-  onCooldown: 0
-  shape: 0
+  cooldownTime: 6
+  onCooldown: 1
+  shape: 1
   originShape: 0
   power: 1
   lifetime: 1
@@ -73,11 +73,12 @@ MonoBehaviour:
   speed: 1
   unique: 0
   spellSlot: 2
-  element: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
-  originElement: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}
+  element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5
   model: {fileID: 7782325385189699009}
   animator: {fileID: 0}
+  icon: {fileID: 0}
   obstacles:
     serializedVersion: 2
     m_Bits: 32768
@@ -100,7 +101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2657433162296218186
 Transform:
   m_ObjectHideFlags: 0
@@ -141,7 +142,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ebe5bb0d40fd97540a2f32cce8bdcd8c, type: 2}
+  - {fileID: 2100000, guid: fc2b4905c220a8a468fbbc7134bfaea3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
