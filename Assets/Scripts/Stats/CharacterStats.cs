@@ -110,4 +110,9 @@ public class CharacterStats : MonoBehaviour
             currentHealth -= value;
         }
     }
+
+    public void Setup()
+    {
+        currentHealth = maxHealth.GetValue();
+    }
 }

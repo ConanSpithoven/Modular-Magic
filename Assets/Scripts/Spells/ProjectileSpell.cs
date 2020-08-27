@@ -61,7 +61,8 @@ public class ProjectileSpell : Spell
                 }
                 Rigidbody rb = GetComponent<Rigidbody>();
                 transform.localScale *= (size / 5f);
-                rb.velocity = transform.forward * (speed + 20) * Time.deltaTime * 100f;
+                //rb.velocity = transform.forward * (speed + 20) * Time.deltaTime * 100f;
+                rb.AddForce((transform.forward * Time.deltaTime * speed) * 0.3f);
                 Destroy(gameObject, lifetime);
                 break;
             case SpellShape.line:
@@ -101,15 +102,48 @@ public class ProjectileSpell : Spell
     private void OnCollisionEnter(Collision col){
         if (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))
         {
-            col.gameObject.GetComponent<EnemyManager>().Hit(power, element);
+            if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+            {
+                enemy.Hit(power, element);
+            }
+            if (unique > 0 && variant == SpellShape.ball)
+            {
+                unique -= 1;
+            }
+            else if (unique <= 0 && variant == SpellShape.ball)
+            {
+                Destroy(gameObject);
+            }
         }
         else if (col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell"))
         {
-            col.gameObject.GetComponent<PlayerManager>().Hit(power, element);
+            if (col.gameObject.TryGetComponent(out PlayerManager player))
+            {
+                player.Hit(power, element);
+            }
+            if (unique > 0 && variant == SpellShape.ball)
+            {
+                unique -= 1;
+            }
+            else if (unique <= 0 && variant == SpellShape.ball)
+            {
+                Destroy(gameObject);
+            }
         }
         else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
         {
-            col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
+            if (col.gameObject.TryGetComponent(out ShieldSpell shield))
+            { 
+                shield.ReducePower(power, element);
+            }
+            if (unique > 0 && variant == SpellShape.ball)
+            {
+                unique -= 1;
+            }
+            else if (unique <= 0 && variant == SpellShape.ball)
+            {
+                Destroy(gameObject);
+            }
         }
         else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
         {
@@ -117,12 +151,16 @@ public class ProjectileSpell : Spell
             {
                 projectile.ReducePower(power, element);
             }
+            if (unique > 0 && variant == SpellShape.ball)
+            {
+                unique -= 1;
+            }
+            else if (unique <= 0 && variant == SpellShape.ball)
+            {
+                Destroy(gameObject);
+            }
         }
-        if (unique > 0 && variant == SpellShape.ball && !col.gameObject.CompareTag("Ground"))
-        {
-            unique -= 1;
-        }
-        else if (unique <= 0 && variant == SpellShape.ball && !col.gameObject.CompareTag("Ground"))
+        if (unique <= 0 && variant == SpellShape.ball && col.gameObject.CompareTag("Wall"))
         {
             Destroy(gameObject);
         }
@@ -130,89 +168,82 @@ public class ProjectileSpell : Spell
 
     private void OnTriggerEnter(Collider col)
     {
-        if(variant == SpellShape.chain && col.gameObject.CompareTag("Wall"))
-        {
-            Destroy(gameObject, 0.1f);
-        }
         if (!targets.Contains(col))
         {
             targets.Add(col);
         }
-        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell")) {
-            if (hit)
+        if (variant == SpellShape.chain && col.gameObject.CompareTag("Wall"))
+        {
+            Destroy(gameObject, 0.1f);
+        }
+        if (hit)
+        {
+            int i = 0;
+            foreach (Collider collider in targets)
             {
-                foreach (Collider collider in targets)
+                if (targets[i] == null)
                 {
-                    if (collider.gameObject.TryGetComponent(out EnemyManager enemy))
-                    {
-                        enemy.Hit(power, element);
-                    }
-                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
-                    {
-                        summon.ReducePower(power, element);
-                    }
+                    targets.RemoveAt(i);
                 }
-                StartCoroutine("BeamDamageCooldown");
+                i++;
+            }
+            if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
+            {
                 if (variant == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
+                }
+                if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+                {
+                    enemy.Hit(power, element);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(power, element);
                 }
                 else if (variant == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
-            }
-        } 
-        else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
-        {
-            if (hit)
-            {
-                foreach (Collider collider in targets)
-                {
-                    if (collider.gameObject.TryGetComponent(out PlayerManager player))
-                    {
-                        player.Hit(power, element);
-                    }
-                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
-                    {
-                        summon.ReducePower(power, element);
-                    }
-                }
                 StartCoroutine("BeamDamageCooldown");
+            }
+            else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
+            {
                 if (variant == SpellShape.chain && instances > 0)
                 {
                     StartCoroutine("Bounces", col.gameObject);
+                }
+                if (col.gameObject.TryGetComponent(out PlayerManager player))
+                {
+                    player.Hit(power, element);
+                }
+                if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+                {
+                    summon.ReducePower(power, element);
                 }
                 else if (variant == SpellShape.chain && instances <= 0)
                 {
                     Destroy(gameObject, 0.1f);
                 }
+                StartCoroutine("BeamDamageCooldown");
             }
-        }
-        else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
-        {
-            if (hit)
+            else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
             {
-                foreach (Collider collider in targets)
+                if (variant == SpellShape.chain && instances > 0)
                 {
-                    if (collider.gameObject.TryGetComponent(out ShieldSpell shield))
-                    {
-                        collider.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
-                    }
-                    StartCoroutine("BeamDamageCooldown");
+                    StartCoroutine("Bounces", col.gameObject);
                 }
-            }
-        }
-        else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
-        {
-            if (hit)
-            {
-                foreach (Collider collider in targets)
+                if (col.gameObject.TryGetComponent(out ShieldSpell shield))
                 {
-                    if (collider.gameObject.TryGetComponent(out ProjectileSpell projectile))
-                    {
-                        projectile.ReducePower(power, element);
-                    }
+                    col.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
+                }
+                StartCoroutine("BeamDamageCooldown");
+            }
+            else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
+            {
+                if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
+                {
+                    projectile.ReducePower(power, element);
                 }
                 StartCoroutine("BeamDamageCooldown");
             }
@@ -221,12 +252,27 @@ public class ProjectileSpell : Spell
 
     private void OnTriggerStay(Collider col)
     {
-        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
+        if (hit)
         {
-            if (hit)
+            int i = 0;
+            foreach (Collider collider in targets)
             {
-                foreach (Collider collider in targets)
+                if (targets[i] == null)
                 {
+                    targets.RemoveAt(i);
+                }
+                i++;
+
+                if ((collider.gameObject.CompareTag("Enemy") || collider.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
+                {
+                    if (variant == SpellShape.chain && instances > 0)
+                    {
+                        StartCoroutine("Bounces", col.gameObject);
+                    }
+                    else if (variant == SpellShape.chain && instances <= 0)
+                    {
+                        Destroy(gameObject, 0.1f);
+                    }
                     if (collider.gameObject.TryGetComponent(out EnemyManager enemy))
                     {
                         enemy.Hit(power, element);
@@ -235,25 +281,18 @@ public class ProjectileSpell : Spell
                     {
                         summon.ReducePower(power, element);
                     }
+                    StartCoroutine("BeamDamageCooldown");
                 }
-                StartCoroutine("BeamDamageCooldown");
-                if (variant == SpellShape.chain && instances > 0)
+                else if (((collider.gameObject.CompareTag("Player") || collider.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
                 {
-                    StartCoroutine("Bounces", col.gameObject);
-                }
-                else if (variant == SpellShape.chain && instances <= 0)
-                {
-                    Destroy(gameObject, 0.1f);
-                }
-            }
-            
-        }
-        else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
-        {
-            if (hit)
-            {
-                foreach (Collider collider in targets)
-                {
+                    if (variant == SpellShape.chain && instances > 0)
+                    {
+                        StartCoroutine("Bounces", col.gameObject);
+                    }
+                    else if (variant == SpellShape.chain && instances <= 0)
+                    {
+                        Destroy(gameObject, 0.1f);
+                    }
                     if (collider.gameObject.TryGetComponent(out PlayerManager player))
                     {
                         player.Hit(power, element);
@@ -262,41 +301,21 @@ public class ProjectileSpell : Spell
                     {
                         summon.ReducePower(power, element);
                     }
+                    StartCoroutine("BeamDamageCooldown");
                 }
-                StartCoroutine("BeamDamageCooldown");
-                if (variant == SpellShape.chain && instances > 0)
-                {
-                    StartCoroutine("Bounces", col.gameObject);
-                }
-                else if (variant == SpellShape.chain && instances <= 0)
-                {
-                    Destroy(gameObject, 0.1f);
-                }
-            }
-        }
-        else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
-        {
-            if (hit)
-            {
-                foreach (Collider collider in targets)
+                else if ((collider.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (collider.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
                 {
                     collider.gameObject.GetComponent<ShieldSpell>().ReducePower(power, element);
+                    StartCoroutine("BeamDamageCooldown");
                 }
-                StartCoroutine("BeamDamageCooldown");
-            }
-        }
-        else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
-        {
-            if (hit)
-            {
-                foreach (Collider collider in targets)
+                else if ((collider.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (collider.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
                 {
                     if (collider.gameObject.TryGetComponent(out ProjectileSpell projectile))
                     {
                         projectile.ReducePower(power, element);
                     }
+                    StartCoroutine("BeamDamageCooldown");
                 }
-                StartCoroutine("BeamDamageCooldown");
             }
         }
     }
@@ -349,35 +368,50 @@ public class ProjectileSpell : Spell
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, distance);
     }
 
-    private IEnumerator Bounces(GameObject target)
+    private IEnumerator Bounces(GameObject newTarget)
     {
+        GameObject target = newTarget;
         yield return new WaitForSeconds(0.1f);
-        Collider[] hitColliders = Physics.OverlapSphere(target.transform.position, size*2f);
-        Transform closestTarget = target.transform;
-        int i = 0;
-        while (i < hitColliders.Length)
+        if (target == null)
         {
-            if (hitColliders[i].gameObject != target)
+            Destroy(gameObject);
+        }
+        else
+        {
+            Collider[] hitColliders = Physics.OverlapSphere(target.transform.position, size * 2f);
+            Transform closestTarget = target.transform;
+            int i = 0;
+            while (i < hitColliders.Length)
             {
-                if ((hitColliders[i].CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) || (hitColliders[i].CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")))
+                if (hitColliders[i].gameObject != target && hitColliders[i] != null)
                 {
-                    if (closestTarget == target.transform || Vector3.Distance(target.transform.position, hitColliders[i].transform.position) < Vector3.Distance(target.transform.position, closestTarget.position))
+                    if ((hitColliders[i].CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) || (hitColliders[i].CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")))
                     {
-                        RaycastHit hit;
-                        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit, size * 2f, chainables, QueryTriggerInteraction.Ignore))
+                        if (closestTarget == target.transform || Vector3.Distance(target.transform.position, hitColliders[i].transform.position) < Vector3.Distance(target.transform.position, closestTarget.position))
                         {
-                            if ((hit.transform.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) || (hitColliders[i].CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")))
+                            RaycastHit hit;
+                            if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit, size * 2f, chainables, QueryTriggerInteraction.Ignore))
                             {
-                                closestTarget = hitColliders[i].transform;
+                                if ((hit.transform.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell")) || (hitColliders[i].CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")))
+                                {
+                                    closestTarget = hitColliders[i].transform;
+                                }
                             }
                         }
                     }
                 }
+                i++;
             }
-            i++;
+            hit = true;
+            if (closestTarget != target.transform)
+            {
+                CastChain(target.transform, closestTarget.position);
+            }
+            else
+            {
+                Destroy(gameObject, 0.1f);
+            }
         }
-        hit = true;
-        CastChain(target.transform, closestTarget.position);
     }
 
     private IEnumerator BeamDamageCooldown()

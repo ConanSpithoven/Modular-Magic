@@ -63,7 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellType: 3
   cooldownTime: 6
-  onCooldown: 1
+  onCooldown: 0
   shape: 2
   originShape: 0
   power: 1

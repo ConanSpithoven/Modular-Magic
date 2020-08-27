@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellType: 0
   cooldownTime: 1
-  onCooldown: 1
+  onCooldown: 0
   shape: 0
   originShape: 0
   power: 1
@@ -62,6 +62,7 @@ MonoBehaviour:
   upgradeLimit: 5
   model: {fileID: 2675785919613463042}
   animator: {fileID: 0}
+  icon: {fileID: 0}
   obstacles:
     serializedVersion: 2
     m_Bits: 49152

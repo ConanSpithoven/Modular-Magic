@@ -7,12 +7,20 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public delegate void OnScalingIncrease(int timeScaling);
+    public OnScalingIncrease onScalingIncrease;
+
     private int score = 0;
     private int timer = 0;
     private int timerS = 0;
     private int timerM = 0;
     private int timerH = 0;
     private int lives = 3;
+    [SerializeField] private float xMax;
+    [SerializeField] private float zMax;
+    [SerializeField] private float xMin;
+    [SerializeField] private float zMin;
+    [SerializeField] private int scalingTimer;
     [SerializeField] private Transform LifeList;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI timerSText;
@@ -28,6 +36,7 @@ public class GameManager : MonoBehaviour
     private SpellInventory spellInventory;
     private List<GameObject> livesList = new List<GameObject>();
     private GameObject livesText;
+    private int timeScaling = 0;
 
 
     #region Singleton
@@ -36,6 +45,10 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (PlayerPrefs.GetInt("HighScore", 0) != 0)
+        {
+            PlayerPrefs.SetInt("HighScore", 0);
+        }
         if (instance != null)
         {
             Debug.LogWarning("More than one instance of GameManager found!");
@@ -53,6 +66,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (player != null)
+        {
+            Camera.main.transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, xMin, xMax), Camera.main.transform.position.y, Mathf.Clamp(player.transform.position.z, zMin, zMax));
+        }
         scoreText.text = score + " points";
         if (timerS >= 60)
         {
@@ -106,6 +123,11 @@ public class GameManager : MonoBehaviour
         timer++;
         timerS++;
         score++;
+        if (timer % scalingTimer == 0 && timer > 0)
+        {
+            timeScaling++;
+            onScalingIncrease.Invoke(timeScaling);
+        }
         StartCoroutine("Timer");
     }
 
@@ -205,13 +227,10 @@ public class GameManager : MonoBehaviour
                 livesList.Remove(livesText);
                 Destroy(livesText);
             }
-            else
-            {
-                Destroy(livesList[lives-1]);
-                livesList.RemoveAt(lives-1);
-            }
             if (lives > 0)
             {
+                Destroy(livesList[lives - 1]);
+                livesList.RemoveAt(lives - 1);
                 Respawn();
             }
             else 
@@ -226,6 +245,7 @@ public class GameManager : MonoBehaviour
         GameObject playerPrefab = Resources.Load<GameObject>("PlayerTest");
         player = Instantiate(playerPrefab, startPos.position, startPos.rotation, null);
         spellInventory = player.GetComponent<SpellInventory>();
+        playerHealthBar.SetFull();
     }
 
     public void Respawn()
@@ -243,10 +263,7 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        if(PlayerPrefs.GetInt("Highscore") < score)
-        {
-            PlayerPrefs.SetInt("Highscore", score);
-        }
+        PlayerPrefs.SetInt("Score", score);
         SceneManager.LoadScene("GameOver");
     }
 

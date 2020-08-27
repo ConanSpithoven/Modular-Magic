@@ -136,12 +136,22 @@ public class MeleeSpell : Spell
 
     private void OnCollisionEnter(Collision col)
     {
+        int i = 0;
+        foreach (GameObject collider in targets)
+        {
+            if (targets[i] == null)
+            {
+                targets.RemoveAt(i);
+            }
+            i++;
+        }
         if (col.gameObject.CompareTag("Wall"))
             Destroy(gameObject);
         if (variant == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
             Destroy(gameObject);
         if (!targets.Contains(col.gameObject))
         {
+            targets.Add(col.gameObject);
             if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
             {
                 if (col.gameObject.TryGetComponent(out EnemyManager enemy))
@@ -175,10 +185,6 @@ public class MeleeSpell : Spell
                     projectile.ReducePower(power, element);
                 }
             }
-        }
-        if (!targets.Contains(col.gameObject))
-        {
-            targets.Add(col.gameObject);
         }
     }
 }

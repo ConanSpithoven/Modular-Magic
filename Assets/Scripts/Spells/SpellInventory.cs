@@ -7,6 +7,7 @@ public class SpellInventory : MonoBehaviour
 {
     private enum Caster { Player, Enemy, Summon };
 
+    private PlayerStats player;
     [SerializeField] private Caster casterType = default;
     [SerializeField] private Spell slotOne = null;
     [SerializeField] private Spell slotTwo = null;
@@ -64,6 +65,10 @@ public class SpellInventory : MonoBehaviour
             cooldown2.SetValue(0,1);
             cooldown3.SetValue(0,1);
         }
+        if (gameObject.TryGetComponent(out PlayerStats playerobj))
+        {
+            player = playerobj;
+        }
     }
 
     private void Update()
@@ -112,14 +117,17 @@ public class SpellInventory : MonoBehaviour
 
                 if ((Input.GetKey(KeyCode.Alpha1) || Input.GetMouseButton(0)) && slotOne != null && !slotOne.onCooldown)
                 {
+                    CalcCooldownTime(1);
                     spellManager.ActivateSpell(slotOne, 1);
                 }
                 if ((Input.GetKey(KeyCode.Alpha2) || Input.GetMouseButton(1)) && slotTwo != null && !slotTwo.onCooldown)
                 {
+                    CalcCooldownTime(2);
                     spellManager.ActivateSpell(slotTwo, 2);
                 }
                 if ((Input.GetKey(KeyCode.Alpha3) || Input.GetMouseButton(2)) && slotThree != null && !slotThree.onCooldown)
                 {
+                    CalcCooldownTime(3);
                     spellManager.ActivateSpell(slotThree, 3);
                 }
                 break;
@@ -384,7 +392,15 @@ public class SpellInventory : MonoBehaviour
     public void CalcCooldownTime(int formulaNumber)
     {
         Spell spell = GetSpell(formulaNumber);
-        float totalCooldownTime = spell.GetBaseCooldownTime() + ((((spell.power * 0.2f - 0.2f) * spell.GetBaseCooldownTime()) + ((spell.size * 0.1f - 0.1f) * spell.GetBaseCooldownTime()) - ((spell.speed * 0.1f - 0.1f) * spell.GetBaseCooldownTime())) * (spell.instances * 0.3f + 0.7f))/* * 1 - spell.cdr*/;
+        float totalCooldownTime;
+        if (casterType == Caster.Player)
+        {
+            totalCooldownTime = (spell.GetBaseCooldownTime() + (((spell.power * 0.2f - 0.2f) * spell.GetBaseCooldownTime()) + ((spell.size * 0.1f - 0.1f) * spell.GetBaseCooldownTime()) - ((spell.speed * 0.1f - 0.1f) * spell.GetBaseCooldownTime())) * (spell.instances * 0.3f + 0.7f)) * (1 - player.cooldownReduction.GetValue());
+        }
+        else 
+        {
+            totalCooldownTime = spell.GetBaseCooldownTime() + ((((spell.power * 0.2f - 0.2f) * spell.GetBaseCooldownTime()) + ((spell.size * 0.1f - 0.1f) * spell.GetBaseCooldownTime()) - ((spell.speed * 0.1f - 0.1f) * spell.GetBaseCooldownTime())) * (spell.instances * 0.3f + 0.7f));
+        }
         spell.SetCooldown(totalCooldownTime);
     }
 

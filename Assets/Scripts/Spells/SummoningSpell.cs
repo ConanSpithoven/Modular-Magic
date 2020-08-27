@@ -154,7 +154,7 @@ public class SummoningSpell : Spell
                 hp = power * 2f;
                 transform.SetParent(null, true);
                 FirePos = GetModel().transform.Find("Firepos").transform;
-                Destroy(gameObject, lifetime*5f);
+                Destroy(gameObject, (lifetime*5f));
                 break;
             case SpellShape.melee:
                 agent = GetComponent<NavMeshAgent>();
@@ -162,7 +162,7 @@ public class SummoningSpell : Spell
                 attackRate = (1f / (speed / 3f));
                 hp = power * 5f;
                 transform.SetParent(null, true);
-                Destroy(gameObject, lifetime * 5f);
+                Destroy(gameObject, (lifetime * 5f));
                 break;
         }
         if (!spellInventory.GetCooldownStatus(spellSlot))
