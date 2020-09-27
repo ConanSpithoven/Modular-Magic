@@ -26,9 +26,6 @@ public class EnemyManager : MonoBehaviour
         agent.speed = stats.movementspeed.GetValue();
         attackRate = (1f / stats.attackSpeed.GetValue());
         animator = GetComponent<Animator>();
-        //test version only
-        target = GameManager.instance.GetPlayer().transform;
-        targetFound = true;
     }
 
     private void Update()

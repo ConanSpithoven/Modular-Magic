@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
     {
         if (player != null)
         {
-            Camera.main.transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, xMin, xMax), Camera.main.transform.position.y, Mathf.Clamp(player.transform.position.z, zMin, zMax));
+            Camera.main.transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, xMin, xMax), Camera.main.transform.position.y, Mathf.Clamp(player.transform.position.z-4, zMin, zMax));
         }
         scoreText.text = score + " points";
         if (timerS >= 60)
@@ -284,5 +284,13 @@ public class GameManager : MonoBehaviour
             case 3:
                 return cooldown3;
         }
+    }
+
+    public void SetCameraBounds(float xmin, float xmax, float zmin, float zmax)
+    {
+        xMin = xmin;
+        xMax = xmax;
+        zMin = zmin;
+        zMax = zmax;
     }
 }
