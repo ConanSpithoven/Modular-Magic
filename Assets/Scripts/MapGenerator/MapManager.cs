@@ -17,6 +17,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int lootRoomLimit = 1;
 
     private bool bossSpawned = false;
+    [SerializeField] private List<GameObject> normalRoomsNumbers;
+    private int lootRoomsSpawned;
 
     #region# Singelton
     public static MapManager instance;
@@ -76,7 +78,7 @@ public class MapManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         if (oldRoomCount == rooms.Count && !bossSpawned)
         {
-            int lootRoomsSpawned = 0;
+            lootRoomsSpawned = 0;
             int bossRoom = rooms.Count - 1;
             bossSpawned = true;
             Instantiate(boss, rooms[bossRoom].transform.position, Quaternion.identity, rooms[bossRoom].transform);
@@ -85,7 +87,7 @@ public class MapManager : MonoBehaviour
                 int rand = Random.Range(0, 20);
                 if (rand >= 0 && rand <= 19)
                 {
-                    Instantiate(normalRooms[Random.Range(0, (normalRooms.Length-1))], rooms[i].transform.position, Quaternion.identity, rooms[i].transform);
+                    normalRoomsNumbers.Add(rooms[i]);
                 }
                 else if (lootRoomsSpawned < lootRoomLimit)
                 {
@@ -93,6 +95,7 @@ public class MapManager : MonoBehaviour
                     Instantiate(lootRoom, rooms[i].transform.position, Quaternion.identity, rooms[i].transform);
                 }
             }
+            SpawnLootRooms();
             CalcMapBounds();
         }
     }
@@ -130,5 +133,31 @@ public class MapManager : MonoBehaviour
         zMin -= 12;
 
         GameManager.instance.SetCameraBounds(xMin, xMax, zMin, zMax);
+    }
+
+    private void SpawnLootRooms()
+    {
+        if (lootRoomsSpawned < lootRoomLimit)
+        {
+            int rand = Random.Range(0, normalRoomsNumbers.Count);
+            int number = rooms.IndexOf(normalRoomsNumbers[rand]);
+            Instantiate(lootRoom, rooms[number].transform.position, Quaternion.identity, rooms[number].transform);
+            lootRoomsSpawned++;
+            normalRoomsNumbers.Remove(normalRoomsNumbers[rand]);
+            SpawnLootRooms();
+        }
+        else 
+        {
+            SpawnNormalRooms();
+        }
+    }
+
+    private void SpawnNormalRooms()
+    {
+        foreach (GameObject room in normalRoomsNumbers)
+        {
+            int number = rooms.IndexOf(room);
+            Instantiate(normalRooms[Random.Range(0, (normalRooms.Length - 1))], rooms[number].transform.position, Quaternion.identity, rooms[number].transform);
+        }
     }
 }
