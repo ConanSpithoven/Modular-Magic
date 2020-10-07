@@ -32,11 +32,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject cooldown1;
     [SerializeField] private GameObject cooldown2;
     [SerializeField] private GameObject cooldown3;
+    [SerializeField] private GameObject pauseMenu;
     private GameObject player;
     private SpellInventory spellInventory;
     private List<GameObject> livesList = new List<GameObject>();
     private GameObject livesText;
     private int timeScaling = 0;
+    private bool paused = false;
 
 
     #region Singleton
@@ -82,6 +84,10 @@ public class GameManager : MonoBehaviour
             timerH++;
         }
         UpdateTimer();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
+        }
     }
 
     #endregion
@@ -292,5 +298,23 @@ public class GameManager : MonoBehaviour
         xMax = xmax;
         zMin = zmin;
         zMax = zmax;
+    }
+
+    private void TogglePause()
+    {
+        if (Time.timeScale == 0f)
+        {
+            Time.timeScale = 1f;
+            paused = false;
+            StartCoroutine("Timer");
+            pauseMenu.SetActive(false);
+        }
+        else
+        {
+            Time.timeScale = 0f;
+            paused = true;
+            StopCoroutine("Timer");
+            pauseMenu.SetActive(true);
+        }
     }
 }
