@@ -503,6 +503,7 @@ MonoBehaviour:
     type: 3}
   boss: {fileID: 5404298516587364146, guid: 9afd5df9822b5b74e8db0af2b58364fb, type: 3}
   lootRoomLimit: 1
+  normalRoomsNumbers: []
 --- !u!114 &1943163878 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6638982287451037008, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,

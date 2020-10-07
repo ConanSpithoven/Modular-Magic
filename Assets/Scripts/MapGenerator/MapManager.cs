@@ -144,6 +144,7 @@ public class MapManager : MonoBehaviour
             Instantiate(lootRoom, rooms[number].transform.position, Quaternion.identity, rooms[number].transform);
             lootRoomsSpawned++;
             normalRoomsNumbers.Remove(normalRoomsNumbers[rand]);
+            Destroy(rooms[number].GetComponentInChildren<RoomCloser>().gameObject);
             SpawnLootRooms();
         }
         else 
