@@ -26,6 +26,7 @@ public class SpellInventory : MonoBehaviour
     private float cooldowntime1;
     private float cooldowntime2;
     private float cooldowntime3;
+    private GameManager gameManager;
 
     private void Awake()
     {
@@ -54,7 +55,7 @@ public class SpellInventory : MonoBehaviour
         {
             EquipmentManager.instance.onEquipmentChanged += onEquipmentChange;
             PatternManager.instance.onPatternChanged += OnPatternChange;
-            GameManager gameManager = GameManager.instance;
+            gameManager = GameManager.instance;
             cooldown1 = gameManager.GetCooldownObj(1).GetComponent<Barhandler>();
             cooldown2 = gameManager.GetCooldownObj(2).GetComponent<Barhandler>();
             cooldown3 = gameManager.GetCooldownObj(3).GetComponent<Barhandler>();
@@ -73,81 +74,84 @@ public class SpellInventory : MonoBehaviour
 
     private void Update()
     {
-        switch (casterType)
+        if (!gameManager.GetPauseStatus())
         {
-            case Caster.Player:
-                if (slotOne.onCooldown)
-                {
-                    if (cooldowntime1 <= 0)
+            switch (casterType)
+            {
+                case Caster.Player:
+                    if (slotOne.onCooldown)
                     {
-                        slotOne.onCooldown = false;
+                        if (cooldowntime1 <= 0)
+                        {
+                            slotOne.onCooldown = false;
+                        }
+                        else
+                        {
+                            cooldowntime1 -= Time.deltaTime;
+                            cooldown1.SetValue(cooldowntime1, slotOne.cooldownTime);
+                        }
                     }
-                    else
+                    if (slotTwo.onCooldown)
                     {
-                        cooldowntime1 -= Time.deltaTime;
-                        cooldown1.SetValue(cooldowntime1, slotOne.cooldownTime);
+                        if (cooldowntime2 <= 0)
+                        {
+                            slotTwo.onCooldown = false;
+                        }
+                        else
+                        {
+                            cooldowntime2 -= Time.deltaTime;
+                            cooldown2.SetValue(cooldowntime2, slotTwo.cooldownTime);
+                        }
                     }
-                }
-                if (slotTwo.onCooldown)
-                {
-                    if (cooldowntime2 <= 0)
+                    if (slotThree.onCooldown)
                     {
-                        slotTwo.onCooldown = false;
+                        if (cooldowntime3 <= 0)
+                        {
+                            slotThree.onCooldown = false;
+                        }
+                        else
+                        {
+                            cooldowntime3 -= Time.deltaTime;
+                            cooldown3.SetValue(cooldowntime3, slotThree.cooldownTime);
+                        }
                     }
-                    else
-                    {
-                        cooldowntime2 -= Time.deltaTime;
-                        cooldown2.SetValue(cooldowntime2, slotTwo.cooldownTime);
-                    }
-                }
-                if (slotThree.onCooldown)
-                {
-                    if (cooldowntime3 <= 0)
-                    {
-                        slotThree.onCooldown = false;
-                    }
-                    else
-                    {
-                        cooldowntime3 -= Time.deltaTime;
-                        cooldown3.SetValue(cooldowntime3, slotThree.cooldownTime);
-                    }
-                }
 
-                if (EventSystem.current.IsPointerOverGameObject()) return;
+                    if (EventSystem.current.IsPointerOverGameObject()) return;
 
-                if ((Input.GetKey(KeyCode.Alpha1) || Input.GetMouseButton(0)) && slotOne != null && !slotOne.onCooldown)
-                {
-                    CalcCooldownTime(1);
-                    spellManager.ActivateSpell(slotOne, 1);
-                }
-                if ((Input.GetKey(KeyCode.Alpha2) || Input.GetMouseButton(1)) && slotTwo != null && !slotTwo.onCooldown)
-                {
-                    CalcCooldownTime(2);
-                    spellManager.ActivateSpell(slotTwo, 2);
-                }
-                if ((Input.GetKey(KeyCode.Alpha3) || Input.GetMouseButton(2)) && slotThree != null && !slotThree.onCooldown)
-                {
-                    CalcCooldownTime(3);
-                    spellManager.ActivateSpell(slotThree, 3);
-                }
-                break;
-            case Caster.Summon:
-                if (targetFound && slotOne != null && !slotOne.onCooldown && attack == 1)
-                {
-                    spellManager.ActivateSpell(slotOne, 1);
-                    attack = 0;
-                }
-                if (targetFound && slotTwo != null && !slotTwo.onCooldown && attack == 2)
-                {
-                    spellManager.ActivateSpell(slotTwo, 2);
-                    attack = 0;
-                }
-                if (targetFound && slotThree != null && !slotThree.onCooldown && attack == 3)
-                {
-                    spellManager.ActivateSpell(slotThree, 3);
-                    attack = 0;
-                }
-                break;
+                    if ((Input.GetKey(KeyCode.Alpha1) || Input.GetMouseButton(0)) && slotOne != null && !slotOne.onCooldown)
+                    {
+                        CalcCooldownTime(1);
+                        spellManager.ActivateSpell(slotOne, 1);
+                    }
+                    if ((Input.GetKey(KeyCode.Alpha2) || Input.GetMouseButton(1)) && slotTwo != null && !slotTwo.onCooldown)
+                    {
+                        CalcCooldownTime(2);
+                        spellManager.ActivateSpell(slotTwo, 2);
+                    }
+                    if ((Input.GetKey(KeyCode.Alpha3) || Input.GetMouseButton(2)) && slotThree != null && !slotThree.onCooldown)
+                    {
+                        CalcCooldownTime(3);
+                        spellManager.ActivateSpell(slotThree, 3);
+                    }
+                    break;
+                case Caster.Summon:
+                    if (targetFound && slotOne != null && !slotOne.onCooldown && attack == 1)
+                    {
+                        spellManager.ActivateSpell(slotOne, 1);
+                        attack = 0;
+                    }
+                    if (targetFound && slotTwo != null && !slotTwo.onCooldown && attack == 2)
+                    {
+                        spellManager.ActivateSpell(slotTwo, 2);
+                        attack = 0;
+                    }
+                    if (targetFound && slotThree != null && !slotThree.onCooldown && attack == 3)
+                    {
+                        spellManager.ActivateSpell(slotThree, 3);
+                        attack = 0;
+                    }
+                    break;
+            }
         }
     }
 

@@ -306,7 +306,7 @@ public class GameManager : MonoBehaviour
         zMax = zmax;
     }
 
-    private void TogglePause()
+    public void TogglePause()
     {
         if (Time.timeScale == 0f)
         {
