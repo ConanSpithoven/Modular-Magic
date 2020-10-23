@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject cooldown2;
     [SerializeField] private GameObject cooldown3;
     [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private EquipmentUI equipmentUI;
+    [SerializeField] private InventoryUI inventoryUI;
+    [SerializeField] private PatternUI patternUI;
     private GameObject player;
     private SpellInventory spellInventory;
     private List<GameObject> livesList = new List<GameObject>();
@@ -86,7 +89,10 @@ public class GameManager : MonoBehaviour
         UpdateTimer();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            if (!CheckUIStatus())
+            {
+                TogglePause();
+            }
         }
     }
 
@@ -132,7 +138,7 @@ public class GameManager : MonoBehaviour
         if (timer % scalingTimer == 0 && timer > 0)
         {
             timeScaling++;
-            onScalingIncrease.Invoke(timeScaling);
+            //onScalingIncrease.Invoke(timeScaling);
         }
         StartCoroutine("Timer");
     }
@@ -316,5 +322,35 @@ public class GameManager : MonoBehaviour
             StopCoroutine("Timer");
             pauseMenu.SetActive(true);
         }
+    }
+
+    public bool GetPauseStatus()
+    {
+        return paused;
+    }
+
+    private bool CheckUIStatus()
+    {
+        int activeUIs = 0;
+        if (equipmentUI.GetUIActive())
+        {
+            equipmentUI.CloseUI();
+            activeUIs++;
+        }
+        if (inventoryUI.GetUIActive())
+        {
+            inventoryUI.CloseUI();
+            activeUIs++;
+        }
+        if (patternUI.GetUIActive())
+        {
+            patternUI.CloseUI();
+            activeUIs++;
+        }
+        if (activeUIs > 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

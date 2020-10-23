@@ -5,6 +5,7 @@ public class InventoryUI : MonoBehaviour
     public Transform itemsParent;
     public GameObject inventoryUI;
     Inventory inventory;
+    private bool UIActive = false;
 
     InventorySlot[] slots;
 
@@ -22,7 +23,11 @@ public class InventoryUI : MonoBehaviour
     {
         if (Input.GetButtonDown("Inventory"))
         {
-            inventoryUI.SetActive(!inventoryUI.activeSelf);
+            if (!GameManager.instance.GetPauseStatus())
+            {
+                inventoryUI.SetActive(!inventoryUI.activeSelf);
+                UIActive = inventoryUI.activeSelf;
+            }
         }
     }
 
@@ -39,5 +44,16 @@ public class InventoryUI : MonoBehaviour
                 slots[i].ClearSlot();
             }
         }
+    }
+
+    public bool GetUIActive()
+    {
+        return UIActive;
+    }
+
+    public void CloseUI()
+    {
+        inventoryUI.SetActive(false);
+        UIActive = false;
     }
 }

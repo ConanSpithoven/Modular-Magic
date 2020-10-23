@@ -352,6 +352,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 68.74, y: -30, z: 0}
+--- !u!114 &1410577706 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6638982286998193842, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6638982287733247670}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de1d191871d62514488737adfb5c3ea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1410577707 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6638982286998193845, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6638982287733247670}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2361cd7bdc5cb4c45a4d01ad7d67ad2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1410577708 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6638982286998193844, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 6638982287733247670}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b599c8e9b5f06264caa9c0ded5b27df3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1472814068 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6638982286982911298, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,
@@ -652,6 +688,9 @@ MonoBehaviour:
   cooldown2: {fileID: 1671291742}
   cooldown3: {fileID: 255861880}
   pauseMenu: {fileID: 647876984}
+  equipmentUI: {fileID: 1410577707}
+  inventoryUI: {fileID: 1410577708}
+  patternUI: {fileID: 1410577706}
 --- !u!114 &1916557931
 MonoBehaviour:
   m_ObjectHideFlags: 0

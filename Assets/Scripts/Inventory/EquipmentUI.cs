@@ -5,6 +5,7 @@ public class EquipmentUI : MonoBehaviour
     public Transform equipsParent;
     public GameObject equipmentUI;
     EquipmentManager equipmentManager;
+    private bool UIActive = false;
 
     EquipmentSlot[] slots;
 
@@ -22,7 +23,11 @@ public class EquipmentUI : MonoBehaviour
     {
         if (Input.GetButtonDown("Equipment"))
         {
-            equipmentUI.SetActive(!equipmentUI.activeSelf);
+            if (!GameManager.instance.GetPauseStatus())
+            {
+                equipmentUI.SetActive(!equipmentUI.activeSelf);
+                UIActive = equipmentUI.activeSelf;
+            }
         }
     }
 
@@ -36,5 +41,16 @@ public class EquipmentUI : MonoBehaviour
         {
             slots[(int)newItem.equipType].AddItem(newItem);
         }
+    }
+
+    public bool GetUIActive()
+    {
+        return UIActive;
+    }
+
+    public void CloseUI()
+    {
+        equipmentUI.SetActive(false);
+        UIActive = false;
     }
 }
