@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3587237652564575511}
   - component: {fileID: 3587237652564575510}
-  - component: {fileID: 3587237652564575513}
+  - component: {fileID: 5382029076753709933}
   - component: {fileID: 3587237652564575512}
   - component: {fileID: 3587237652564575515}
   - component: {fileID: 3587237652564575514}
@@ -68,8 +68,8 @@ MonoBehaviour:
   attackSpeed:
     baseValue: 0.5
     currentValue: 0
-  enemyManager: {fileID: 3587237652564575513}
---- !u!114 &3587237652564575513
+  enemyManager: {fileID: 5382029076753709933}
+--- !u!114 &5382029076753709933
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,14 +78,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 3587237652564575517}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eff8541c57c6a2140b9f0a591127de7a, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e1a8a0df431a4948b0c745f73194513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  target: {fileID: 0}
+  targetFound: 0
+  attackCooldown: 0
+  attackRate: 0
+  targets: []
   stats: {fileID: 3587237652564575510}
   obstacles:
     serializedVersion: 2
     m_Bits: 164096
   type: 1
+  searchSize: 8
   projectilespell: {fileID: 2675785919471812800, guid: 750e884d8dde11643a7ee081d33c8f93,
     type: 3}
 --- !u!195 &3587237652564575512

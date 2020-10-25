@@ -7,19 +7,19 @@ using UnityEngine.AI;
 
 public class EnemyManager : MonoBehaviour
 {
+    public NavMeshAgent agent;
+    public Transform target;
+    public bool targetFound = false;
+    public bool attackCooldown = false;
+    public float attackRate;
+    public List<Collider> targets = new List<Collider>();
+
     [SerializeField] private EnemyStats stats;
     [SerializeField] private LayerMask obstacles;
     [SerializeField] private EnemyType type;
-    [SerializeField] private ProjectileSpell projectilespell = default;
-    private NavMeshAgent agent;
-    private Transform target;
-    private bool targetFound = false;
-    private bool attackCooldown = false;
-    private float attackRate;
+
     private Animator animator;
-    private List<Collider> targets = new List<Collider>();
-    private Spawner spawner;
-    private RoomCreator roomCreator;
+    
 
     private void Awake()
     {
@@ -29,85 +29,14 @@ public class EnemyManager : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        switch (type)
-        {
-            case EnemyType.Melee:
-                if (!targetFound)
-                {
-                    TargetFinder();
-                }
-                else
-                {
-                    if (target == null)
-                    {
-                        targetFound = false;
-                    }
-                    if (Vector3.Distance(transform.position, target.position) > 1.2f)
-                    {
-                        agent.destination = target.position;
-                    }
-                    else
-                    {
-                        //patrol
-                        agent.destination = transform.position;
-                        if (!attackCooldown)
-                        {
-                            Attack();
-                        }
-                    }
-                    Vector3 direction = target.position - transform.position;
-                    float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                    transform.rotation = Quaternion.Euler(0, rotation, 0);
-                    //check if player not too far away
-                }
-                break;
-            case EnemyType.Ranged:
-                if (!targetFound)
-                {
-                    TargetFinder();
-                }
-                else
-                {
-                    if (target == null)
-                    {
-                        targetFound = false;
-                    }
-                    agent.destination = target.position;
-
-                    Vector3 direction = target.position - transform.position;
-                    float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                    transform.rotation = Quaternion.Euler(0, rotation, 0);
-                    if (!attackCooldown)
-                    {
-                        RangedAttack();
-                        StartCoroutine("AttackCooldown");
-                    }
-                }
-                break;
-        }
-    }
-
-    public void Hit(float damageTaken, Element element)
+    public virtual void Hit(float damageTaken, Element element)
     {
         stats.TakeDamage(damageTaken, element);
         //aggro?
     }
 
-    private void TargetFinder()
+    public void TargetFinder(float searchSize)
     {
-        float searchSize;
-        switch (type)
-        {
-            default:
-            case EnemyType.Melee:
-                searchSize = 8f;
-                break;
-            case EnemyType.Ranged:
-                searchSize = 12f;
-                break;
-        }
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, searchSize);
         foreach (Collider col in hitColliders)
         {
@@ -126,30 +55,29 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void Attack()
+    public virtual void Attack()
     {
-        animator.SetTrigger("Attack");
-        StartCoroutine("AttackCooldown");
+        
     }
 
-    private void RangedAttack()
+    public void SetAnimator(string type, string name, bool status = false, float value = 0f)
     {
-        GameObject projectileObject = Instantiate(projectilespell.gameObject, (transform.position + transform.forward), transform.rotation);
-        ProjectileSpell projectile = projectileObject.GetComponent<ProjectileSpell>();
-        projectile.SetDamage(stats.power.GetValue());
-        projectile.Activate();
-        StartCoroutine("AttackCooldown");
+        switch (type)
+        {
+            default:
+            case "Trigger":
+                animator.SetTrigger(name);
+                break;
+            case "Bool":
+                animator.SetBool(name, status);
+                break;
+            case "Float":
+                animator.SetFloat(name, value);
+                break;
+        }
     }
 
-    private IEnumerator AttackCooldown()
-    {
-        attackCooldown = true;
-        yield return new WaitForSeconds(attackRate);
-        targets.Clear();
-        attackCooldown = false;
-    }
-
-    private void OnTriggerEnter(Collider col)
+    public virtual void OnTriggerEnter(Collider col)
     {
         if (!targets.Contains(col))
         {
@@ -180,16 +108,6 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void SetSpawner(Spawner spawner)
-    {
-        this.spawner = spawner;
-    }
-
-    public void SetRoomCreator(RoomCreator roomCreator)
-    {
-        this.roomCreator = roomCreator;
-    }
-
     public void SetScaling(int scaling)
     {
         stats.maxHealth.AddModifier((stats.maxHealth.GetValue() * (scaling * 0.1f)));
@@ -206,16 +124,14 @@ public class EnemyManager : MonoBehaviour
         stats.Setup();
     }
 
-    public void OnDeath()
+    public float GetDamage()
     {
-        if (spawner != null)
-        {
-            spawner.ReduceCount();
-        }
-        if (roomCreator != null)
-        {
-            roomCreator.ReduceCount();
-        }
+        return stats.power.GetValue();
+    }
+
+    public virtual void OnDeath()
+    {
+        
         Destroy(gameObject);
     }
 }

@@ -32,8 +32,8 @@ public class Spawner : MonoBehaviour
         if (spawnNumber < spawnLimit && scalingCounter >= RequiredScaling)
         {
             GameObject newEnemy = Instantiate(spawnedUnit, spawnPos.position, spawnPos.rotation);
-            newEnemy.GetComponent<EnemyManager>().SetSpawner(this);
-            newEnemy.GetComponent<EnemyManager>().SetScaling(scalingCounter);
+            //newEnemy.GetComponent<EnemyManager>().SetSpawner(this);
+            //newEnemy.GetComponent<EnemyManager>().SetScaling(scalingCounter);
             spawnNumber++;
         }
         StartCoroutine("Spawn");
