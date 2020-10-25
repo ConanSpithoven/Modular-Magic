@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 3587237652564575514}
   - component: {fileID: 3587237652564575508}
   m_Layer: 9
-  m_Name: Warrior
+  m_Name: Boss_Thief
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,7 +125,7 @@ Transform:
   m_GameObject: {fileID: 3587237652564575517}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.86, y: 1, z: 5.46}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 3587237652760876553}
   m_Father: {fileID: 0}
@@ -144,21 +144,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth:
-    baseValue: 7
-    currentValue: 7
-  currentHealth: 7
+    baseValue: 25
+    currentValue: 25
+  currentHealth: 25
   element: {fileID: 11400000, guid: 49c6323bc6d0b0744b15c511a22cbbc1, type: 2}
   baseElement: {fileID: 11400000, guid: 49c6323bc6d0b0744b15c511a22cbbc1, type: 2}
   power:
-    baseValue: 1
-    currentValue: 1
+    baseValue: 3
+    currentValue: 3
   armor:
     baseValue: 0
     currentValue: 0
   movementspeed:
-    baseValue: 3.5
+    baseValue: 4
     currentValue: 0
-  scoreValue: 100
+  scoreValue: 1000
   attackSpeed:
     baseValue: 1
     currentValue: 0

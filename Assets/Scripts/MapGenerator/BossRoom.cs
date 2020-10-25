@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomCreator : MonoBehaviour
+public class BossRoom : MonoBehaviour
 {
     [SerializeField] private List<Transform> spawnPoints;
-    [SerializeField] private List<Transform> enemyPoints;
+    [SerializeField] private Transform bossPoint;
     [SerializeField] private GameObject wall;
-    [SerializeField] private int enemyLimit;
+    [SerializeField] private string bossName;
 
     private RoomCloser roomCloser;
     private int enemyCount;
@@ -15,7 +15,7 @@ public class RoomCreator : MonoBehaviour
 
     private void Start()
     {
-        if(spawnPoints.Count > 0)
+        if (spawnPoints.Count > 0)
         {
             foreach (Transform spawnPoint in spawnPoints)
             {
@@ -30,27 +30,10 @@ public class RoomCreator : MonoBehaviour
                 }
             }
         }
-        if (enemyPoints.Count > 0 && enemyLimit > 0)
-        {
-            int rand = Random.Range(0, enemyLimit);
-            for (int i = 0; i <= rand; i++)
-            {
-                int enemytype = Random.Range(0, 10);
-                int point = Random.Range(0, enemyPoints.Count-1);
-                if (enemytype < 7)
-                {
-                    GameObject enemy = Instantiate(Resources.Load<GameObject>("Enemies/Warrior"), enemyPoints[point].position, Quaternion.identity);
-                    enemy.GetComponent<EnemyManager>().SetRoomCreator(this);
-                    enemyCount++;
-                }
-                else
-                {
-                    GameObject enemy = Instantiate(Resources.Load<GameObject>("Enemies/Mage"), enemyPoints[point].position, Quaternion.identity);
-                    enemy.GetComponent<EnemyManager>().SetRoomCreator(this);
-                    enemyCount++;
-                }
-            }
-        }
+        GameObject boss = Instantiate(Resources.Load<GameObject>("Enemies/" + bossName), bossPoint.position, Quaternion.identity);
+        //enemy.GetComponent<Boss_Thief_Manager>().SetRoom(this);
+        enemyCount++;
+
         roomCloser = transform.parent.GetComponentInChildren<RoomCloser>();
         instantiated = true;
     }
