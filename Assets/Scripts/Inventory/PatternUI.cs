@@ -26,6 +26,8 @@ public class PatternUI : MonoBehaviour
 
     [SerializeField] private GameObject patternSlot;
 
+    private bool UIActive = false;
+
     void Start()
     {
         patternManager = PatternManager.instance;
@@ -46,7 +48,11 @@ public class PatternUI : MonoBehaviour
     {
         if (Input.GetButtonDown("Patterns"))
         {
-            patternUI.SetActive(!patternUI.activeSelf);
+            if (!GameManager.instance.GetPauseStatus())
+            {
+                patternUI.SetActive(!patternUI.activeSelf);
+                UIActive = patternUI.activeSelf;
+            }
         }
     }
 
@@ -330,5 +336,16 @@ public class PatternUI : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public bool GetUIActive()
+    {
+        return UIActive;
+    }
+
+    public void CloseUI()
+    {
+        patternUI.SetActive(false);
+        UIActive = false;
     }
 }

@@ -32,11 +32,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject cooldown1;
     [SerializeField] private GameObject cooldown2;
     [SerializeField] private GameObject cooldown3;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private EquipmentUI equipmentUI;
+    [SerializeField] private InventoryUI inventoryUI;
+    [SerializeField] private PatternUI patternUI;
     private GameObject player;
     private SpellInventory spellInventory;
     private List<GameObject> livesList = new List<GameObject>();
     private GameObject livesText;
     private int timeScaling = 0;
+    private bool paused = false;
 
 
     #region Singleton
@@ -68,7 +73,7 @@ public class GameManager : MonoBehaviour
     {
         if (player != null)
         {
-            Camera.main.transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, xMin, xMax), Camera.main.transform.position.y, Mathf.Clamp(player.transform.position.z, zMin, zMax));
+            Camera.main.transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, xMin, xMax), Camera.main.transform.position.y, Mathf.Clamp(player.transform.position.z-4, zMin, zMax));
         }
         scoreText.text = score + " points";
         if (timerS >= 60)
@@ -82,6 +87,13 @@ public class GameManager : MonoBehaviour
             timerH++;
         }
         UpdateTimer();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!CheckUIStatus())
+            {
+                TogglePause();
+            }
+        }
     }
 
     #endregion
@@ -126,7 +138,7 @@ public class GameManager : MonoBehaviour
         if (timer % scalingTimer == 0 && timer > 0)
         {
             timeScaling++;
-            onScalingIncrease.Invoke(timeScaling);
+            //onScalingIncrease.Invoke(timeScaling);
         }
         StartCoroutine("Timer");
     }
@@ -284,5 +296,61 @@ public class GameManager : MonoBehaviour
             case 3:
                 return cooldown3;
         }
+    }
+
+    public void SetCameraBounds(float xmin, float xmax, float zmin, float zmax)
+    {
+        xMin = xmin;
+        xMax = xmax;
+        zMin = zmin;
+        zMax = zmax;
+    }
+
+    public void TogglePause()
+    {
+        if (Time.timeScale == 0f)
+        {
+            Time.timeScale = 1f;
+            paused = false;
+            StartCoroutine("Timer");
+            pauseMenu.SetActive(false);
+        }
+        else
+        {
+            Time.timeScale = 0f;
+            paused = true;
+            StopCoroutine("Timer");
+            pauseMenu.SetActive(true);
+        }
+    }
+
+    public bool GetPauseStatus()
+    {
+        return paused;
+    }
+
+    private bool CheckUIStatus()
+    {
+        int activeUIs = 0;
+        if (equipmentUI.GetUIActive())
+        {
+            equipmentUI.CloseUI();
+            activeUIs++;
+        }
+        if (inventoryUI.GetUIActive())
+        {
+            inventoryUI.CloseUI();
+            activeUIs++;
+        }
+        if (patternUI.GetUIActive())
+        {
+            patternUI.CloseUI();
+            activeUIs++;
+        }
+        if (activeUIs > 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

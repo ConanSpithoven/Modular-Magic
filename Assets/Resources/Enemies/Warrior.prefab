@@ -156,7 +156,7 @@ MonoBehaviour:
     baseValue: 0
     currentValue: 0
   movementspeed:
-    baseValue: 4
+    baseValue: 3.5
     currentValue: 0
   scoreValue: 100
   attackSpeed:

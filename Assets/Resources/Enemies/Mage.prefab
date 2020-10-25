@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth:
     baseValue: 5
-    currentValue: 0
+    currentValue: 5
   currentHealth: 5
   element: {fileID: 11400000, guid: 49c6323bc6d0b0744b15c511a22cbbc1, type: 2}
   baseElement: {fileID: 11400000, guid: 49c6323bc6d0b0744b15c511a22cbbc1, type: 2}

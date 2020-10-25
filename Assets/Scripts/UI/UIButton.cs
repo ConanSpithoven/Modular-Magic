@@ -9,5 +9,10 @@ public class UIButton : MonoBehaviour
     {
         SceneManager.LoadScene(target);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
 

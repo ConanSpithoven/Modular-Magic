@@ -16,6 +16,7 @@ TagManager:
   - Enemy_Summon_Spell
   - Item
   - Enemy_Weapon
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
@@ -38,7 +39,7 @@ TagManager:
   - Enemy_Summon_Spell
   - Item
   - Enemy_Weapon
-  - 
+  - SpawnPoint
   - 
   - 
   - 

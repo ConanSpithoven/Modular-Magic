@@ -19,6 +19,7 @@ public class EnemyManager : MonoBehaviour
     private Animator animator;
     private List<Collider> targets = new List<Collider>();
     private Spawner spawner;
+    private RoomCreator roomCreator;
 
     private void Awake()
     {
@@ -26,9 +27,6 @@ public class EnemyManager : MonoBehaviour
         agent.speed = stats.movementspeed.GetValue();
         attackRate = (1f / stats.attackSpeed.GetValue());
         animator = GetComponent<Animator>();
-        //test version only
-        target = GameManager.instance.GetPlayer().transform;
-        targetFound = true;
     }
 
     private void Update()
@@ -187,6 +185,11 @@ public class EnemyManager : MonoBehaviour
         this.spawner = spawner;
     }
 
+    public void SetRoomCreator(RoomCreator roomCreator)
+    {
+        this.roomCreator = roomCreator;
+    }
+
     public void SetScaling(int scaling)
     {
         stats.maxHealth.AddModifier((stats.maxHealth.GetValue() * (scaling * 0.1f)));
@@ -205,8 +208,14 @@ public class EnemyManager : MonoBehaviour
 
     public void OnDeath()
     {
-        if(spawner != null)
+        if (spawner != null)
+        {
             spawner.ReduceCount();
+        }
+        if (roomCreator != null)
+        {
+            roomCreator.ReduceCount();
+        }
         Destroy(gameObject);
     }
 }
