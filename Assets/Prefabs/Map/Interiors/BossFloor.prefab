@@ -300,6 +300,36 @@ Transform:
   m_Father: {fileID: 5803704941880206890}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4899738195091147630
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6877532537721547089}
+  m_Layer: 14
+  m_Name: ClearPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6877532537721547089
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4899738195091147630}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5404298516587364141}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5314970882165829503
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +394,7 @@ Transform:
   m_Children:
   - {fileID: 5803704941880206890}
   - {fileID: 450273927065809452}
+  - {fileID: 6877532537721547089}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -491,6 +522,7 @@ MonoBehaviour:
   - {fileID: 8719362717220551375}
   - {fileID: 8189740012566012063}
   bossPoint: {fileID: 450273927065809452}
+  clearPoint: {fileID: 6877532537721547089}
   wall: {fileID: 6547509981797011765, guid: 323239ba752e86d49b912dcd1c49b9c7, type: 3}
   bossName: Boss_Thief
 --- !u!1 &5857847537203217301

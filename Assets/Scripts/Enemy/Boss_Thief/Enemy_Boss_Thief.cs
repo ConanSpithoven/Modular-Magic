@@ -12,6 +12,8 @@ public class Enemy_Boss_Thief : EnemyManager
     [SerializeField] private float searchSize;
     [SerializeField] private ProjectileSpell projectilespell = default;
 
+    private BossRoom bossRoom;
+
     void Update()
     {
         if (!targetFound)
@@ -102,6 +104,11 @@ public class Enemy_Boss_Thief : EnemyManager
         }
     }
 
+    public void SetBossRoom(BossRoom bossRoom)
+    {
+        this.bossRoom = bossRoom;
+    }
+
     public void ResetHit()
     {
         targets.Clear();
@@ -120,8 +127,22 @@ public class Enemy_Boss_Thief : EnemyManager
 
     private IEnumerator MoveAndStop()
     {
-        move = !move;
-        yield return new WaitForSeconds(Random.Range(0.1f, 1.5f));
+        float rand = Random.Range(0, 100);
+        if (rand < 70)
+        {
+            move = true;
+        }
+        else
+        {
+            move = false;
+        }
+        yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
         alternate = true;
+    }
+
+    public override void OnDeath()
+    {
+        bossRoom.ReduceCount();
+        base.OnDeath();
     }
 }

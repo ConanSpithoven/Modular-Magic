@@ -130,7 +130,6 @@ public class EnemyManager : MonoBehaviour
 
     public virtual void OnDeath()
     {
-        
         Destroy(gameObject);
     }
 }
