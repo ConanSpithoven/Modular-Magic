@@ -16,7 +16,6 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] private EnemyStats stats;
     [SerializeField] private LayerMask obstacles;
-    [SerializeField] private EnemyType type;
 
     private Animator animator;
     
