@@ -61,8 +61,8 @@ public class ProjectileSpell : Spell
                 }
                 Rigidbody rb = GetComponent<Rigidbody>();
                 transform.localScale *= (size / 5f);
-                //rb.velocity = transform.forward * (speed + 20) * Time.deltaTime * 100f;
-                rb.AddForce((transform.forward * Time.deltaTime * speed) * 0.3f);
+                rb.velocity = transform.forward * (speed + 20) * Time.deltaTime * 100f;
+                //rb.AddForce((transform.forward * Time.deltaTime * speed) * 0.3f);
                 Destroy(gameObject, lifetime);
                 break;
             case SpellShape.line:

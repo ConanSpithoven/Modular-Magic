@@ -6,6 +6,7 @@ public class BossRoom : MonoBehaviour
 {
     [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private Transform bossPoint;
+    [SerializeField] private Transform clearPoint;
     [SerializeField] private GameObject wall;
     [SerializeField] private string bossName;
 
@@ -31,16 +32,11 @@ public class BossRoom : MonoBehaviour
             }
         }
         GameObject boss = Instantiate(Resources.Load<GameObject>("Enemies/" + bossName), bossPoint.position, Quaternion.identity);
-        //enemy.GetComponent<Boss_Thief_Manager>().SetRoom(this);
+        boss.GetComponent<Enemy_Boss_Thief>().SetBossRoom(this);
         enemyCount++;
 
         roomCloser = transform.parent.GetComponentInChildren<RoomCloser>();
         instantiated = true;
-    }
-
-    public void ReduceCount()
-    {
-        enemyCount--;
     }
 
     private void Update()
@@ -48,6 +44,17 @@ public class BossRoom : MonoBehaviour
         if (instantiated && enemyCount <= 0)
         {
             roomCloser.OperateDoors(false);
+            FloorClear();
         }
+    }
+
+    public void ReduceCount()
+    {
+        enemyCount--;
+    }
+
+    private void FloorClear()
+    {
+        Instantiate(Resources.Load<GameObject>("Map/FloorClearStair"), clearPoint.position, Quaternion.identity);
     }
 }

@@ -40,13 +40,13 @@ public class RoomCreator : MonoBehaviour
                 if (enemytype < 7)
                 {
                     GameObject enemy = Instantiate(Resources.Load<GameObject>("Enemies/Warrior"), enemyPoints[point].position, Quaternion.identity);
-                    enemy.GetComponent<EnemyManager>().SetRoomCreator(this);
+                    enemy.GetComponent<Enemy_Melee>().SetRoomCreator(this);
                     enemyCount++;
                 }
                 else
                 {
                     GameObject enemy = Instantiate(Resources.Load<GameObject>("Enemies/Mage"), enemyPoints[point].position, Quaternion.identity);
-                    enemy.GetComponent<EnemyManager>().SetRoomCreator(this);
+                    enemy.GetComponent<Enemy_Ranged>().SetRoomCreator(this);
                     enemyCount++;
                 }
             }
