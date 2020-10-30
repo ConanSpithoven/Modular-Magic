@@ -62,9 +62,10 @@ MonoBehaviour:
   upgradeLimit: 5
   model: {fileID: 4983697977340773618}
   animator: {fileID: 0}
+  icon: {fileID: 0}
   layerMask:
     serializedVersion: 2
-    m_Bits: 40960
+    m_Bits: 41472
 --- !u!54 &888164610907674547
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -38,10 +38,6 @@ public class MeleeSpell : Spell
                 }
                 break;
             case SpellShape.spear:
-                if (transform.position == targetPos)
-                {
-                    Destroy(gameObject);
-                }
                 if (currentDistance < travelDistance)
                 {
                     float step = speed * Time.deltaTime;
@@ -107,21 +103,27 @@ public class MeleeSpell : Spell
                     if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, size * 2f, layerMask))
                     {
                         targetPos = hit.point;
+                        travelDistance = Vector3.Distance(targetPos, transform.position);
                     }
                     else if (Physics.Raycast(FirePos.position, FirePos.forward, out hit, Mathf.Infinity, layerMask))
                     {
                         targetPos = hit.point;
+                        travelDistance = Vector3.Distance(targetPos, transform.position);
+                        if (travelDistance > size + 3f)
+                        {
+                            travelDistance = size + 3f;
+                        }
                     }
                 }
                 else
                 {
                     targetPos = spellInventory.GetTarget().position;
+                    travelDistance = Vector3.Distance(targetPos, transform.position);
                 }
                 Vector3 targetDirection = targetPos - transform.position;
                 Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, 360f, 360f);
                 transform.rotation = Quaternion.LookRotation(newDirection);
                 transform.Rotate(Vector3.forward, Random.Range(0f, 360f));
-                travelDistance = size + 3f;
                 break;
             case SpellShape.axe:
                 transform.localScale *= (1 + (size * 0.2f));
