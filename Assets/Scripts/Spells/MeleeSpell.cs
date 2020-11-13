@@ -90,10 +90,12 @@ public class MeleeSpell : Spell
                 transform.localScale *= (1 + (size * 0.1f));
                 speed *= 5;
                 speed += 250f;
+                power *= 1.2f;
                 break;
             case SpellShape.spear:
                 speed *= 1.2f;
                 speed += 7.5f;
+                power *= 1.1f;
                 transform.localScale *= (1 + (size * 0.15f));
                 oldPos = transform.position;
                 transform.SetParent(null, true);
@@ -129,6 +131,7 @@ public class MeleeSpell : Spell
                 transform.localScale *= (1 + (size * 0.2f));
                 speed *= 5f;
                 speed += 100f;
+                power *= 2f;
                 transform.SetParent(null, true);
                 break;
         }
@@ -147,8 +150,8 @@ public class MeleeSpell : Spell
             }
             i++;
         }
-        if (col.gameObject.CompareTag("Wall"))
-            Destroy(gameObject);
+        //if (col.gameObject.CompareTag("Wall"))
+        //    Destroy(gameObject);
         if (variant == SpellShape.axe && ((col.gameObject.CompareTag("Player") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy") && gameObject.CompareTag("Attack_Spell"))) || col.gameObject.CompareTag("Ground"))
             Destroy(gameObject);
         if (!targets.Contains(col.gameObject))

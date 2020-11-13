@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 2
-  cooldownTime: 3
+  cooldownTime: 1
   onCooldown: 0
-  shape: 1
+  shape: 0
   originShape: 0
   power: 1
   lifetime: 1
@@ -108,8 +108,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4983697977340773618}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalRotation: {x: -0.000000030908623, y: -0.7071068, z: 0.7071068, w: -0.000000030908623}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 733419172724263481}
@@ -122,7 +122,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4983697977340773618}
-  m_Mesh: {fileID: 6288198046689518721, guid: 9447fb4101bc47c4fa3eb6d2389e58f7, type: 3}
+  m_Mesh: {fileID: -856059019632272089, guid: a5bfdc1c2df04364f82d51b363a080bd, type: 3}
 --- !u!23 &8372366431751660632
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -173,6 +173,6 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.1
-  m_Height: 0.93
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1.42, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}

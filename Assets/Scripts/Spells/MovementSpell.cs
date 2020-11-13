@@ -92,12 +92,14 @@ public class MovementSpell : Spell
         switch (variant)
         {
             case SpellShape.dash:
+                power *= 0.4f;
                 Dash();
                 break;
             case SpellShape.teleport:
                 Teleport();
                 break;
             case SpellShape.push:
+                power *= 0.2f;
                 Push();
                 Destroy(gameObject, lifetime);
                 break;
