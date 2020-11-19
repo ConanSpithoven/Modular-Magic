@@ -22,7 +22,7 @@ public class FloorClearStair : MonoBehaviour
 
     private IEnumerator ActiveDelay()
     {
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(0.5f);
         stairActive = true;
     }
 }

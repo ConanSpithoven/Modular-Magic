@@ -10,13 +10,12 @@ public class PlayerManager : MonoBehaviour
     private bool allowMovement = true;
     private Rigidbody rb = default;
     private PlayerStats playerstats = default;
-    private CapsuleCollider playerCollider = default;
+    private bool allowHit = true;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         playerstats = GetComponent<PlayerStats>();
-        playerCollider = GetComponent<CapsuleCollider>();
     }
 
     private void Start()
@@ -30,7 +29,8 @@ public class PlayerManager : MonoBehaviour
             HandleMovement();
     }
 
-    private void HandleMovement() {
+    private void HandleMovement()
+    {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         if (Input.GetAxis("Horizontal") != 0f || Input.GetAxis("Vertical") != 0f)
@@ -41,7 +41,8 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public float GetSpeed() {
+    public float GetSpeed()
+    {
         return playerstats.movementspeed.GetValue();
     }
 
@@ -54,10 +55,14 @@ public class PlayerManager : MonoBehaviour
 
     public void Hit(float damageTaken, Element element)
     {
-        playerstats.TakeDamage(damageTaken, element);
+        if (allowHit)
+        {
+            playerstats.TakeDamage(damageTaken, element);
+        }
     }
 
-    public void Heal(float healingReceived) {
+    public void Heal(float healingReceived)
+    {
         playerstats.Heal(healingReceived);
     }
 
@@ -85,9 +90,10 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
-    public void AllowMovement(bool status) {
+    public void AllowMovement(bool status)
+    {
         allowMovement = status;
-        playerCollider.enabled = status;
+        allowHit = status;
     }
 
     public SpellInventory GetSpellInventory()
@@ -104,7 +110,7 @@ public class PlayerManager : MonoBehaviour
                 playerstats.SetElement(newItem.elementModifier);
             }
         }
-        else 
+        else
         {
             playerstats.SetElement(playerstats.GetBaseElement());
         }

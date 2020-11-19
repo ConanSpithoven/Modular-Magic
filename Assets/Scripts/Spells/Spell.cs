@@ -359,51 +359,52 @@ public class Spell : MonoBehaviour
     private void SummonSpellShapeModifier()
     {
         rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
         spellAgent = GetComponent<NavMeshAgent>();
-        model = Resources.Load<GameObject>("Models/Spells/Summon/" + element.ElementName + "/" + shape);
-        //string path = AssetDatabase.GetAssetPath(gameObject);
-        GameObject newPrefab = Instantiate(this.gameObject, new Vector3(0, -100, 0), Quaternion.identity, null);
-        GameObject oldModel = newPrefab.transform.Find("Model").gameObject;
-        oldModel.transform.SetParent(null, true);
-        Destroy(oldModel);
-        Vector3 rot = Vector3.zero;
 
-        switch (shape)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            case 0:
-                rot = new Vector3(0, 180, 180);
-                break;
-            case 1:
-                rot = new Vector3(0,0,0);
-                break;
-            case 2:
-                rot = new Vector3(0, 0, 0);
-                break;
+            transform.GetChild(i).gameObject.name = "" + i;
+            if (transform.GetChild(i).name == "" + shape)
+            {
+                if (transform.GetChild(i).TryGetComponent(out Animator animator))
+                {
+                    this.animator = animator;
+                }
+                model = transform.GetChild(i).gameObject;
+                model.name = "Model";
+                model.SetActive(true);
+            }
+            else 
+            {
+                transform.GetChild(i).gameObject.name = "" + i;
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
         }
-        GameObject newModel = Instantiate(model, new Vector3(0, -100, 0), Quaternion.Euler(rot), null);
-        newModel.transform.parent = newPrefab.transform;
-        newModel.name = "Model";
-        //PrefabUtility.SaveAsPrefabAsset(newPrefab, path);
-        DestroyImmediate(newPrefab);
-
         switch (shape)
         {
             case 0:
+                gameObject.tag = "Attack_Spell";
+                gameObject.layer = 10;
                 animator.enabled = false;
                 spellAgent.enabled = false;
                 break;
             case 1:
+                gameObject.tag = "Summon_Spell";
+                gameObject.layer = 17;
                 animator.enabled = false;
-                spellAgent.enabled = true;
                 GetComponent<SummoningSpell>().GetProjectile().ModifyElement(element, true);
+                spellAgent.enabled = true;
                 break;
             case 2:
+                gameObject.tag = "Summon_Spell";
+                gameObject.layer = 17;
                 animator.enabled = true;
                 animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animation/Summon/2/SwordSummon");
                 spellAgent.enabled = true;
                 break;
         }
+        //GameObject newMesh = Resources.Load<GameObject>("Models/Spells/Summon/" + element.ElementName + "/" + shape);
+        //model.GetComponent<MeshFilter>().sharedMesh = newMesh.GetComponent<MeshFilter>().sharedMesh;
     }
 
     private void MeshSetter()

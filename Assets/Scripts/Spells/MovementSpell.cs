@@ -92,6 +92,29 @@ public class MovementSpell : Spell
         switch (variant)
         {
             case SpellShape.dash:
+                power *= 0.4f;
+                Dash();
+                break;
+            case SpellShape.teleport:
+                Teleport();
+                break;
+            case SpellShape.push:
+                power *= 0.2f;
+                Push();
+                Destroy(gameObject, lifetime);
+                break;
+        }
+    }
+
+    private void ReActivate()
+    {
+        if (caster.TryGetComponent(out PlayerManager playerManager) && variant != SpellShape.push)
+        {
+            playerManager.AllowMovement(false);
+        }
+        switch (variant)
+        {
+            case SpellShape.dash:
                 Dash();
                 break;
             case SpellShape.teleport:
@@ -213,15 +236,15 @@ public class MovementSpell : Spell
         {
             case 1:
                 if ((Input.GetKeyDown(KeyCode.Alpha1) || Input.GetMouseButtonDown(0)))
-                    Activate();
+                    ReActivate();
                     break;
             case 2:
                 if ((Input.GetKeyDown(KeyCode.Alpha2) || Input.GetMouseButtonDown(1)))
-                    Activate();
+                    ReActivate();
                 break;
             case 3:
                 if ((Input.GetKeyDown(KeyCode.Alpha3) || Input.GetMouseButtonDown(2)))
-                    Activate();
+                    ReActivate();
                 break;
         }
     }

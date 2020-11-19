@@ -12,6 +12,7 @@ public class RoomCreator : MonoBehaviour
     private RoomCloser roomCloser;
     private int enemyCount;
     private bool instantiated = false;
+    private bool opened = false;
 
     private void Start()
     {
@@ -62,8 +63,9 @@ public class RoomCreator : MonoBehaviour
 
     private void Update()
     {
-        if (instantiated && enemyCount <= 0)
+        if (instantiated && enemyCount <= 0 && !opened)
         {
+            opened = true;
             roomCloser.OperateDoors(false);
         }
     }

@@ -25,7 +25,7 @@ public class AOESpell : Spell
                 float sizelimited = Mathf.Clamp(currentsize, 0f, size);
                 transform.localScale = new Vector3(sizelimited, sizelimited, sizelimited);
             }
-            else if (transform.localScale.y != 0.3f)
+            else if (transform.localScale.y != 0.3f && unique > 0)
             {
                 if (variant == SpellShape.orb)
                 {
@@ -33,7 +33,10 @@ public class AOESpell : Spell
                 }
                 transform.localScale = new Vector3(transform.localScale.x, 0.3f, transform.localScale.z);
                 transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
-                Destroy(gameObject, lifetime);
+                Destroy(gameObject, unique);
+            }
+            else {
+                Destroy(gameObject);
             }
             return;
         }
@@ -71,15 +74,18 @@ public class AOESpell : Spell
             case SpellShape.orb:
                 size *= 1.4f;
                 size += 5f;
+                power *= 0.4f;
                 transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
                 break;
             case SpellShape.orbit:
                 lifetime *= 1.3f;
                 lifetime += 5f;
+                power *= 0.2f;
                 break;
             case SpellShape.point:
                 size *= 0.8f;
                 size += 3f;
+                power *= 0.3f;
                 transform.SetParent(null, true);
                 break;
         }

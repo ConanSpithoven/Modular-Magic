@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 2
-  cooldownTime: 1.2
+  cooldownTime: 1
   onCooldown: 0
   shape: 0
   originShape: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   layerMask:
     serializedVersion: 2
-    m_Bits: 40960
+    m_Bits: 41472
 --- !u!54 &888164610907674547
 Rigidbody:
   m_ObjectHideFlags: 0
