@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,8 +20,9 @@ public class SummoningSpell : Spell
     private Transform FirePos = default;
     private NavMeshAgent agent = default;
     private float attackRate = default;
-    private bool attackCooldown = default;
+    private bool attackCooldown = false;
     private float hp = default;
+    private GameObject spellModel;
 
     private void Awake()
     {
@@ -153,7 +155,7 @@ public class SummoningSpell : Spell
                 attackRate = (1f / (speed / 2.5f));
                 hp = power * 2f;
                 transform.SetParent(null, true);
-                FirePos = GetModel().transform.Find("Firepos").transform;
+                FirePos = spellModel.transform.Find("Firepos").transform;
                 Destroy(gameObject, (lifetime*5f));
                 break;
             case SpellShape.melee:
