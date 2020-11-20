@@ -16,6 +16,8 @@ public class FloorClearStair : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player") && stairActive)
         {
+            stairActive = false;
+            GameManager.instance.DeclareScore();
             SceneManager.LoadScene("GameClear");
         }
     }

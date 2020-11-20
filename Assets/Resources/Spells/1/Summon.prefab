@@ -50,9 +50,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellType: 6
-  cooldownTime: 11
-  onCooldown: 1
-  shape: 2
+  cooldownTime: 16
+  onCooldown: 0
+  shape: 1
   originShape: 0
   power: 1
   lifetime: 1
@@ -64,7 +64,7 @@ MonoBehaviour:
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   originElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   upgradeLimit: 5
-  model: {fileID: 5337028481167923}
+  model: {fileID: 4817584939710566989}
   animator: {fileID: 100464838830603984}
   icon: {fileID: 0}
   obstacles:
@@ -118,7 +118,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5376322008537632179}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 58477e3bca4f99b40b959efaaf2fe4c3, type: 2}
   m_CullingMode: 0
@@ -274,21 +274,15 @@ PrefabInstance:
     - target: {fileID: 3842052937281469011, guid: 5c62903467c36b1489786320c01abca1,
         type: 3}
       propertyPath: m_Name
-      value: Model
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3842052937281469011, guid: 5c62903467c36b1489786320c01abca1,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c62903467c36b1489786320c01abca1, type: 3}
---- !u!1 &5337028481167923 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3842052937281469011, guid: 5c62903467c36b1489786320c01abca1,
-    type: 3}
-  m_PrefabInstance: {fileID: 3837985204781107296}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5337028481167920 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3842052937281469008, guid: 5c62903467c36b1489786320c01abca1,
@@ -305,12 +299,12 @@ PrefabInstance:
     - target: {fileID: 1870049835351467521, guid: b6d73f5ac5f7777459d4e9a3184bbd64,
         type: 3}
       propertyPath: m_Name
-      value: 1
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 1870049835351467521, guid: b6d73f5ac5f7777459d4e9a3184bbd64,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1870049835351467522, guid: b6d73f5ac5f7777459d4e9a3184bbd64,
         type: 3}
@@ -369,6 +363,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6d73f5ac5f7777459d4e9a3184bbd64, type: 3}
+--- !u!1 &4817584939710566989 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1870049835351467521, guid: b6d73f5ac5f7777459d4e9a3184bbd64,
+    type: 3}
+  m_PrefabInstance: {fileID: 6568710684045915212}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4817584939710566990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1870049835351467522, guid: b6d73f5ac5f7777459d4e9a3184bbd64,

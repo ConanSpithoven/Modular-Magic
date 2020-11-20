@@ -22,7 +22,6 @@ public class SummoningSpell : Spell
     private float attackRate = default;
     private bool attackCooldown = false;
     private float hp = default;
-    private GameObject spellModel;
 
     private void Awake()
     {
@@ -155,7 +154,7 @@ public class SummoningSpell : Spell
                 attackRate = (1f / (speed / 2.5f));
                 hp = power * 2f;
                 transform.SetParent(null, true);
-                FirePos = spellModel.transform.Find("Firepos").transform;
+                FirePos = GetModel().transform.Find("Firepos").transform;
                 Destroy(gameObject, (lifetime*5f));
                 break;
             case SpellShape.melee:
