@@ -24,23 +24,23 @@ public class SpellDetails : MonoBehaviour
 
     private void Awake()
     {
-        if (spellInventory == null)
-        {
-            spellInventory = FindObjectOfType<SpellInventory>().transform.GetComponent<SpellInventory>();
-        }
         if (patternManager == null)
         {
             patternManager = PatternManager.instance;
         }
-        UpdateSpell(patternManager.activeFormula);
     }
 
     private void Start()
     {
+        if (spellInventory == null)
+        {
+            spellInventory = GameManager.instance.GetPlayer().GetComponent<SpellInventory>();
+        }
         patternManager = PatternManager.instance;
         patternManager.onPatternChanged += PatternChanged;
         patternManager.onFormulaChanged += UpdateSpell;
         patternManager.onUpgradeLimitChanged += UpgradeLimitChanged;
+        UpdateSpell(patternManager.activeFormula);
     }
 
     private void SetStats(Spell spell)
@@ -228,7 +228,13 @@ public class SpellDetails : MonoBehaviour
 
     public void UpdateSpell(int slot)
     {
-        if(spellInventory != null)
+        StartCoroutine("UpdateDelay", slot);
+    }
+
+    private IEnumerator UpdateDelay(int slot)
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (spellInventory != null)
             SetStats(spellInventory.GetSpell(slot));
     }
 }
