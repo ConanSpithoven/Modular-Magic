@@ -13,6 +13,7 @@ public class BossRoom : MonoBehaviour
     private RoomCloser roomCloser;
     private int enemyCount;
     private bool instantiated = false;
+    private bool cleared = false;
 
     private void Start()
     {
@@ -41,8 +42,9 @@ public class BossRoom : MonoBehaviour
 
     private void Update()
     {
-        if (instantiated && enemyCount <= 0)
+        if (instantiated && enemyCount <= 0 && !cleared)
         {
+            cleared = true;
             roomCloser.OperateDoors(false);
             FloorClear();
         }
