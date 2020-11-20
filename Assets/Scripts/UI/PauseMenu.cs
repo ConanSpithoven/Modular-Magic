@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitButton()
     {
+        GameManager.instance.TogglePause();
         SceneManager.LoadScene("MainMenu");
     }
 }

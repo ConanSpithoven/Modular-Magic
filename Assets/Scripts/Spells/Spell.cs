@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class Spell : MonoBehaviour
@@ -267,7 +265,6 @@ public class Spell : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         CapsuleCollider col = model.GetComponent<CapsuleCollider>();
-        Renderer ren = model.GetComponent<Renderer>();
 
         switch (shape)
         {
@@ -431,7 +428,6 @@ public class Spell : MonoBehaviour
                 type = "Shield";
                 break;
             case SpellType.Summon:
-                type = "Summon";
                 return;
         }
         GameObject newMesh = Resources.Load<GameObject>("Models/Spells/" + type + "/" + element.ElementName + "/" + shape);

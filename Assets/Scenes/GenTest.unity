@@ -629,7 +629,7 @@ MonoBehaviour:
   timerMText: {fileID: 1683464455}
   timerHText: {fileID: 197845742}
   startPos: {fileID: 1477001928}
-  spellDetails: {fileID: 0}
+  spellDetails: {fileID: 1916557932}
   playerHealthBar: {fileID: 516964306}
   cooldown1: {fileID: 929676028}
   cooldown2: {fileID: 1671291742}

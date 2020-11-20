@@ -353,4 +353,13 @@ public class GameManager : MonoBehaviour
         }
         return false;
     }
+
+    public void DeclareScore()
+    {
+        PlayerPrefs.SetInt("Score", score);
+        if (PlayerPrefs.GetInt("Score") > PlayerPrefs.GetInt("HighScore"))
+        {
+            PlayerPrefs.SetInt("HighScore", score);
+        }
+    }
 }
