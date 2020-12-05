@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5781074472423199610}
   - component: {fileID: 8893514780601709260}
   - component: {fileID: 3659468029379184936}
-  - component: {fileID: 1219424205977742957}
   m_Layer: 11
   m_Name: Model
   m_TagString: Shield_Spell
@@ -94,20 +93,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.33, y: 0.77, z: 0.15}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &1219424205977742957
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3331749597634521765}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: -0.00657529}
 --- !u!1 &4238391487416804670
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,6 +164,7 @@ MonoBehaviour:
   upgradeLimit: 5
   model: {fileID: 3331749597634521765}
   animator: {fileID: 0}
+  icon: {fileID: 0}
 --- !u!54 &-5240452477876547970
 Rigidbody:
   m_ObjectHideFlags: 0

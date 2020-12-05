@@ -8,9 +8,11 @@ public class PlayerManager : MonoBehaviour
     private int tickAmount = default;
     private float tickSpeed = default;
     private bool allowMovement = true;
+    private bool shielded = false;
     private Rigidbody rb = default;
     private PlayerStats playerstats = default;
     private bool allowHit = true;
+    private GameObject shield = default;
 
     private void Awake()
     {
@@ -57,7 +59,14 @@ public class PlayerManager : MonoBehaviour
     {
         if (allowHit)
         {
-            playerstats.TakeDamage(damageTaken, element);
+            if (!shielded)
+            {
+                playerstats.TakeDamage(damageTaken, element);
+            }
+            else
+            {
+                playerstats.TakeShieldDamage(damageTaken, element);
+            }
         }
     }
 
@@ -113,6 +122,23 @@ public class PlayerManager : MonoBehaviour
         else
         {
             playerstats.SetElement(playerstats.GetBaseElement());
+        }
+    }
+
+    public void SetShield(float power, Element element, GameObject shield)
+    {
+        shielded = true;
+        this.shield = shield;
+        playerstats.shieldHealth = power;
+        playerstats.shieldElement = element;
+    }
+
+    public void RemoveShield()
+    {
+        shielded = false;
+        if (shield != null)
+        {
+            Destroy(shield);
         }
     }
 }

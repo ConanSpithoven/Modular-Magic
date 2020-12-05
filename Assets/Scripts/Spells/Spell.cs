@@ -337,16 +337,12 @@ public class Spell : MonoBehaviour
             case 0:
                 model.transform.rotation = Quaternion.Euler(0, 0, 0);
                 model.transform.localScale = new Vector3(1.2f ,1.2f ,1.2f);
-                cCol.enabled = true;
                 bCol.enabled = false;
-                cCol.radius = 0.5f;
-                cCol.height = 2f;
                 break;
             case 1:
             case 2:
                 model.transform.rotation = Quaternion.Euler(0, 0, 90);
                 model.transform.localScale = new Vector3(1, 1 ,1);
-                cCol.enabled = false;
                 bCol.enabled = true;
                 bCol.size = new Vector3(1.33f, 0.77f, 0.15f);
                 break;

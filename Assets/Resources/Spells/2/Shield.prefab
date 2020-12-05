@@ -62,6 +62,7 @@ MonoBehaviour:
   upgradeLimit: 5
   model: {fileID: 3291109939604811589}
   animator: {fileID: 0}
+  icon: {fileID: 0}
 --- !u!54 &5335614241904192475
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -89,7 +90,6 @@ GameObject:
   - component: {fileID: 5489409299593716452}
   - component: {fileID: 5627548993792791487}
   - component: {fileID: 6184912727464637511}
-  - component: {fileID: 4738362617751803294}
   - component: {fileID: 1761678395268224752}
   m_Layer: 0
   m_Name: Model
@@ -159,20 +159,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &4738362617751803294
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3291109939604811589}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &1761678395268224752
 BoxCollider:
   m_ObjectHideFlags: 0

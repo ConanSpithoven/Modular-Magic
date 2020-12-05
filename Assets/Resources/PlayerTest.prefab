@@ -333,26 +333,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth:
     baseValue: 100
+    currentValue: 0
   currentHealth: 0
   element: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   baseElement: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
   power:
     baseValue: 0
+    currentValue: 0
   armor:
     baseValue: 0
+    currentValue: 0
   movementspeed:
-    baseValue: 4
+    baseValue: 6
+    currentValue: 0
   upgradeLimit:
     baseValue: 0
+    currentValue: 0
   lifetime:
     baseValue: 0
+    currentValue: 0
   size:
     baseValue: 0
+    currentValue: 0
   speed:
     baseValue: 0
+    currentValue: 0
   instances:
     baseValue: 0
+    currentValue: 0
   unique:
     baseValue: 0
+    currentValue: 0
   cooldownReduction:
     baseValue: 0
+    currentValue: 0
+  shieldHealth: 0
+  shieldElement: {fileID: 0}

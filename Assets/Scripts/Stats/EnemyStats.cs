@@ -10,7 +10,7 @@ public class EnemyStats : CharacterStats
 
     public override void TakeDamage(float damageTaken, Element element)
     {
-        float elementModifier = CheckElement(element);
+        float elementModifier = CheckElement(this.element, element);
         float totalDamage = damageTaken * elementModifier;
         totalDamage -= armor.GetValue();
         totalDamage = Mathf.Clamp(totalDamage, 0, float.MaxValue);
