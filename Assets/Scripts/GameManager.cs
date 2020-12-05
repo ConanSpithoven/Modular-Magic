@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1);
         timer++;
         timerS++;
-        score++;
+        //score--;
         if (timer % scalingTimer == 0 && timer > 0)
         {
             timeScaling++;
