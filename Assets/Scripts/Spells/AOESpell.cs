@@ -115,57 +115,54 @@ public class AOESpell : Spell
         {
             targets.Add(col);
         }
-        if (hit)
+        int i = 0;
+        foreach (Collider collider in targets)
         {
-            int i = 0;
-            foreach (Collider collider in targets)
+            if (targets[i] == null)
             {
-                if (targets[i] == null)
-                {
-                    targets.RemoveAt(i);
-                }
-                i++;
-                if ((collider.gameObject.CompareTag("Enemy") || collider.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
-                {
-                    if (collider.gameObject.TryGetComponent(out EnemyManager enemy))
-                    {
-                        enemy.Hit(power, element);
-                    }
-                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
-                    {
-                        summon.ReducePower(power, element);
-                    }
-                    StartCoroutine("BeamDamageCooldown");
-                }
-                else if (((collider.gameObject.CompareTag("Player") || collider.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
-                {
-                    if (collider.gameObject.TryGetComponent(out PlayerManager player))
-                    {
-                        player.Hit(power, element);
-                    }
-                    if (collider.gameObject.TryGetComponent(out SummoningSpell summon))
-                    {
-                        summon.ReducePower(power, element);
-                    }
-                    StartCoroutine("BeamDamageCooldown");
-                }
-                else if ((collider.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (collider.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
-                {
-                    if (collider.gameObject.TryGetComponent(out ShieldSpell shield))
-                    {
-                        shield.ReducePower(power, element);
-                    }
-                    StartCoroutine("BeamDamageCooldown");
-                }
-                else if ((collider.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (collider.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
-                {
-                    if (collider.gameObject.TryGetComponent(out ProjectileSpell projectile))
-                    {
-                        projectile.ReducePower(power, element);
-                    }
-                    StartCoroutine("BeamDamageCooldown");
-                }
+                targets.RemoveAt(i);
             }
+            i++;
+        }
+        if ((col.gameObject.CompareTag("Enemy") || col.gameObject.CompareTag("Enemy_Summon_Spell")) && gameObject.CompareTag("Attack_Spell"))
+        {
+            if (col.gameObject.TryGetComponent(out EnemyManager enemy))
+            {
+                enemy.Hit(power, element);
+            }
+            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            {
+                summon.ReducePower(power, element);
+            }
+            StartCoroutine("BeamDamageCooldown");
+        }
+        else if (((col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Summon_Spell")) && gameObject.CompareTag("Enemy_Attack_Spell")))
+        {
+            if (col.gameObject.TryGetComponent(out PlayerManager player))
+            {
+                player.Hit(power, element);
+            }
+            if (col.gameObject.TryGetComponent(out SummoningSpell summon))
+            {
+                summon.ReducePower(power, element);
+            }
+            StartCoroutine("BeamDamageCooldown");
+        }
+        else if ((col.gameObject.CompareTag("Shield_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")) || (col.gameObject.CompareTag("Enemy_Shield_Spell") && gameObject.CompareTag("Attack_Spell")))
+        {
+            if (col.gameObject.TryGetComponent(out ShieldSpell shield))
+            {
+                shield.ReducePower(power, element);
+            }
+            StartCoroutine("BeamDamageCooldown");
+        }
+        else if ((col.gameObject.CompareTag("Enemy_Attack_Spell") && gameObject.CompareTag("Attack_Spell")) || (col.gameObject.CompareTag("Attack_Spell") && gameObject.CompareTag("Enemy_Attack_Spell")))
+        {
+            if (col.gameObject.TryGetComponent(out ProjectileSpell projectile))
+            {
+                projectile.ReducePower(power, element);
+            }
+            StartCoroutine("BeamDamageCooldown");
         }
     }
 

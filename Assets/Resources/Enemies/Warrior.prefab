@@ -185,7 +185,6 @@ MonoBehaviour:
   obstacles:
     serializedVersion: 2
     m_Bits: 164096
-  type: 0
   searchSize: 5
 --- !u!195 &3587237652564575512
 NavMeshAgent:
@@ -267,9 +266,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3587237652648326939}
-  m_Layer: 9
+  m_Layer: 20
   m_Name: Sword
-  m_TagString: Enemy
+  m_TagString: Enemy_Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
