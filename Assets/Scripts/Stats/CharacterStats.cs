@@ -25,7 +25,7 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void TakeDamage(float damageTaken, Element element)
     {
-        float elementModifier = CheckElement(element);
+        float elementModifier = CheckElement(this.element, element);
         float totalDamage = damageTaken * elementModifier;
         totalDamage -= armor.GetValue();
         totalDamage = Mathf.Clamp(totalDamage, 0, float.MaxValue);
@@ -53,10 +53,10 @@ public class CharacterStats : MonoBehaviour
         element = newElement;
     }
 
-    public float CheckElement(Element element)
+    public float CheckElement(Element ownElement, Element element)
     {
         float modifier = 1f;
-        if (element.ElementName == this.element.ElementName)
+        if (element.ElementName == ownElement.ElementName)
         {
             modifier = 0.5f;
         }
@@ -64,26 +64,26 @@ public class CharacterStats : MonoBehaviour
         {
             foreach (string strength in element.ElementStrengths)
             {
-                if (strength == this.element.ElementName || strength == "All")
+                if (strength == ownElement.ElementName || strength == "All")
                 {
                     modifier = 1.25f;
                 }
             }
             foreach (string weakness in element.ElementWeaknesses)
             {
-                if (weakness == this.element.ElementName || weakness == "All")
+                if (weakness == ownElement.ElementName || weakness == "All")
                 {
                     modifier = 0.75f;
                 }
             }
-            foreach (string strength in this.element.ElementStrengths)
+            foreach (string strength in ownElement.ElementStrengths)
             {
                 if (strength == element.ElementName || strength == "All")
                 {
                     modifier = 0.75f;
                 }
             }
-            foreach (string weakness in this.element.ElementWeaknesses)
+            foreach (string weakness in ownElement.ElementWeaknesses)
             {
                 if (weakness == element.ElementName || weakness == "All")
                 {

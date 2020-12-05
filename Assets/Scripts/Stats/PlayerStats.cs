@@ -11,6 +11,8 @@ public class PlayerStats : CharacterStats
     public Stat instances;
     public Stat unique;
     public Stat cooldownReduction;
+    public float shieldHealth;
+    public Element shieldElement;
     private Barhandler Healthbar;
     private GameManager gameManager;
 
@@ -46,6 +48,18 @@ public class PlayerStats : CharacterStats
     {
         base.TakeDamage(damageTaken, element);
         Healthbar.SetValue(GetCurrentHP(), maxHealth.GetValue());
+    }
+
+    public void TakeShieldDamage(float damageTaken, Element element)
+    {
+        float elementModifier = CheckElement(shieldElement, element);
+        float totalDamage = damageTaken * elementModifier;
+        totalDamage = Mathf.Clamp(totalDamage, 0, float.MaxValue);
+        shieldHealth -= totalDamage;
+        if (shieldHealth <= 0)
+        {
+            GetComponent<PlayerManager>().RemoveShield();
+        }
     }
 
     public override void Heal(float healing)
