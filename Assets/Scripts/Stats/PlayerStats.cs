@@ -74,15 +74,11 @@ public class PlayerStats : CharacterStats
         gameManager.ChangeLives(1, false);
     }
 
-    public void SavePlayer()
-    {
-        SaveSystem.SavePlayer(this);
-    }
-
     public void LoadPlayer()
     {
         PlayerData data = SaveSystem.LoadPlayer();
 
-        //set stats according to data.
+        LoadedPlayer(data);
+        transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
     }
 }

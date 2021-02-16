@@ -50,6 +50,10 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (PlayerPrefs.GetInt("Loading") == 1)
+        {
+            player.GetComponent<PlayerStats>().LoadPlayer();
+        }
         if (PlayerPrefs.GetInt("HighScore", 0) != 0)
         {
             PlayerPrefs.SetInt("HighScore", 0);
@@ -361,5 +365,11 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("HighScore", score);
         }
+    }
+
+    public void SaveGame()
+    {
+        SaveSystem.SavePlayer(player.GetComponent<PlayerStats>());
+        SaveSystem.SaveSeed();
     }
 }
