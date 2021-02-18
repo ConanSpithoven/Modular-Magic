@@ -16,6 +16,7 @@ MonoBehaviour:
   type: 2
   icon: {fileID: 21300000, guid: 6c632ff70851fd64fa4be9e795a7216b, type: 3}
   worldIcon: {fileID: 21300000, guid: f39d990769f23ea4c8bfb3a47e67d844, type: 3}
+  flavor: A random stick found on the ground.
   equipType: 0
   maxhealthModifier: 0
   powerModifier: 1

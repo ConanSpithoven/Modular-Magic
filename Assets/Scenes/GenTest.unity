@@ -185,7 +185,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &197845742 stripped
 MonoBehaviour:
@@ -298,7 +298,7 @@ PrefabInstance:
     - target: {fileID: 6825947916670634768, guid: aed2a545d2f56954097f1a83609229ef,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6825947916670634768, guid: aed2a545d2f56954097f1a83609229ef,
         type: 3}
@@ -478,7 +478,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 68.74, y: -30, z: 0}
 --- !u!114 &1240055481 stripped
 MonoBehaviour:
@@ -690,6 +690,7 @@ GameObject:
   - component: {fileID: 1916557930}
   - component: {fileID: 1916557931}
   - component: {fileID: 1916557932}
+  - component: {fileID: 1916557933}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -788,6 +789,7 @@ MonoBehaviour:
   equipmentUI: {fileID: 1410577707}
   inventoryUI: {fileID: 1410577708}
   patternUI: {fileID: 1410577706}
+  itemList: {fileID: 1916557933}
 --- !u!114 &1916557931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -870,6 +872,21 @@ MonoBehaviour:
   UpgradeLimitStat: {fileID: 268684823}
   UniqueStat: {fileID: 944132429}
   spellInventory: {fileID: 0}
+--- !u!114 &1916557933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916557925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe14abe988274e44a7bf19734670d36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patterns: {fileID: 11400000, guid: 8be16c059b33b8c46838be69fc99c665, type: 2}
+  equipment: {fileID: 11400000, guid: d48730572a5b85443850cb387b926665, type: 2}
+  consumables: {fileID: 11400000, guid: a06aa56f1f56ac7438780c7dbc64c845, type: 2}
 --- !u!114 &1943163878 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6638982287451037008, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,
@@ -981,7 +998,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 75, y: 0, z: 0}
 --- !u!1001 &6638982287733247670
 PrefabInstance:
@@ -1433,7 +1450,7 @@ PrefabInstance:
     - target: {fileID: 6638982286998193847, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6638982286998193847, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,
         type: 3}
@@ -1708,7 +1725,7 @@ PrefabInstance:
     - target: {fileID: 7535529192257019754, guid: e1255eb9e14abe949b6de450117e5f56,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7535529192257019754, guid: e1255eb9e14abe949b6de450117e5f56,
         type: 3}

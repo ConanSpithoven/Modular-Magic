@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EquipmentUI equipmentUI;
     [SerializeField] private InventoryUI inventoryUI;
     [SerializeField] private PatternUI patternUI;
+    [SerializeField] private ItemList itemList;
     private GameObject player;
     private SpellInventory spellInventory;
     private List<GameObject> livesList = new List<GameObject>();
