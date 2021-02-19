@@ -373,4 +373,16 @@ public class GameManager : MonoBehaviour
         SaveSystem.SavePlayer(player.GetComponent<PlayerStats>());
         SaveSystem.SaveSeed();
     }
+
+    #region ItemList
+    public int GetItemCount(string type)
+    {
+        return itemList.GetItemCount(type);
+    }
+
+    public string GetItem(int index, string type)
+    {
+        return itemList.GetItem(index, type);
+    }
+    #endregion
 }

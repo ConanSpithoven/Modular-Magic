@@ -40,6 +40,7 @@ public class ItemUpdater: EditorWindow
         {
             itemNames[i] = item.name;
             Debug.Log("added: " + itemNames[i]);
+            i++;
         }
         patterns.SetContent(itemNames);
     }
@@ -54,6 +55,7 @@ public class ItemUpdater: EditorWindow
         {
             itemNames[i] = item.name;
             Debug.Log("added: " + itemNames[i]);
+            i++;
         }
         equipment.SetContent(itemNames);
     }
@@ -68,6 +70,7 @@ public class ItemUpdater: EditorWindow
         {
             itemNames[i] = item.name;
             Debug.Log("added: " + itemNames[i]);
+            i++;
         }
         consumables.SetContent(itemNames);
     }

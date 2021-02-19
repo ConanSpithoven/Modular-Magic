@@ -42,4 +42,18 @@ public class ItemList : MonoBehaviour
                 break;
         }
     }
+
+    public int GetItemCount(string type)
+    {
+        switch (type)
+        {
+            default:
+            case "Patterns":
+                return patterns.GetSize();
+            case "Equipment":
+                return equipment.GetSize();
+            case "Consumables":
+                return consumables.GetSize();
+        }
+    }
 }

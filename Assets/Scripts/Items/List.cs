@@ -15,4 +15,9 @@ public class List : ScriptableObject
     {
         return content[index];
     }
+
+    public int GetSize()
+    {
+        return content.Length;
+    }
 }
