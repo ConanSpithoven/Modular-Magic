@@ -105,4 +105,38 @@ public static class SaveSystem
         }
     }
     #endregion
+
+    #region Equipment
+    public static void SaveEquipment(string[] equips)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/equipment.mgc";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        EquipmentData data = new EquipmentData(equips);
+
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
+    public static EquipmentData LoadEquipment()
+    {
+        string path = Application.persistentDataPath + "/equipment.mgc";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            EquipmentData data = formatter.Deserialize(stream) as EquipmentData;
+            stream.Close();
+
+            return data;
+        }
+        else
+        {
+            Debug.LogError("Save file not found in " + path);
+            return null;
+        }
+    }
+    #endregion
 }

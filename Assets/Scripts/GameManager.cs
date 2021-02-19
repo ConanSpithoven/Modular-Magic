@@ -383,12 +383,18 @@ public class GameManager : MonoBehaviour
         SaveSystem.SaveSeed();
         Inventory inventory = GetComponent<Inventory>();
         SaveSystem.SaveInventory(inventory.SaveInventoryContent(), inventory.SaveInventoryTypes());
+        EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
+        string[] equips = equipmentManager.SaveEquipment();
+        Debug.Log(equips[0] + " " + equips[1] + " " + equips[2] + " " + equips[3]);
+        SaveSystem.SaveEquipment(equips);
     }
 
     public void LoadGame()
     {
         Inventory inventory = GetComponent<Inventory>();
         inventory.LoadInventory();
+        EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
+        equipmentManager.LoadEquipment();
     }
     #endregion
 
