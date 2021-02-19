@@ -71,4 +71,38 @@ public static class SaveSystem
         }
     }
     #endregion
+
+    #region Inventory
+    public static void SaveInventory(string[] inventoryContent, int[] itemTypes)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/inventory.mgc";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        InventoryData data = new InventoryData(inventoryContent, itemTypes);
+
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
+    public static InventoryData LoadInventory()
+    {
+        string path = Application.persistentDataPath + "/inventory.mgc";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            InventoryData data = formatter.Deserialize(stream) as InventoryData;
+            stream.Close();
+
+            return data;
+        }
+        else
+        {
+            Debug.LogError("Save file not found in " + path);
+            return null;
+        }
+    }
+    #endregion
 }

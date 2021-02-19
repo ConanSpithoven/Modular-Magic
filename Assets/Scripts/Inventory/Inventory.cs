@@ -68,4 +68,66 @@ public class Inventory : MonoBehaviour
             full = false;
         }
     }
+
+    public string[] SaveInventoryContent()
+    {
+        string[] inventoryContent = new string[items.Count];
+        int i = 0;
+        if (items.Count != 0)
+        {
+            foreach (Item item in items)
+            {
+                Debug.Log("saving " + item.name);
+                inventoryContent[i] = item.name;
+                i++;
+            }
+        }
+        return inventoryContent;
+    }
+
+    public int[] SaveInventoryTypes()
+    {
+        int[] itemTypes = new int[items.Count];
+        int i = 0;
+        if (items.Count != 0)
+        {
+            foreach (Item item in items)
+            {
+                Debug.Log("saving " + item.name + " type " + (int)item.type);
+                itemTypes[i] = (int)item.type;
+                i++;
+            }
+        }
+        return itemTypes;
+    }
+
+    public void LoadInventory()
+    {
+        InventoryData data = SaveSystem.LoadInventory();
+        if (data.inventoryContent.Length != 0)
+        {
+            int i = 0;
+            foreach (string itemname in data.inventoryContent)
+            {
+                string type;
+                switch (data.itemTypes[i])
+                {
+                    default:
+                    case 0:
+                        type = "Patterns";
+                        break;
+                    case 1:
+                        type = "Consumables";
+                        break;
+                    case 2:
+                        type = "Equipment";
+                        break;
+                }
+                Debug.Log("Loading Items/" + type + "/" + itemname);
+                Item loadedItem = Resources.Load<Item>("Items/" + type + "/" + itemname);
+                Add(loadedItem);
+                i++;
+            }
+        }
+    }
 }

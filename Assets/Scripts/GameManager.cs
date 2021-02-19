@@ -99,6 +99,14 @@ public class GameManager : MonoBehaviour
                 TogglePause();
             }
         }
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            SaveGame();
+        }
+        if (Input.GetKeyDown(KeyCode.F9))
+        {
+            LoadGame();
+        }
     }
 
     #endregion
@@ -368,11 +376,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    #region Save Load
     public void SaveGame()
     {
         SaveSystem.SavePlayer(player.GetComponent<PlayerStats>());
         SaveSystem.SaveSeed();
+        Inventory inventory = GetComponent<Inventory>();
+        SaveSystem.SaveInventory(inventory.SaveInventoryContent(), inventory.SaveInventoryTypes());
     }
+
+    public void LoadGame()
+    {
+        Inventory inventory = GetComponent<Inventory>();
+        inventory.LoadInventory();
+    }
+    #endregion
 
     #region ItemList
     public int GetItemCount(string type)
