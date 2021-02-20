@@ -81,16 +81,6 @@ public class GameManager : MonoBehaviour
             Camera.main.transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, xMin, xMax), Camera.main.transform.position.y, Mathf.Clamp(player.transform.position.z-4, zMin, zMax));
         }
         scoreText.text = score + " points";
-        if (timerS >= 60)
-        {
-            timerS -= 60;
-            timerM++;
-        }
-        if (timerM >= 60)
-        {
-            timerM -= 60;
-            timerH++;
-        }
         UpdateTimer();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -146,7 +136,6 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1);
         timer++;
-        timerS++;
         //score--;
         if (timer % scalingTimer == 0 && timer > 0)
         {
@@ -158,6 +147,10 @@ public class GameManager : MonoBehaviour
 
     private void UpdateTimer()
     {
+        timerH = TimeSpan.FromSeconds(timer).Hours;
+        timerM = TimeSpan.FromSeconds(timer).Minutes;
+        timerS = TimeSpan.FromSeconds(timer).Seconds;
+
         if (timerS > 9)
         {
             timerSText.text = "" + timerS;
@@ -256,7 +249,10 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(livesList[lives - 1]);
                 livesList.RemoveAt(lives - 1);
-                Respawn();
+                if (player.GetComponent<PlayerStats>().GetCurrentHP() <= 0)
+                {
+                    Respawn();
+                }
             }
             else 
             {
@@ -390,6 +386,7 @@ public class GameManager : MonoBehaviour
         string[] formula2 = PatternManager.instance.SavePattern(2);
         string[] formula3 = PatternManager.instance.SavePattern(3);
         SaveSystem.SavePatterns(formula1, formula2, formula3);
+        SaveSystem.SaveGameData(score, timer, lives);
     }
 
     public void LoadGame()
@@ -399,6 +396,28 @@ public class GameManager : MonoBehaviour
         EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
         equipmentManager.LoadEquipment();
         PatternManager.instance.LoadPattern();
+        LoadGameData();
+    }
+
+    private void LoadGameData()
+    {
+        GameData data = SaveSystem.LoadGameData();
+        score = data.score;
+        timer = data.totalTime;
+        if (data.lives > lives)
+        {
+            while(lives < data.lives)
+            {
+                ChangeLives(1, true);
+            }
+        }
+        else if (data.lives < lives)
+        {
+            while (lives > data.lives)
+            {
+                ChangeLives(1, false);
+            }
+        }
     }
     #endregion
 
