@@ -139,4 +139,38 @@ public static class SaveSystem
         }
     }
     #endregion
+
+    #region Patterns
+    public static void SavePatterns(string[] formula1, string[] formula2, string[] formula3)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/patterns.mgc";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        PatternData data = new PatternData(formula1, formula2, formula3);
+
+        formatter.Serialize(stream, data);
+        stream.Close();
+    }
+
+    public static PatternData LoadPatterns()
+    {
+        string path = Application.persistentDataPath + "/patterns.mgc";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            PatternData data = formatter.Deserialize(stream) as PatternData;
+            stream.Close();
+
+            return data;
+        }
+        else
+        {
+            Debug.LogError("Save file not found in " + path);
+            return null;
+        }
+    }
+    #endregion
 }

@@ -385,8 +385,11 @@ public class GameManager : MonoBehaviour
         SaveSystem.SaveInventory(inventory.SaveInventoryContent(), inventory.SaveInventoryTypes());
         EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
         string[] equips = equipmentManager.SaveEquipment();
-        Debug.Log(equips[0] + " " + equips[1] + " " + equips[2] + " " + equips[3]);
         SaveSystem.SaveEquipment(equips);
+        string[] formula1 = PatternManager.instance.SavePattern(1);
+        string[] formula2 = PatternManager.instance.SavePattern(2);
+        string[] formula3 = PatternManager.instance.SavePattern(3);
+        SaveSystem.SavePatterns(formula1, formula2, formula3);
     }
 
     public void LoadGame()
@@ -395,6 +398,7 @@ public class GameManager : MonoBehaviour
         inventory.LoadInventory();
         EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
         equipmentManager.LoadEquipment();
+        PatternManager.instance.LoadPattern();
     }
     #endregion
 

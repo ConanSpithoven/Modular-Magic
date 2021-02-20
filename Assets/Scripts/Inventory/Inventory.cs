@@ -77,7 +77,6 @@ public class Inventory : MonoBehaviour
         {
             foreach (Item item in items)
             {
-                Debug.Log("saving " + item.name);
                 inventoryContent[i] = item.name;
                 i++;
             }
@@ -93,7 +92,6 @@ public class Inventory : MonoBehaviour
         {
             foreach (Item item in items)
             {
-                Debug.Log("saving " + item.name + " type " + (int)item.type);
                 itemTypes[i] = (int)item.type;
                 i++;
             }
@@ -123,7 +121,6 @@ public class Inventory : MonoBehaviour
                         type = "Equipment";
                         break;
                 }
-                Debug.Log("Loading Items/" + type + "/" + itemname);
                 Item loadedItem = Resources.Load<Item>("Items/" + type + "/" + itemname);
                 Add(loadedItem);
                 i++;
