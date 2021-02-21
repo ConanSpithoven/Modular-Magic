@@ -51,10 +51,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (PlayerPrefs.GetInt("Loading") == 1)
-        {
-            player.GetComponent<PlayerStats>().LoadPlayer();
-        }
         if (PlayerPrefs.GetInt("HighScore", 0) != 0)
         {
             PlayerPrefs.SetInt("HighScore", 0);
@@ -72,6 +68,16 @@ public class GameManager : MonoBehaviour
             livesList.Add(life);
         }
         instance = this;
+        if (PlayerPrefs.GetInt("Loading") == 1)
+        {
+            LoadGame();
+            PlayerPrefs.SetInt("Loading", 0);
+        }
+    }
+
+    private void Start()
+    {
+        SaveGame();
     }
 
     private void Update()
@@ -89,14 +95,14 @@ public class GameManager : MonoBehaviour
                 TogglePause();
             }
         }
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            SaveGame();
-        }
-        if (Input.GetKeyDown(KeyCode.F9))
-        {
-            LoadGame();
-        }
+        //if (Input.GetKeyDown(KeyCode.F5))
+        //{
+        //    SaveGame();
+        //}
+        //if (Input.GetKeyDown(KeyCode.F9))
+        //{
+        //    LoadGame();
+        //}
     }
 
     #endregion
@@ -375,6 +381,7 @@ public class GameManager : MonoBehaviour
     #region Save Load
     public void SaveGame()
     {
+        Debug.Log("Saving");
         SaveSystem.SavePlayer(player.GetComponent<PlayerStats>());
         SaveSystem.SaveSeed();
         Inventory inventory = GetComponent<Inventory>();
@@ -391,6 +398,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame()
     {
+        player.GetComponent<PlayerStats>().LoadPlayer();
         Inventory inventory = GetComponent<Inventory>();
         inventory.LoadInventory();
         EquipmentManager equipmentManager = GetComponent<EquipmentManager>();

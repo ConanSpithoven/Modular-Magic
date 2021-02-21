@@ -229,7 +229,6 @@ GameObject:
   - component: {fileID: 192190114}
   - component: {fileID: 192190113}
   - component: {fileID: 192190112}
-  - component: {fileID: 192190116}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -325,18 +324,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &192190116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 192190111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7baf9c7bd037a344bb6eeecf1d715215, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &224382587
 GameObject:
   m_ObjectHideFlags: 0
@@ -2653,6 +2640,7 @@ GameObject:
   - component: {fileID: 1791608973}
   - component: {fileID: 1791608972}
   - component: {fileID: 1791608971}
+  - component: {fileID: 1791608975}
   m_Layer: 5
   m_Name: Button (4)
   m_TagString: Untagged
@@ -2735,7 +2723,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1791608973}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1791608975}
+        m_MethodName: LoadGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1791608973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2772,6 +2771,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791608969}
   m_CullTransparentMesh: 0
+--- !u!114 &1791608975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791608969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e80141f720ab14c96714644308f76b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1944502978
 GameObject:
   m_ObjectHideFlags: 0
@@ -2857,6 +2868,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1944502983}
         m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1069315399}
+        m_MethodName: SubmitSeed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

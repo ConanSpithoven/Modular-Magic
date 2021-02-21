@@ -7,6 +7,7 @@ public class UIButton : MonoBehaviour
 
     public void OnClick()
     {
+        PlayerPrefs.SetInt("Loading", 0);
         SceneManager.LoadScene(target);
     }
 

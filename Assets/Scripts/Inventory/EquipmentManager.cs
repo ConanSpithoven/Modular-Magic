@@ -86,8 +86,7 @@ public class EquipmentManager : MonoBehaviour
     public string[] SaveEquipment()
     {
         string[] equips = new string[4];
-
-        for (int i = 0; i <= 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (currentEquipment[i] != null)
             {
@@ -98,7 +97,6 @@ public class EquipmentManager : MonoBehaviour
                 equips[i] = "none";
             }
         }
-
         return equips;
     }
 
@@ -106,7 +104,7 @@ public class EquipmentManager : MonoBehaviour
     {
         EquipmentData data = SaveSystem.LoadEquipment();
         string[] equips = data.equips;
-        for (int i = 0; i <= 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (equips[i] != "none")
             {
