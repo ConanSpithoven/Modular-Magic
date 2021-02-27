@@ -841,9 +841,10 @@ GameObject:
   - component: {fileID: 1916557931}
   - component: {fileID: 1916557932}
   - component: {fileID: 1916557933}
-  m_Layer: 0
+  - component: {fileID: 1916557934}
+  m_Layer: 22
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: FloorClearDoor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -940,6 +941,7 @@ MonoBehaviour:
   inventoryUI: {fileID: 1410577708}
   patternUI: {fileID: 1410577706}
   itemList: {fileID: 1916557933}
+  InSpawnRoom: 1
 --- !u!114 &1916557931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,6 +1039,19 @@ MonoBehaviour:
   patterns: {fileID: 11400000, guid: 8be16c059b33b8c46838be69fc99c665, type: 2}
   equipment: {fileID: 11400000, guid: d48730572a5b85443850cb387b926665, type: 2}
   consumables: {fileID: 11400000, guid: a06aa56f1f56ac7438780c7dbc64c845, type: 2}
+--- !u!65 &1916557934
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916557925}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 20, y: 2, z: 20}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1943163878 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6638982287451037008, guid: 4d893e7a64a9a1c4496e9ef3c0936fc8,
@@ -1890,16 +1905,6 @@ PrefabInstance:
     - target: {fileID: 7535529192257019754, guid: e1255eb9e14abe949b6de450117e5f56,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7535529192476240232, guid: e1255eb9e14abe949b6de450117e5f56,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7535529192476240232, guid: e1255eb9e14abe949b6de450117e5f56,
-        type: 3}
-      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
