@@ -44,15 +44,12 @@ public class PatternUI : MonoBehaviour
         empowermentSlots3 = new List<PatternSlot>(formulaSlotParent3.GetComponentsInChildren<PatternSlot>());
     }
 
-    void Update()
+    public void TogglePatternUI()
     {
-        if (Input.GetButtonDown("Patterns"))
+        if (!GameManager.instance.GetPauseStatus())
         {
-            if (!GameManager.instance.GetPauseStatus())
-            {
-                patternUI.SetActive(!patternUI.activeSelf);
-                UIActive = patternUI.activeSelf;
-            }
+            patternUI.SetActive(!patternUI.activeSelf);
+            UIActive = patternUI.activeSelf;
         }
     }
 

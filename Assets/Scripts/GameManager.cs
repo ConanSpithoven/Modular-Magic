@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     private GameObject livesText;
     private int timeScaling = 0;
     private bool paused = false;
-
+    public bool InSpawnRoom = true;
 
     #region Singleton
 
@@ -95,14 +95,6 @@ public class GameManager : MonoBehaviour
                 TogglePause();
             }
         }
-        //if (Input.GetKeyDown(KeyCode.F5))
-        //{
-        //    SaveGame();
-        //}
-        //if (Input.GetKeyDown(KeyCode.F9))
-        //{
-        //    LoadGame();
-        //}
     }
 
     #endregion
@@ -273,6 +265,7 @@ public class GameManager : MonoBehaviour
         player = Instantiate(playerPrefab, startPos.position, startPos.rotation, null);
         spellInventory = player.GetComponent<SpellInventory>();
         playerHealthBar.SetFull();
+
     }
 
     public void Respawn()
@@ -375,6 +368,24 @@ public class GameManager : MonoBehaviour
         if (PlayerPrefs.GetInt("Score") > PlayerPrefs.GetInt("HighScore"))
         {
             PlayerPrefs.SetInt("HighScore", score);
+        }
+    }
+
+    public void TogglePatternUI()
+    {
+        patternUI.TogglePatternUI();
+    }
+
+    public bool GetPatterUIActive()
+    {
+        return patternUI.GetUIActive();
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            InSpawnRoom = false;
         }
     }
 
