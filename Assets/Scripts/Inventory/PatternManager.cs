@@ -430,4 +430,92 @@ public class PatternManager : MonoBehaviour
         droppedItem.transform.rotation = Quaternion.Euler(90, 0, 0);
         droppedItem.transform.localScale *= 0.5f;
     }
+
+    public string[] SavePattern(int index)
+    {
+        string[] patternlist;
+        int i = 0;
+        switch (index)
+        {
+            default:
+            case 1:
+                if (currentPattern1.Count > 0)
+                {
+                    patternlist = new string[currentPattern1.Count];
+                    foreach (Pattern pattern in currentPattern1)
+                    {
+                        patternlist[i] = currentPattern1[i].name;
+                        i++;
+                    }
+                }
+                else 
+                {
+                    patternlist = null;
+                }
+                break;
+            case 2:
+                if (currentPattern2.Count > 0)
+                {
+                    patternlist = new string[currentPattern2.Count];
+                    foreach (Pattern pattern in currentPattern2)
+                    {
+                        patternlist[i] = currentPattern2[i].name;
+                        i++;
+                    }
+                }
+                else
+                {
+                    patternlist = null;
+                }
+                break;
+            case 3:
+                if (currentPattern3.Count > 0)
+                {
+                    patternlist = new string[currentPattern3.Count];
+                    foreach (Pattern pattern in currentPattern3)
+                    {
+                        patternlist[i] = currentPattern3[i].name;
+                        i++;
+                    }
+                }
+                else
+                {
+                    patternlist = null;
+                }
+                break;
+        }
+        return patternlist;
+    }
+
+    public void LoadPattern()
+    {
+        PatternData data = SaveSystem.LoadPatterns();
+        if (data.formula1 != null)
+        {
+            activeFormula = 1;
+            foreach (string patternName in data.formula1)
+            {
+                Pattern loadedPattern = Resources.Load<Pattern>("Items/Patterns/" + patternName);
+                Equip(loadedPattern);
+            }
+        }
+        if (data.formula2 != null)
+        {
+            activeFormula = 2;
+            foreach (string patternName in data.formula2)
+            {
+                Pattern loadedPattern = Resources.Load<Pattern>("Items/Patterns/" + patternName);
+                Equip(loadedPattern);
+            }
+        }
+        if (data.formula3 != null)
+        {
+            activeFormula = 3;
+            foreach (string patternName in data.formula3)
+            {
+                Pattern loadedPattern = Resources.Load<Pattern>("Items/Patterns/" + patternName);
+                Equip(loadedPattern);
+            }
+        }
+    }
 }

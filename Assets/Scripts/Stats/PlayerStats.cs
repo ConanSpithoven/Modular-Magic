@@ -73,4 +73,12 @@ public class PlayerStats : CharacterStats
         //respawn and reduce lives
         gameManager.ChangeLives(1, false);
     }
+
+    public void LoadPlayer()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+
+        LoadedPlayer(data);
+        transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
+    }
 }

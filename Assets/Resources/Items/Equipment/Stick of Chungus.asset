@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f0a9e0364c85d84bbf830b325564923, type: 3}
-  m_Name: Staff
+  m_Name: Stick of Chungus
   m_EditorClassIdentifier: 
-  name: Stick
+  name: Stick of Chungus
   type: 2
-  icon: {fileID: 21300000, guid: 6c632ff70851fd64fa4be9e795a7216b, type: 3}
-  worldIcon: {fileID: 21300000, guid: f39d990769f23ea4c8bfb3a47e67d844, type: 3}
-  flavor: A random stick found on the ground.
+  icon: {fileID: 21300000, guid: 7b1b2c9e1389e3944ab5aaf95f9694f4, type: 3}
+  worldIcon: {fileID: 21300000, guid: f44cdaf85fcc0a5458734f9032a3260e, type: 3}
+  flavor: A stick infused with the power of Big Chungus
   equipType: 0
   maxhealthModifier: 0
-  powerModifier: 1
+  powerModifier: 2
   armorModifier: 0
-  lifetimeModifier: 0
-  sizeModifier: 0
+  lifetimeModifier: 1
+  sizeModifier: 2
   instancesModifier: 0
   speedModifier: 0
   movementspeedModifier: 0
   uniqueModifier: 0
   cooldownReductionModifier: 0
   upgradeLimitModifier: 0
-  elementModifier: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  elementModifier: {fileID: 11400000, guid: 4e73610100233b0499d08791a969a54b, type: 2}

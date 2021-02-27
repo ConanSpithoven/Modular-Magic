@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f0a9e0364c85d84bbf830b325564923, type: 3}
-  m_Name: Staff
+  m_Name: Cloak of the Bear
   m_EditorClassIdentifier: 
-  name: Stick
+  name: Cloak of the Bear
   type: 2
-  icon: {fileID: 21300000, guid: 6c632ff70851fd64fa4be9e795a7216b, type: 3}
-  worldIcon: {fileID: 21300000, guid: f39d990769f23ea4c8bfb3a47e67d844, type: 3}
-  flavor: A random stick found on the ground.
-  equipType: 0
-  maxhealthModifier: 0
-  powerModifier: 1
-  armorModifier: 0
+  icon: {fileID: 21300000, guid: 2d6ff99e12bfe1b4f910b86b0bab693d, type: 3}
+  worldIcon: {fileID: 21300000, guid: 8922722544936eb45809d0df1d975c07, type: 3}
+  flavor: 
+  equipType: 1
+  maxhealthModifier: 50
+  powerModifier: 0
+  armorModifier: 2
   lifetimeModifier: 0
   sizeModifier: 0
   instancesModifier: 0
   speedModifier: 0
-  movementspeedModifier: 0
+  movementspeedModifier: 1
   uniqueModifier: 0
   cooldownReductionModifier: 0
   upgradeLimitModifier: 0
-  elementModifier: {fileID: 11400000, guid: 9700943e4741225498e9c9c1902dbe3f, type: 2}
+  elementModifier: {fileID: 11400000, guid: f6b03a4f56d6b0b419dbd0a2211dc891, type: 2}

@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EquipmentUI equipmentUI;
     [SerializeField] private InventoryUI inventoryUI;
     [SerializeField] private PatternUI patternUI;
+    [SerializeField] private ItemList itemList;
     private GameObject player;
     private SpellInventory spellInventory;
     private List<GameObject> livesList = new List<GameObject>();
@@ -67,6 +68,16 @@ public class GameManager : MonoBehaviour
             livesList.Add(life);
         }
         instance = this;
+        if (PlayerPrefs.GetInt("Loading") == 1)
+        {
+            LoadGame();
+            PlayerPrefs.SetInt("Loading", 0);
+        }
+    }
+
+    private void Start()
+    {
+        SaveGame();
     }
 
     private void Update()
@@ -76,16 +87,6 @@ public class GameManager : MonoBehaviour
             Camera.main.transform.position = new Vector3(Mathf.Clamp(player.transform.position.x, xMin, xMax), Camera.main.transform.position.y, Mathf.Clamp(player.transform.position.z-4, zMin, zMax));
         }
         scoreText.text = score + " points";
-        if (timerS >= 60)
-        {
-            timerS -= 60;
-            timerM++;
-        }
-        if (timerM >= 60)
-        {
-            timerM -= 60;
-            timerH++;
-        }
         UpdateTimer();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -94,6 +95,14 @@ public class GameManager : MonoBehaviour
                 TogglePause();
             }
         }
+        //if (Input.GetKeyDown(KeyCode.F5))
+        //{
+        //    SaveGame();
+        //}
+        //if (Input.GetKeyDown(KeyCode.F9))
+        //{
+        //    LoadGame();
+        //}
     }
 
     #endregion
@@ -133,7 +142,6 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1);
         timer++;
-        timerS++;
         //score--;
         if (timer % scalingTimer == 0 && timer > 0)
         {
@@ -145,6 +153,10 @@ public class GameManager : MonoBehaviour
 
     private void UpdateTimer()
     {
+        timerH = TimeSpan.FromSeconds(timer).Hours;
+        timerM = TimeSpan.FromSeconds(timer).Minutes;
+        timerS = TimeSpan.FromSeconds(timer).Seconds;
+
         if (timerS > 9)
         {
             timerSText.text = "" + timerS;
@@ -243,7 +255,10 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(livesList[lives - 1]);
                 livesList.RemoveAt(lives - 1);
-                Respawn();
+                if (player.GetComponent<PlayerStats>().GetCurrentHP() <= 0)
+                {
+                    Respawn();
+                }
             }
             else 
             {
@@ -362,4 +377,67 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("HighScore", score);
         }
     }
+
+    #region Save Load
+    public void SaveGame()
+    {
+        Debug.Log("Saving");
+        SaveSystem.SavePlayer(player.GetComponent<PlayerStats>());
+        SaveSystem.SaveSeed();
+        Inventory inventory = GetComponent<Inventory>();
+        SaveSystem.SaveInventory(inventory.SaveInventoryContent(), inventory.SaveInventoryTypes());
+        EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
+        string[] equips = equipmentManager.SaveEquipment();
+        SaveSystem.SaveEquipment(equips);
+        string[] formula1 = PatternManager.instance.SavePattern(1);
+        string[] formula2 = PatternManager.instance.SavePattern(2);
+        string[] formula3 = PatternManager.instance.SavePattern(3);
+        SaveSystem.SavePatterns(formula1, formula2, formula3);
+        SaveSystem.SaveGameData(score, timer, lives);
+    }
+
+    public void LoadGame()
+    {
+        player.GetComponent<PlayerStats>().LoadPlayer();
+        Inventory inventory = GetComponent<Inventory>();
+        inventory.LoadInventory();
+        EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
+        equipmentManager.LoadEquipment();
+        PatternManager.instance.LoadPattern();
+        LoadGameData();
+    }
+
+    private void LoadGameData()
+    {
+        GameData data = SaveSystem.LoadGameData();
+        score = data.score;
+        timer = data.totalTime;
+        if (data.lives > lives)
+        {
+            while(lives < data.lives)
+            {
+                ChangeLives(1, true);
+            }
+        }
+        else if (data.lives < lives)
+        {
+            while (lives > data.lives)
+            {
+                ChangeLives(1, false);
+            }
+        }
+    }
+    #endregion
+
+    #region ItemList
+    public int GetItemCount(string type)
+    {
+        return itemList.GetItemCount(type);
+    }
+
+    public string GetItem(int index, string type)
+    {
+        return itemList.GetItem(index, type);
+    }
+    #endregion
 }

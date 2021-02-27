@@ -23,7 +23,7 @@ public class ItemPickup : MonoBehaviour
 
     private void Update()
     {
-        if (!Inventory.instance.full && ready)
+        if (!Inventory.instance.full && player != null && ready)
         {
             distance = Vector3.Distance(player.position, transform.position);
             if (distance <= radius)

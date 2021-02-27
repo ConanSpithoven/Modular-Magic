@@ -111,6 +111,11 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    public void LoadedPlayer(PlayerData data)
+    {
+        currentHealth = data.currentHealth;
+    }
+
     public void Setup()
     {
         currentHealth = maxHealth.GetValue();

@@ -82,4 +82,35 @@ public class EquipmentManager : MonoBehaviour
         droppedItem.transform.rotation = Quaternion.Euler(90, 0, 0);
         droppedItem.transform.localScale *= 0.5f;
     }
+
+    public string[] SaveEquipment()
+    {
+        string[] equips = new string[4];
+        for (int i = 0; i < 3; i++)
+        {
+            if (currentEquipment[i] != null)
+            {
+                equips[i] = currentEquipment[i].name;
+            }
+            else
+            {
+                equips[i] = "none";
+            }
+        }
+        return equips;
+    }
+
+    public void LoadEquipment()
+    {
+        EquipmentData data = SaveSystem.LoadEquipment();
+        string[] equips = data.equips;
+        for (int i = 0; i < 3; i++)
+        {
+            if (equips[i] != "none")
+            {
+                Equipment loadedEquip = Resources.Load<Equipment>("Items/Equipment/" + equips[i]);
+                Equip(loadedEquip);
+            }
+        }
+    }
 }
