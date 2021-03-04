@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ItemGenerator : MonoBehaviour
 {
-    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private Transform itemPoint;
 
     private void Start()
     {
-        GameObject spawnedItem = Instantiate(Resources.Load<GameObject>("Items/Item"), spawnPoint.position, Quaternion.Euler(new Vector3(90,0,0)));
+        GameObject spawnedItem = Instantiate(Resources.Load<GameObject>("Items/Item"), itemPoint.position, Quaternion.Euler(new Vector3(90,0,0)));
         string type;
         int rand = Random.Range(1,10);
         switch (rand)
