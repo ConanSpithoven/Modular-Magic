@@ -7,6 +7,7 @@ public class BossRoom : MonoBehaviour
     [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private Transform bossPoint;
     [SerializeField] private Transform clearPoint;
+    [SerializeField] private Transform itemPoint;
     [SerializeField] private GameObject wall;
     [SerializeField] private string bossName;
 
@@ -58,5 +59,37 @@ public class BossRoom : MonoBehaviour
     private void FloorClear()
     {
         Instantiate(Resources.Load<GameObject>("Map/FloorClearStair"), clearPoint.position, Quaternion.identity);
+        SpawnItem();
+    }
+
+    private void SpawnItem()
+    {
+        GameObject spawnedItem = Instantiate(Resources.Load<GameObject>("Items/Item"), itemPoint.position, Quaternion.Euler(new Vector3(90, 0, 0)));
+        string type;
+        int rand = Random.Range(1, 10);
+        switch (rand)
+        {
+            default:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                type = "Patterns";
+                break;
+            case 7:
+            case 8:
+            case 9:
+                type = "Consumables";
+                break;
+            case 10:
+                type = "Equipment";
+                break;
+        }
+        int maxIndex = GameManager.instance.GetItemCount(type);
+        int index = Random.Range(0, maxIndex);
+        Item item = spawnedItem.GetComponent<ItemPickup>().item = Resources.Load<Item>("Items/" + type + "/" + GameManager.instance.GetItem(index, type));
+        spawnedItem.GetComponent<SpriteRenderer>().sprite = item.worldIcon;
     }
 }
