@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,7 +16,8 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private LayerMask obstacles;
 
     private Animator animator;
-    
+    public bool wanderCooldown = false;
+    public Vector3 wanderPos;
 
     private void Awake()
     {
@@ -49,6 +51,14 @@ public class EnemyManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void Wander()
+    {
+        wanderCooldown = true;
+        wanderPos = new Vector3(transform.position.x + Random.Range(-3, 3), transform.position.y, transform.position.z + Random.Range(-3, 3));
+        agent.destination = wanderPos;
+        StartCoroutine("WanderCooldownTimer");
     }
 
     public virtual void Attack()
@@ -128,5 +138,11 @@ public class EnemyManager : MonoBehaviour
     public virtual void OnDeath()
     {
         Destroy(gameObject);
+    }
+
+    private IEnumerator WanderCooldownTimer()
+    {
+        yield return new WaitForSeconds(2);
+        wanderCooldown = false;
     }
 }

@@ -14,6 +14,10 @@ public class Enemy_Melee : EnemyManager
         if (!targetFound)
         {
             TargetFinder(searchSize);
+            if (!wanderCooldown)
+            {
+                Wander();
+            }
         }
         else
         {
