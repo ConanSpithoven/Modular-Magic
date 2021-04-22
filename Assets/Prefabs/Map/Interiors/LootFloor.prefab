@@ -168,17 +168,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2e7768e70fde64099b19d669b332e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPool:
-  - {fileID: 11400000, guid: c0732a26a4d6e9741a40f631e008d9d8, type: 2}
-  - {fileID: 11400000, guid: a06f4833e6fda86499a3f767089cedbd, type: 2}
-  - {fileID: 11400000, guid: ccfd0c8c08eb4674c961c9f99caf6636, type: 2}
-  - {fileID: 11400000, guid: 218772d0d8c21ad41a08ee595fc3b3af, type: 2}
-  - {fileID: 11400000, guid: 929ba618ac19b674692fcb3f43c56794, type: 2}
-  - {fileID: 11400000, guid: ccfd0c8c08eb4674c961c9f99caf6636, type: 2}
-  - {fileID: 11400000, guid: ccfd0c8c08eb4674c961c9f99caf6636, type: 2}
-  - {fileID: 11400000, guid: ccfd0c8c08eb4674c961c9f99caf6636, type: 2}
-  - {fileID: 11400000, guid: 945861c2bfaa4e44f9ae22567c475708, type: 2}
-  - {fileID: 11400000, guid: f394e8ada75a2f44a982d8dec957993c, type: 2}
-  - {fileID: 11400000, guid: ac7f1e3671df38445862f103bf215787, type: 2}
-  - {fileID: 11400000, guid: 749b2475bb761974baf1c260071e3048, type: 2}
-  spawnPoint: {fileID: 3868347424964648462}
+  itemPoint: {fileID: 3868347424964648462}

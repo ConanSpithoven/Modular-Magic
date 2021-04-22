@@ -13,6 +13,7 @@ public class List : ScriptableObject
 
     public string GetContent(int index)
     {
+        index = Mathf.Clamp(index, 0, content.Length-1);
         if (content[index] != null)
         {
             return content[index];
