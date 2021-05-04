@@ -23,7 +23,8 @@ public class RoomSpawner : MonoBehaviour
         if (!spawned)
         {
             rand = Random.Range(0, mapManager.GetRoomsLength((int)openingSide)-1);
-            Instantiate(mapManager.GetRooms((int)openingSide, rand), transform.position, Quaternion.identity);
+            GameObject room = mapManager.GetRooms((int)openingSide, rand);
+            Instantiate(room, transform.position + room.GetComponent<AddRoom>().GetRoomOffset(), Quaternion.identity);
             spawned = true;
         }
     }

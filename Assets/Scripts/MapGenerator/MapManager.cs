@@ -12,6 +12,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject[] rightRooms;
     [SerializeField] private GameObject closedRoom;
     [SerializeField] private GameObject[] normalRooms;
+    [SerializeField] private GameObject[] CornerRooms;
     [SerializeField] private GameObject lootRoom;
     [SerializeField] private GameObject boss;
     [SerializeField] private int lootRoomLimit = 1;
@@ -141,11 +142,14 @@ public class MapManager : MonoBehaviour
         {
             int rand = Random.Range(0, normalRoomsNumbers.Count);
             int number = rooms.IndexOf(normalRoomsNumbers[rand]);
-            Instantiate(lootRoom, rooms[number].transform.position, Quaternion.identity, rooms[number].transform);
-            lootRoomsSpawned++;
-            normalRoomsNumbers.Remove(normalRoomsNumbers[rand]);
-            Destroy(rooms[number].GetComponentInChildren<RoomCloser>().gameObject);
-            SpawnLootRooms();
+            if (rooms[number].GetComponent<AddRoom>().GetRoomType() == RoomType.Single)
+            {
+                Instantiate(lootRoom, rooms[number].transform.position, Quaternion.identity, rooms[number].transform);
+                lootRoomsSpawned++;
+                normalRoomsNumbers.Remove(normalRoomsNumbers[rand]);
+                Destroy(rooms[number].GetComponentInChildren<RoomCloser>().gameObject);
+                SpawnLootRooms();
+            }
         }
         else 
         {
