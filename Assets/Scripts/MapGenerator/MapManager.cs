@@ -11,11 +11,18 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject[] leftRooms;
     [SerializeField] private GameObject[] rightRooms;
     [SerializeField] private GameObject closedRoom;
-    [SerializeField] private GameObject[] normalRooms;
-    [SerializeField] private GameObject[] CornerRooms;
-    [SerializeField] private GameObject lootRoom;
+    [SerializeField] private GameObject[] normalInteriors;
+    [SerializeField] private GameObject[] TLCornerInteriors;
+    [SerializeField] private GameObject[] TRCornerInteriors;
+    [SerializeField] private GameObject[] BLCornerInteriors;
+    [SerializeField] private GameObject[] BRCornerInteriors;
+    [SerializeField] private GameObject[] QuadInteriors;
+    [SerializeField] private GameObject lootInteriors;
     [SerializeField] private GameObject boss;
     [SerializeField] private int lootRoomLimit = 1;
+
+    private List<Vector3> roomCoords = new List<Vector3>();
+    private int bossRoom;
 
     private bool bossSpawned = false;
     [SerializeField] private List<GameObject> normalRoomsNumbers;
@@ -80,24 +87,7 @@ public class MapManager : MonoBehaviour
         if (oldRoomCount == rooms.Count && !bossSpawned)
         {
             lootRoomsSpawned = 0;
-            int bossRoom = rooms.Count - 1;
-            bossSpawned = true;
-            Instantiate(boss, rooms[bossRoom].transform.position, Quaternion.identity, rooms[bossRoom].transform);
-            for (int i = 1; i <= rooms.Count - 2; i++)
-            {
-                int rand = Random.Range(0, 20);
-                if (rand >= 0 && rand <= 19)
-                {
-                    normalRoomsNumbers.Add(rooms[i]);
-                }
-                else if (lootRoomsSpawned < lootRoomLimit)
-                {
-                    lootRoomsSpawned++;
-                    Instantiate(lootRoom, rooms[i].transform.position, Quaternion.identity, rooms[i].transform);
-                }
-            }
-            SpawnLootRooms();
-            CalcMapBounds();
+            GetBossRoomNumber(0);
         }
     }
 
@@ -136,7 +126,7 @@ public class MapManager : MonoBehaviour
         GameManager.instance.SetCameraBounds(xMin, xMax, zMin, zMax);
     }
 
-    private void SpawnLootRooms()
+    private void SpawnLootInteriors()
     {
         if (lootRoomsSpawned < lootRoomLimit)
         {
@@ -144,25 +134,110 @@ public class MapManager : MonoBehaviour
             int number = rooms.IndexOf(normalRoomsNumbers[rand]);
             if (rooms[number].GetComponent<AddRoom>().GetRoomType() == RoomType.Single)
             {
-                Instantiate(lootRoom, rooms[number].transform.position, Quaternion.identity, rooms[number].transform);
+                Instantiate(lootInteriors, rooms[number].transform.position, Quaternion.identity, rooms[number].transform);
                 lootRoomsSpawned++;
                 normalRoomsNumbers.Remove(normalRoomsNumbers[rand]);
                 Destroy(rooms[number].GetComponentInChildren<RoomCloser>().gameObject);
-                SpawnLootRooms();
+                SpawnLootInteriors();
             }
         }
         else 
         {
-            SpawnNormalRooms();
+            SpawnNormalInteriors();
         }
     }
 
-    private void SpawnNormalRooms()
+    private void SpawnNormalInteriors()
     {
         foreach (GameObject room in normalRoomsNumbers)
         {
             int number = rooms.IndexOf(room);
-            Instantiate(normalRooms[Random.Range(0, (normalRooms.Length - 1))], rooms[number].transform.position, Quaternion.identity, rooms[number].transform);
+            GameObject currentRoom = rooms[number];
+            switch (currentRoom.GetComponent<AddRoom>().GetRoomType())
+            {
+                default:
+                case RoomType.Single:
+                    Instantiate(normalInteriors[Random.Range(0, (normalInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    break;
+                case RoomType.TLCorner:
+                    Instantiate(TLCornerInteriors[Random.Range(0, (TLCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    break;
+                case RoomType.TRCorner:
+                    Instantiate(TRCornerInteriors[Random.Range(0, (TRCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    break;
+                case RoomType.BLCorner:
+                    Instantiate(BLCornerInteriors[Random.Range(0, (BLCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    break;
+                case RoomType.BRCorner:
+                    Instantiate(BRCornerInteriors[Random.Range(0, (BRCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    break;
+                case RoomType.Quad:
+                    Instantiate(QuadInteriors[Random.Range(0, (QuadInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    break;
+            }
+            
+        }
+    }
+
+    private void GetBossRoomNumber(int i)
+    {
+        Debug.Log("bossRoom: " + i);
+        int bossRoom = rooms.Count - (1 + i);
+        if (rooms[bossRoom].GetComponent<AddRoom>().GetRoomType() == RoomType.Single)
+        {
+            Instantiate(boss, rooms[bossRoom].transform.position, Quaternion.identity, rooms[bossRoom].transform);
+            bossSpawned = true;
+            this.bossRoom = bossRoom;
+            SpawnRooms();
+        }
+        else
+        {
+            Debug.Log("Nope");
+            GetBossRoomNumber(i + 1);
+        }
+    }
+
+    private void SpawnRooms()
+    {
+        for (int i = 1; i <= rooms.Count; i++)
+        {
+            if (i == bossRoom)
+            {
+                break;
+            }
+            int rand = Random.Range(0, 20);
+            if (rand >= 0 && rand <= 19)
+            {
+                normalRoomsNumbers.Add(rooms[i]);
+            }
+            else if (lootRoomsSpawned < lootRoomLimit)
+            {
+                int number = rooms.IndexOf(normalRoomsNumbers[i]);
+                if (rooms[number].GetComponent<AddRoom>().GetRoomType() == RoomType.Single)
+                {
+                    lootRoomsSpawned++;
+                    Instantiate(lootInteriors, rooms[i].transform.position, Quaternion.identity, rooms[i].transform);
+                }
+            }
+        }
+        SpawnLootInteriors();
+        CalcMapBounds();
+    }
+
+    public void AddRoomCoords(Vector3 coords)
+    {
+        roomCoords.Add(coords);
+    }
+
+    public bool CheckRoomCoordsTaken(Vector3 coords)
+    {
+        if (roomCoords.Contains(coords))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

@@ -325,7 +325,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8319f05f99f550146b2f2aa78edc0238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomSpawnOffset: {x: 20, y: 0, z: 0}
+  roomSpawnOffset: {x: 0, y: 0, z: 0}
+  roomType: 1
 --- !u!1 &7535529192761093807
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,6 +463,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openingSide: 2
+  spawnDelay: 0.1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &8001993293259494554
 GameObject:
   m_ObjectHideFlags: 0
