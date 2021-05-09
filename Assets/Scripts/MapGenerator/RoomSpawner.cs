@@ -21,7 +21,6 @@ public class RoomSpawner : MonoBehaviour
 
     private void Spawn()
     {
-        //rewrite spawningCode, save room spawnpoint locations - the new room spots. when spawning room, when spawning new room, check if the needed spots are already taken or not.
         if (!spawned)
         {
             Physics.SyncTransforms();

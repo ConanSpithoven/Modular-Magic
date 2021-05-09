@@ -23,7 +23,7 @@ public class MapManager : MonoBehaviour
 
     private List<Vector3> roomCoords = new List<Vector3>();
     private int bossRoom;
-
+    
     private bool bossSpawned = false;
     [SerializeField] private List<GameObject> normalRoomsNumbers;
     private int lootRoomsSpawned;
@@ -138,8 +138,8 @@ public class MapManager : MonoBehaviour
                 lootRoomsSpawned++;
                 normalRoomsNumbers.Remove(normalRoomsNumbers[rand]);
                 Destroy(rooms[number].GetComponentInChildren<RoomCloser>().gameObject);
-                SpawnLootInteriors();
             }
+            SpawnLootInteriors();
         }
         else 
         {
@@ -153,6 +153,7 @@ public class MapManager : MonoBehaviour
         {
             int number = rooms.IndexOf(room);
             GameObject currentRoom = rooms[number];
+            //Debug.Log(currentRoom.name);
             switch (currentRoom.GetComponent<AddRoom>().GetRoomType())
             {
                 default:
@@ -160,15 +161,19 @@ public class MapManager : MonoBehaviour
                     Instantiate(normalInteriors[Random.Range(0, (normalInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
                     break;
                 case RoomType.TLCorner:
+                    Debug.Log("TLCorner");
                     Instantiate(TLCornerInteriors[Random.Range(0, (TLCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
                     break;
                 case RoomType.TRCorner:
+                    Debug.Log("TRCorner");
                     Instantiate(TRCornerInteriors[Random.Range(0, (TRCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
                     break;
                 case RoomType.BLCorner:
+                    Debug.Log("BLCorner");
                     Instantiate(BLCornerInteriors[Random.Range(0, (BLCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
                     break;
                 case RoomType.BRCorner:
+                    Debug.Log("BRCorner");
                     Instantiate(BRCornerInteriors[Random.Range(0, (BRCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
                     break;
                 case RoomType.Quad:
@@ -199,24 +204,26 @@ public class MapManager : MonoBehaviour
 
     private void SpawnRooms()
     {
-        for (int i = 1; i <= rooms.Count; i++)
+        for (int i = 1; i < rooms.Count; i++)
         {
-            if (i == bossRoom)
+            if (i != bossRoom)
             {
-                break;
-            }
-            int rand = Random.Range(0, 20);
-            if (rand >= 0 && rand <= 19)
-            {
-                normalRoomsNumbers.Add(rooms[i]);
-            }
-            else if (lootRoomsSpawned < lootRoomLimit)
-            {
-                int number = rooms.IndexOf(normalRoomsNumbers[i]);
-                if (rooms[number].GetComponent<AddRoom>().GetRoomType() == RoomType.Single)
+                if (rooms[i].GetComponent<AddRoom>().GetRoomType() == RoomType.Single)
                 {
-                    lootRoomsSpawned++;
-                    Instantiate(lootInteriors, rooms[i].transform.position, Quaternion.identity, rooms[i].transform);
+                    int rand = Random.Range(0, 20);
+                    if (rand >= 0 && rand <= 19)
+                    {
+                        normalRoomsNumbers.Add(rooms[i]);
+                    }
+                    else if (lootRoomsSpawned < lootRoomLimit)
+                    {
+                        lootRoomsSpawned++;
+                        Instantiate(lootInteriors, rooms[i].transform.position, Quaternion.identity, rooms[i].transform);
+                    }
+                }
+                else
+                {
+                    normalRoomsNumbers.Add(rooms[i]);
                 }
             }
         }
