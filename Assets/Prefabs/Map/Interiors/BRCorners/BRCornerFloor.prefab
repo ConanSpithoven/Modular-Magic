@@ -193,7 +193,6 @@ GameObject:
   - component: {fileID: 2029286215632076393}
   - component: {fileID: 4854057280535834870}
   - component: {fileID: 8719870563450739480}
-  - component: {fileID: 9015529690344495388}
   m_Layer: 14
   m_Name: BRCornerFloor
   m_TagString: Ground
@@ -236,10 +235,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -264,6 +265,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &4854057280535834870
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -274,7 +276,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -462981019419857548, guid: a2b55c37251ece247a36bacdcd6c6b97, type: 3}
@@ -290,7 +292,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 892361c03164eb54db97c45046a45fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallPoints: []
+  wallPoints:
+  - {fileID: 6175731574242446863}
+  - {fileID: 996377928581496113}
+  - {fileID: 8133469734871433918}
+  - {fileID: 749481285846442050}
+  - {fileID: 2852348702808870024}
+  - {fileID: 622457864247127025}
+  - {fileID: 7901515514315680409}
+  - {fileID: 5158799364373480505}
+  - {fileID: 7209517029481404158}
+  - {fileID: 7431439360111842565}
+  - {fileID: 1028112421746102460}
+  - {fileID: 3032139824348767444}
+  - {fileID: 7372568079834230401}
+  - {fileID: 6034405868835711994}
+  - {fileID: 7834576424030356521}
+  - {fileID: 7308729630829021672}
+  - {fileID: 8651637190493781004}
+  - {fileID: 1395330975695698074}
+  - {fileID: 6896751910589278230}
+  - {fileID: 2948975644860234666}
+  - {fileID: 429095686624505407}
+  - {fileID: 4611130650830868787}
+  - {fileID: 451279145425007375}
+  - {fileID: 6753126361618509079}
+  - {fileID: 4534373407527659016}
+  - {fileID: 2876966748755665232}
+  - {fileID: 2211070260692370827}
+  - {fileID: 1456147650086509058}
+  - {fileID: 7311015379503925862}
+  - {fileID: 5156119215359277430}
+  - {fileID: 7841460316659333113}
+  - {fileID: 4694749110191426643}
+  - {fileID: 5351388569176966786}
+  - {fileID: 1072165779412929360}
+  - {fileID: 1073315458014450303}
+  - {fileID: 71059550852804290}
+  - {fileID: 3783387810387246983}
+  - {fileID: 5517088633945877619}
+  - {fileID: 8732804833454395163}
+  - {fileID: 3452165562889922939}
+  - {fileID: 2683713324529023713}
+  - {fileID: 7807291134618280308}
+  - {fileID: 5923997605918064220}
+  - {fileID: 1571719273502302945}
+  - {fileID: 5586283692228132432}
+  - {fileID: 5060454240282762488}
+  - {fileID: 6587269960365634345}
+  - {fileID: 3421786056239916596}
+  - {fileID: 2695200305027020283}
+  - {fileID: 472274307683639548}
+  - {fileID: 5730471002483892495}
+  - {fileID: 1527567828342176680}
+  - {fileID: 6869660493434303659}
+  - {fileID: 7491034008229020932}
+  - {fileID: 3197480560830967691}
+  - {fileID: 36897734722541159}
+  - {fileID: 4879389507483005080}
+  - {fileID: 6416283577183949410}
+  - {fileID: 1880762805092660525}
+  - {fileID: 5553661132810923058}
+  - {fileID: 2613293478397216532}
+  - {fileID: 3215741933661958247}
   enemyPoints:
   - {fileID: 2809240738096657950}
   - {fileID: 3020945082072015086}
@@ -307,35 +371,6 @@ MonoBehaviour:
   - {fileID: 1242197630914229634}
   - {fileID: 6634891428600116732}
   enemyLimit: 8
---- !u!114 &9015529690344495388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 294333778280221365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df27b9289d1e8c4fb82e0df4f4673ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 60160
-  m_UseGeometry: 1
-  m_DefaultArea: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 0}
 --- !u!1 &335540611903386194
 GameObject:
   m_ObjectHideFlags: 0
