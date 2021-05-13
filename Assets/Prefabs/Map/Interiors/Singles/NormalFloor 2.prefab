@@ -1496,7 +1496,7 @@ GameObject:
   - component: {fileID: 5404298516587364143}
   - component: {fileID: 5404298516587364140}
   - component: {fileID: 853384856924318913}
-  - component: {fileID: 2922220169620942169}
+  - component: {fileID: 4359461429077327076}
   m_Layer: 14
   m_Name: NormalFloor 2
   m_TagString: Ground
@@ -1539,10 +1539,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1567,6 +1569,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5404298516587364140
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1577,7 +1580,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -1673,7 +1676,7 @@ MonoBehaviour:
   - {fileID: 2640499352267311894}
   - {fileID: 5251252464822616634}
   enemyLimit: 5
---- !u!114 &2922220169620942169
+--- !u!114 &4359461429077327076
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1682,7 +1685,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5404298516587364146}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df27b9289d1e8c4fb82e0df4f4673ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
@@ -1691,7 +1694,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 60160
+    m_Bits: 4294967295
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
