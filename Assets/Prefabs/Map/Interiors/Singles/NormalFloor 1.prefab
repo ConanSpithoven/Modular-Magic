@@ -1100,7 +1100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 892361c03164eb54db97c45046a45fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoints:
+  wallPoints:
   - {fileID: 618819896960975893}
   - {fileID: 2335894616208252133}
   - {fileID: 6044666137677251559}
@@ -1166,7 +1166,6 @@ MonoBehaviour:
   - {fileID: 1883746425728335942}
   - {fileID: 5493961844701735557}
   - {fileID: 5151808578124167384}
-  wall: {fileID: 6547509981797011765, guid: 323239ba752e86d49b912dcd1c49b9c7, type: 3}
   enemyLimit: 4
 --- !u!114 &3597574254312429442
 MonoBehaviour:
@@ -1196,7 +1195,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 06418bd3b738ebf4188889cad5140712, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 8b7a7f37c55b7764f976ee00056478be, type: 2}
 --- !u!1 &5572292278556744525
 GameObject:
   m_ObjectHideFlags: 0

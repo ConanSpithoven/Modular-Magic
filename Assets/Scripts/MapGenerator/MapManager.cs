@@ -153,7 +153,6 @@ public class MapManager : MonoBehaviour
         {
             int number = rooms.IndexOf(room);
             GameObject currentRoom = rooms[number];
-            //Debug.Log(currentRoom.name);
             switch (currentRoom.GetComponent<AddRoom>().GetRoomType())
             {
                 default:
@@ -162,19 +161,23 @@ public class MapManager : MonoBehaviour
                     break;
                 case RoomType.TLCorner:
                     Debug.Log("TLCorner");
-                    Instantiate(TLCornerInteriors[Random.Range(0, (TLCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    GameObject TLfloor = TLCornerInteriors[Random.Range(0, TLCornerInteriors.Length - 1)];
+                    Instantiate(TLfloor, currentRoom.transform.position, TLfloor.transform.rotation, currentRoom.transform);
                     break;
                 case RoomType.TRCorner:
                     Debug.Log("TRCorner");
-                    Instantiate(TRCornerInteriors[Random.Range(0, (TRCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    GameObject TRfloor = TRCornerInteriors[Random.Range(0, TRCornerInteriors.Length - 1)];
+                    Instantiate(TRfloor, currentRoom.transform.position, TRfloor.transform.rotation, currentRoom.transform);
                     break;
                 case RoomType.BLCorner:
                     Debug.Log("BLCorner");
-                    Instantiate(BLCornerInteriors[Random.Range(0, (BLCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    GameObject BLfloor = BLCornerInteriors[Random.Range(0, BLCornerInteriors.Length - 1)];
+                    Instantiate(BLfloor, currentRoom.transform.position, BLfloor.transform.rotation, currentRoom.transform);
                     break;
                 case RoomType.BRCorner:
                     Debug.Log("BRCorner");
-                    Instantiate(BRCornerInteriors[Random.Range(0, (BRCornerInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
+                    GameObject BRfloor = BRCornerInteriors[Random.Range(0, BRCornerInteriors.Length - 1)];
+                    Instantiate(BRfloor, currentRoom.transform.position, BRfloor.transform.rotation, currentRoom.transform);
                     break;
                 case RoomType.Quad:
                     Instantiate(QuadInteriors[Random.Range(0, (QuadInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);

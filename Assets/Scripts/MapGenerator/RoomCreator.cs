@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class RoomCreator : MonoBehaviour
 {
-    [SerializeField] private List<Transform> spawnPoints;
+    [SerializeField] private List<Transform> wallPoints;
     [SerializeField] private List<Transform> enemyPoints;
-    [SerializeField] private GameObject wall;
     [SerializeField] private int enemyLimit;
 
     private RoomCloser roomCloser;
     private int enemyCount;
     private bool instantiated = false;
     private bool opened = false;
+    private GameObject wall;
 
     private void Start()
     {
-        if(spawnPoints.Count > 0)
+        wall = Resources.Load<GameObject>("Map/Wall");
+        if(wallPoints.Count > 0)
         {
-            foreach (Transform spawnPoint in spawnPoints)
+            foreach (Transform spawnPoint in wallPoints)
             {
                 if (spawnPoint != null)
                 {
@@ -31,6 +32,7 @@ public class RoomCreator : MonoBehaviour
                 }
             }
         }
+
         if (enemyPoints.Count > 0 && enemyLimit > 0)
         {
             int rand = Random.Range(0, enemyLimit);
@@ -52,6 +54,7 @@ public class RoomCreator : MonoBehaviour
                 }
             }
         }
+
         roomCloser = transform.parent.GetComponentInChildren<RoomCloser>();
         instantiated = true;
     }

@@ -45,6 +45,12 @@ public class Enemy_Melee : EnemyManager
         }
     }
 
+    public override void Hit(float damageTaken, Element element)
+    {
+        base.Hit(damageTaken, element);
+        TargetFinder(searchSize*5f);
+    }
+
     public override void Attack()
     {
         SetAnimator("Trigger", "Attack");

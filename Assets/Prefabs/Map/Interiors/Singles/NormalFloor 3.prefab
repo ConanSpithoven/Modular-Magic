@@ -1353,7 +1353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 892361c03164eb54db97c45046a45fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoints:
+  wallPoints:
   - {fileID: 618819896960975893}
   - {fileID: 1130688530291977286}
   - {fileID: 6285305294036506987}
@@ -1420,7 +1420,6 @@ MonoBehaviour:
   - {fileID: 5983369559831631302}
   - {fileID: 4968391179199283133}
   - {fileID: 4760487611554755018}
-  wall: {fileID: 6547509981797011765, guid: 323239ba752e86d49b912dcd1c49b9c7, type: 3}
   enemyLimit: 5
 --- !u!114 &1312281577072409537
 MonoBehaviour:

@@ -120,7 +120,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 1961eb98246988042a29621839a698d4, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: d3d2c9136d9440b48ab25d58ea8528e4, type: 2}
 --- !u!1 &95832508
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,13 +711,13 @@ MonoBehaviour:
   - {fileID: 5404298516587364146, guid: cfc400f0c6ac204459b3174328c2790b, type: 3}
   - {fileID: 5404298516587364146, guid: e97b1c6b33ef1fb4fa261356ea61a5a1, type: 3}
   TLCornerInteriors:
-  - {fileID: 8372567334871536326, guid: 6edb0e6a66093cd499bf380af8f75120, type: 3}
+  - {fileID: 294333778280221365, guid: 2e466034c005c6f48b90a2f6646bc831, type: 3}
   TRCornerInteriors:
-  - {fileID: 8372567334871536326, guid: 6de42962556007e48b4b60b2697a8330, type: 3}
+  - {fileID: 294333778280221365, guid: afc31517887cfd9449db0584c8b77674, type: 3}
   BLCornerInteriors:
-  - {fileID: 8372567334871536326, guid: 2660a42364c5537408bddb80a36d17d8, type: 3}
+  - {fileID: 425480427835919707, guid: 1a007887abf7238499b7d59ca24e0480, type: 3}
   BRCornerInteriors:
-  - {fileID: 8372567334871536326, guid: 7af029b64b8c0fd4d9b56dce2d656e4e, type: 3}
+  - {fileID: 294333778280221365, guid: f464a42c2426a3344b272d9c23846a8d, type: 3}
   QuadInteriors: []
   lootInteriors: {fileID: 5404298516587364146, guid: 768c25e1ef3bafb4c9d88f75544f897a,
     type: 3}
@@ -1572,10 +1572,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5215657562138168652, guid: e1255eb9e14abe949b6de450117e5f56,
+        type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7535529192257019752, guid: e1255eb9e14abe949b6de450117e5f56,
         type: 3}
       propertyPath: m_Name
       value: SpawnRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 7535529192257019752, guid: e1255eb9e14abe949b6de450117e5f56,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7535529192257019754, guid: e1255eb9e14abe949b6de450117e5f56,
         type: 3}
@@ -1652,5 +1662,6 @@ PrefabInstance:
       propertyPath: spawnDelay
       value: 0.12
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5215657562138168652, guid: e1255eb9e14abe949b6de450117e5f56, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e1255eb9e14abe949b6de450117e5f56, type: 3}

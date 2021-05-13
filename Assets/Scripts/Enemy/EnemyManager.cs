@@ -25,13 +25,12 @@ public class EnemyManager : MonoBehaviour
         agent.speed = stats.movementspeed.GetValue();
         attackRate = (1f / stats.attackSpeed.GetValue());
         animator = GetComponent<Animator>();
-        //StartCoroutine("WanderCooldownTimer");
+        StartCoroutine("WanderCooldownTimer");
     }
 
     public virtual void Hit(float damageTaken, Element element)
     {
         stats.TakeDamage(damageTaken, element);
-        //aggro?
     }
 
     public void TargetFinder(float searchSize)
