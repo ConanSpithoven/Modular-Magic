@@ -35,6 +35,12 @@ public class Enemy_Ranged : EnemyManager
         }
     }
 
+    public override void Hit(float damageTaken, Element element)
+    {
+        base.Hit(damageTaken, element);
+        TargetFinder(searchSize * 5f);
+    }
+
     public override void Attack()
     {
         GameObject projectileObject = Instantiate(projectilespell.gameObject, (transform.position + transform.forward), transform.rotation);

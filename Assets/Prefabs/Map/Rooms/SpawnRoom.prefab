@@ -181,6 +181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8319f05f99f550146b2f2aa78edc0238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomSpawnOffset: {x: 0, y: 0, z: 0}
+  roomType: 0
 --- !u!1 &7535529192476240231
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,6 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openingSide: 2
+  spawnDelay: 0.1
 --- !u!1 &7535529192936210928
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openingSide: 1
+  spawnDelay: 0.1
 --- !u!1 &7535529193535906372
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,6 +501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openingSide: 0
+  spawnDelay: 0.1
 --- !u!1 &7535529193939790175
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,6 +577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openingSide: 3
+  spawnDelay: 0.1
 --- !u!1001 &2480497399464624541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -649,6 +655,12 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 7641979463857458385, guid: 77f2831e30c31eb4ea649c42224bd8b1,
+        type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 42717e95634b1e84e99481dbd099c1e6,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77f2831e30c31eb4ea649c42224bd8b1, type: 3}
 --- !u!4 &7535529191870217904 stripped

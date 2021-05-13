@@ -22,6 +22,12 @@ public class Enemy_Boss_Thief : EnemyManager
         }
     }
 
+    public override void Hit(float damageTaken, Element element)
+    {
+        base.Hit(damageTaken, element);
+        TargetFinder(searchSize * 5f);
+    }
+
     public void MoveToPlayer()
     {
         if (target == null)

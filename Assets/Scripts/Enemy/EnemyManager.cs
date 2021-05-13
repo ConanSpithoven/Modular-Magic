@@ -16,7 +16,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private LayerMask obstacles;
 
     private Animator animator;
-    public bool wanderCooldown = false;
+    public bool wanderCooldown = true;
     public Vector3 wanderPos;
 
     private void Awake()
@@ -25,12 +25,12 @@ public class EnemyManager : MonoBehaviour
         agent.speed = stats.movementspeed.GetValue();
         attackRate = (1f / stats.attackSpeed.GetValue());
         animator = GetComponent<Animator>();
+        StartCoroutine("WanderCooldownTimer");
     }
 
     public virtual void Hit(float damageTaken, Element element)
     {
         stats.TakeDamage(damageTaken, element);
-        //aggro?
     }
 
     public void TargetFinder(float searchSize)
