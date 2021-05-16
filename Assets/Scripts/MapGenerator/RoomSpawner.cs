@@ -29,14 +29,12 @@ public class RoomSpawner : MonoBehaviour
             {
                 if (room.GetComponent<AddRoom>().GetOpeningCount() == 1)
                 {
-                    Debug.Log("Room only has 1 door");
                     Spawn();
                     return;
                 }
             }
             if (mapManager.GetMaxRoomsReached())
             {
-                Debug.Log("max reached, closing off");
                 room = mapManager.GetClosedRoom();
                 Instantiate(room, transform.position, Quaternion.identity);
                 mapManager.AddRoomCoords(transform.position);

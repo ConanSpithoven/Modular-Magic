@@ -44,7 +44,6 @@ public class MapManager : MonoBehaviour
     public void AddRoom(GameObject room)
     {
         rooms.Add(room);
-        Debug.Log(rooms.Count);
         if (rooms.Count >= minRooms)
         {
             minRoomsReached = true;
