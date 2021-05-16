@@ -23,9 +23,26 @@ public class RoomSpawner : MonoBehaviour
     {
         if (!spawned)
         {
-            Physics.SyncTransforms();
             rand = Random.Range(0, mapManager.GetRoomsLength((int)openingSide) - 1);
             GameObject room = mapManager.GetRooms((int)openingSide, rand);
+            if (!mapManager.GetMinRoomsReached())
+            {
+                if (room.GetComponent<AddRoom>().GetOpeningCount() == 1)
+                {
+                    Debug.Log("Room only has 1 door");
+                    Spawn();
+                    return;
+                }
+            }
+            if (mapManager.GetMaxRoomsReached())
+            {
+                Debug.Log("max reached, closing off");
+                room = mapManager.GetClosedRoom();
+                Instantiate(room, transform.position, Quaternion.identity);
+                mapManager.AddRoomCoords(transform.position);
+                spawned = true;
+                return;
+            }
             //Check for possible overlap depending on roomtype
             switch (room.GetComponent<AddRoom>().GetRoomType())
             {
@@ -38,7 +55,6 @@ public class RoomSpawner : MonoBehaviour
                 case RoomType.TLCorner:
                     if (mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset()) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(20, 0, 0)) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, -20)))
                     {
-                        Debug.Log("Overlap!");
                         Spawn();
                     }
                     else
@@ -52,7 +68,6 @@ public class RoomSpawner : MonoBehaviour
                 case RoomType.TRCorner:
                     if (mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset()) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(-20, 0, 0)) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, -20)))
                     {
-                        Debug.Log("Overlap!");
                         Spawn();
                     }
                     else
@@ -66,7 +81,6 @@ public class RoomSpawner : MonoBehaviour
                 case RoomType.BLCorner:
                     if (mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset()) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(20, 0, 0)) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, 20)))
                     {
-                        Debug.Log("Overlap!");
                         Spawn();
                     }
                     else
@@ -80,7 +94,6 @@ public class RoomSpawner : MonoBehaviour
                 case RoomType.BRCorner:
                     if (mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset()) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(-20, 0, 0)) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, 20)))
                     {
-                        Debug.Log("Overlap!");
                         Spawn();
                     }
                     else
@@ -94,7 +107,6 @@ public class RoomSpawner : MonoBehaviour
                 case RoomType.Quad:
                     if (mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset()) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(20, 0, 0)) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, 20)) || mapManager.CheckRoomCoordsTaken(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(20, 0, 20)))
                     {
-                        Debug.Log("Overlap!");
                         Spawn();
                     }
                     else
