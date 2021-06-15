@@ -44,12 +44,14 @@ public class MapManager : MonoBehaviour
     public void AddRoom(GameObject room)
     {
         rooms.Add(room);
-        if (rooms.Count >= minRooms)
+        if (rooms.Count >= minRooms && !minRoomsReached)
         {
+            Debug.Log("Minimum Mapsize Reached");
             minRoomsReached = true;
         }
-        if (rooms.Count == maxRooms)
+        if (rooms.Count == maxRooms && !maxRoomsReached)
         {
+            Debug.Log("Maximum Mapsize Reached");
             maxRoomsReached = true;
         }
         StartCoroutine("CheckSpawnFinish");
@@ -257,6 +259,43 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public void OverlapManager(RoomSpawner spawner1, RoomSpawner spawner2)
+    {
+        if (spawner1 != null && spawner2 != null)
+        {
+            Vector3 spawnPos = spawner1.transform.position;
+            int openingDir = spawner1.GetOpeningSide();
+            int openingSide1 = OpeningSideInverter(spawner1.GetOpeningSide());
+            int openingSide2 = OpeningSideInverter(spawner2.GetOpeningSide());
+            Destroy(spawner1.gameObject);
+            Destroy(spawner2.gameObject);
+            RoomOverlapSpawn(spawnPos, openingSide1, openingSide2, openingDir);
+        }
+    }
+
+    private void RoomOverlapSpawn(Vector3 spawnPos, int openingSide1, int openingSide2, int openingDir) 
+    {
+        if (GetMaxRoomsReached())
+        {
+            Instantiate(GetClosedRoom(), spawnPos, Quaternion.identity);
+            return;
+        }
+        GameObject roomSpawnerObj = Instantiate(Resources.Load<GameObject>("map/SpawnPoint"), spawnPos, Quaternion.identity, null);
+        RoomSpawner roomSpawner = roomSpawnerObj.GetComponent<RoomSpawner>();
+        RoomOpenings[] roomOpenings = new RoomOpenings[2];
+        roomOpenings[0] = (RoomOpenings)openingSide1;
+        roomOpenings[1] = (RoomOpenings)openingSide2;
+        if (GetMinRoomsReached())
+        {
+            roomSpawner.Setup(2, roomOpenings, openingDir, true, false);
+        }
+        else
+        {
+            //roomSpawner.Setup(2, roomOpenings, openingDir, true, false);
+            roomSpawner.Setup(3,  roomOpenings, openingDir, true, false);
+        }
+    }
+
     public bool GetMinRoomsReached()
     {
         return minRoomsReached;
@@ -265,5 +304,27 @@ public class MapManager : MonoBehaviour
     public bool GetMaxRoomsReached()
     {
         return maxRoomsReached;
+    }
+
+    private int OpeningSideInverter(int openingSide)
+    {
+        int newOpening;
+        switch (openingSide) 
+        {
+            default:
+            case 0:
+                newOpening = 1;
+                break;
+            case 1:
+                newOpening = 0;
+                break;
+            case 2:
+                newOpening = 3;
+                break;
+            case 3:
+                newOpening = 2;
+                break;
+        }
+        return newOpening;
     }
 }

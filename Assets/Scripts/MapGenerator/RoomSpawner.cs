@@ -11,12 +11,28 @@ public class RoomSpawner : MonoBehaviour
     private MapManager mapManager;
     private int rand;
     private bool spawned = false;
+    private bool roomIsFiller = false;
+    private RoomOpenings[] roomOpenings = new RoomOpenings[2];
+    private int requiredOpeningCount = 0;
+    private int openingMatches = 0;
 
     private void Start()
     {
         Destroy(gameObject, 4f);
-        mapManager = MapManager.instance;
+        if (mapManager == null)
+        {
+            mapManager = MapManager.instance;
+        }
         Invoke("Spawn", spawnDelay);
+    }
+
+    public void Setup(int requiredOpeningCount, RoomOpenings[] roomOpenings, int openingSide, bool roomIsFiller, bool spawned = false)
+    {
+        this.openingSide = (OpeningDir)openingSide;
+        this.requiredOpeningCount = requiredOpeningCount;
+        this.roomOpenings = roomOpenings;
+        this.roomIsFiller = roomIsFiller;
+        this.spawned = spawned;
     }
 
     private void Spawn()
@@ -27,7 +43,7 @@ public class RoomSpawner : MonoBehaviour
             GameObject room = mapManager.GetRooms((int)openingSide, rand);
             if (!mapManager.GetMinRoomsReached())
             {
-                if (room.GetComponent<AddRoom>().GetOpeningCount() == 1)
+                if (room.GetComponent<AddRoom>().GetOpeningCount() <= 1)
                 {
                     Spawn();
                     return;
@@ -40,6 +56,27 @@ public class RoomSpawner : MonoBehaviour
                 mapManager.AddRoomCoords(transform.position);
                 spawned = true;
                 return;
+            }
+            if (roomIsFiller)
+            {
+                if (room.GetComponent<AddRoom>().GetOpeningCount() < requiredOpeningCount)
+                {
+                    Spawn();
+                    return;
+                }
+                openingMatches = 0;
+                foreach (RoomOpenings side in room.GetComponent<AddRoom>().GetRoomOpenings())
+                {
+                    if (side == roomOpenings[0] || side == roomOpenings[1])
+                    {
+                        openingMatches++;
+                    }
+                }
+                if (openingMatches < roomOpenings.Length)
+                {
+                    Spawn();
+                    return;
+                }
             }
             //Check for possible overlap depending on roomtype
             switch (room.GetComponent<AddRoom>().GetRoomType())
@@ -61,6 +98,7 @@ public class RoomSpawner : MonoBehaviour
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset());
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(20, 0, 0));
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, -20));
+                        spawned = true;
                     }
                     break;
                 case RoomType.TRCorner:
@@ -74,6 +112,7 @@ public class RoomSpawner : MonoBehaviour
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset());
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(-20, 0, 0));
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, -20));
+                        spawned = true;
                     }
                     break;
                 case RoomType.BLCorner:
@@ -87,6 +126,7 @@ public class RoomSpawner : MonoBehaviour
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset());
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(20, 0, 0));
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, 20));
+                        spawned = true;
                     }
                     break;
                 case RoomType.BRCorner:
@@ -100,6 +140,7 @@ public class RoomSpawner : MonoBehaviour
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset());
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(-20, 0, 0));
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, 20));
+                        spawned = true;
                     }
                     break;
                 case RoomType.Quad:
@@ -114,9 +155,14 @@ public class RoomSpawner : MonoBehaviour
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(20, 0, 0));
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(0, 0, 20));
                         mapManager.AddRoomCoords(transform.position + room.GetComponent<AddRoom>().GetRoomOffset() + new Vector3(20, 0, 20));
+                        spawned = true;
                     }
                     break;
             }
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -128,25 +174,39 @@ public class RoomSpawner : MonoBehaviour
             {
                 if (spawner.spawned == false && spawned == false)
                 {
-                    Instantiate(mapManager.GetClosedRoom(), transform.position, Quaternion.identity);
+                    if (mapManager == null)
+                    {
+                        mapManager = MapManager.instance;
+                    }
+                    mapManager.OverlapManager(this, spawner);
+                    //Instantiate(mapManager.GetClosedRoom(), transform.position, Quaternion.identity);
                 }
             }
             spawned = true;
         }
     }
 
-    private void OnTriggerStay(Collider col)
+    //private void OnTriggerStay(Collider col)
+    //{
+    //    if (col.gameObject.CompareTag("SpawnPoint"))
+    //    {
+    //        if (col.gameObject.TryGetComponent(out RoomSpawner spawner))
+    //        {
+    //            if (spawner.spawned == false && spawned == false)
+    //            {
+    //                if (mapManager == null)
+    //                {
+    //                    mapManager = MapManager.instance;
+    //                }
+    //                Instantiate(mapManager.GetClosedRoom(), transform.position, Quaternion.identity);
+    //            }
+    //        }
+    //        spawned = true;
+    //    }
+    //}
+
+    public int GetOpeningSide()
     {
-        if (col.gameObject.CompareTag("SpawnPoint"))
-        {
-            if (col.gameObject.TryGetComponent(out RoomSpawner spawner))
-            {
-                if (spawner.spawned == false && spawned == false)
-                {
-                    Instantiate(mapManager.GetClosedRoom(), transform.position, Quaternion.identity);
-                }
-            }
-            spawned = true;
-        }
+        return (int)openingSide;
     }
 }

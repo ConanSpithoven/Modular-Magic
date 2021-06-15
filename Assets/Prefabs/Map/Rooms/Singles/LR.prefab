@@ -356,6 +356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomSpawnOffset: {x: 0, y: 0, z: 0}
   roomType: 0
+  roomOpenings: 0200000003000000
   openingCount: 2
 --- !u!1 &7535529192761093807
 GameObject:
