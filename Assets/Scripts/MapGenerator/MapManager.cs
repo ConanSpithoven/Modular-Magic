@@ -20,10 +20,14 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject lootInteriors;
     [SerializeField] private GameObject boss;
     [SerializeField] private int lootRoomLimit = 1;
+    [SerializeField] private int maxRooms = 20;
+    [SerializeField] private int minRooms = 8;
 
     private List<Vector3> roomCoords = new List<Vector3>();
     private int bossRoom;
-    
+
+    private bool minRoomsReached = false;
+    private bool maxRoomsReached = false;
     private bool bossSpawned = false;
     [SerializeField] private List<GameObject> normalRoomsNumbers;
     private int lootRoomsSpawned;
@@ -40,6 +44,16 @@ public class MapManager : MonoBehaviour
     public void AddRoom(GameObject room)
     {
         rooms.Add(room);
+        if (rooms.Count >= minRooms && !minRoomsReached)
+        {
+            Debug.Log("Minimum Mapsize Reached");
+            minRoomsReached = true;
+        }
+        if (rooms.Count == maxRooms && !maxRoomsReached)
+        {
+            Debug.Log("Maximum Mapsize Reached");
+            maxRoomsReached = true;
+        }
         StartCoroutine("CheckSpawnFinish");
     }
 
@@ -160,22 +174,18 @@ public class MapManager : MonoBehaviour
                     Instantiate(normalInteriors[Random.Range(0, (normalInteriors.Length - 1))], currentRoom.transform.position, Quaternion.identity, currentRoom.transform);
                     break;
                 case RoomType.TLCorner:
-                    Debug.Log("TLCorner");
                     GameObject TLfloor = TLCornerInteriors[Random.Range(0, TLCornerInteriors.Length - 1)];
                     Instantiate(TLfloor, currentRoom.transform.position, TLfloor.transform.rotation, currentRoom.transform);
                     break;
                 case RoomType.TRCorner:
-                    Debug.Log("TRCorner");
                     GameObject TRfloor = TRCornerInteriors[Random.Range(0, TRCornerInteriors.Length - 1)];
                     Instantiate(TRfloor, currentRoom.transform.position, TRfloor.transform.rotation, currentRoom.transform);
                     break;
                 case RoomType.BLCorner:
-                    Debug.Log("BLCorner");
                     GameObject BLfloor = BLCornerInteriors[Random.Range(0, BLCornerInteriors.Length - 1)];
                     Instantiate(BLfloor, currentRoom.transform.position, BLfloor.transform.rotation, currentRoom.transform);
                     break;
                 case RoomType.BRCorner:
-                    Debug.Log("BRCorner");
                     GameObject BRfloor = BRCornerInteriors[Random.Range(0, BRCornerInteriors.Length - 1)];
                     Instantiate(BRfloor, currentRoom.transform.position, BRfloor.transform.rotation, currentRoom.transform);
                     break;
@@ -189,7 +199,6 @@ public class MapManager : MonoBehaviour
 
     private void GetBossRoomNumber(int i)
     {
-        Debug.Log("bossRoom: " + i);
         int bossRoom = rooms.Count - (1 + i);
         if (rooms[bossRoom].GetComponent<AddRoom>().GetRoomType() == RoomType.Single)
         {
@@ -200,7 +209,6 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Nope");
             GetBossRoomNumber(i + 1);
         }
     }
@@ -249,5 +257,74 @@ public class MapManager : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void OverlapManager(RoomSpawner spawner1, RoomSpawner spawner2)
+    {
+        if (spawner1 != null && spawner2 != null)
+        {
+            Vector3 spawnPos = spawner1.transform.position;
+            int openingDir = spawner1.GetOpeningSide();
+            int openingSide1 = OpeningSideInverter(spawner1.GetOpeningSide());
+            int openingSide2 = OpeningSideInverter(spawner2.GetOpeningSide());
+            Destroy(spawner1.gameObject);
+            Destroy(spawner2.gameObject);
+            RoomOverlapSpawn(spawnPos, openingSide1, openingSide2, openingDir);
+        }
+    }
+
+    private void RoomOverlapSpawn(Vector3 spawnPos, int openingSide1, int openingSide2, int openingDir) 
+    {
+        if (GetMaxRoomsReached())
+        {
+            Instantiate(GetClosedRoom(), spawnPos, Quaternion.identity);
+            return;
+        }
+        GameObject roomSpawnerObj = Instantiate(Resources.Load<GameObject>("map/SpawnPoint"), spawnPos, Quaternion.identity, null);
+        RoomSpawner roomSpawner = roomSpawnerObj.GetComponent<RoomSpawner>();
+        RoomOpenings[] roomOpenings = new RoomOpenings[2];
+        roomOpenings[0] = (RoomOpenings)openingSide1;
+        roomOpenings[1] = (RoomOpenings)openingSide2;
+        if (GetMinRoomsReached())
+        {
+            roomSpawner.Setup(2, roomOpenings, openingDir, true, false);
+        }
+        else
+        {
+            //roomSpawner.Setup(2, roomOpenings, openingDir, true, false);
+            roomSpawner.Setup(3,  roomOpenings, openingDir, true, false);
+        }
+    }
+
+    public bool GetMinRoomsReached()
+    {
+        return minRoomsReached;
+    }
+
+    public bool GetMaxRoomsReached()
+    {
+        return maxRoomsReached;
+    }
+
+    private int OpeningSideInverter(int openingSide)
+    {
+        int newOpening;
+        switch (openingSide) 
+        {
+            default:
+            case 0:
+                newOpening = 1;
+                break;
+            case 1:
+                newOpening = 0;
+                break;
+            case 2:
+                newOpening = 3;
+                break;
+            case 3:
+                newOpening = 2;
+                break;
+        }
+        return newOpening;
     }
 }

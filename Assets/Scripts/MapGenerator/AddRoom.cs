@@ -4,6 +4,7 @@ public class AddRoom : MonoBehaviour
 {
     [SerializeField] private Vector3 roomSpawnOffset;
     [SerializeField] private RoomType roomType;
+    [SerializeField] private RoomOpenings[] roomOpenings;
 
     void Start()
     {
@@ -18,5 +19,15 @@ public class AddRoom : MonoBehaviour
     public RoomType GetRoomType()
     {
         return roomType;
+    }
+
+    public int GetOpeningCount()
+    {
+        return roomOpenings.Length;
+    }
+
+    public RoomOpenings[] GetRoomOpenings()
+    {
+        return roomOpenings;
     }
 }
